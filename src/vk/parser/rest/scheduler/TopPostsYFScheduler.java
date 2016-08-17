@@ -1,0 +1,26 @@
+package vk.parser.rest.scheduler;
+
+import java.util.logging.Logger;
+
+import javax.ejb.Schedule;
+import javax.ejb.Singleton;
+import javax.ejb.Timeout;
+import javax.inject.Inject;
+
+import vk.logic.elastic.ElasticWorkflow;
+
+@Singleton
+public class TopPostsYFScheduler implements Scheduler{
+	@Inject
+	ElasticWorkflow elastic;
+    private Logger logger = Logger.getLogger(RestScheduler.class.getName());
+
+
+    @Schedule(second = "0", minute = "30", hour = "0", dayOfMonth = "*")
+	@Timeout
+	public void process() {
+		elastic.getNativeWeeklyTop();
+		logger.info("Weekly Top Updated");		
+	}
+	
+}
