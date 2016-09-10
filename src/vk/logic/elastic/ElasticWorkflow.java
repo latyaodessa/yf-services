@@ -11,6 +11,8 @@ import io.searchbox.core.Search;
 import io.searchbox.core.SearchResult;
 import io.searchbox.core.SearchResult.Hit;
 import vk.logic.entities.Post;
+import yf.user.dto.GeneralUserDTO;
+import yf.user.dto.VKResponseDTO;
 
 public class ElasticWorkflow {
 	private static String SETS_TAG= "#sets@youngfolks";
@@ -35,6 +37,11 @@ public class ElasticWorkflow {
 	private static String YF_80S90S_INDEX = "yf-photo-80s90s";
 	private static String YF_LEGS_INDEX = "yf-photo-legs";
 	private static String YF_ART_INDEX = "yf-photo-art";
+	
+	
+	private static String USER_GENERAL_TAG = "general-user";
+	private static String USER_VK_TAG = "vk-user";
+	private static String USER_TYPE = "user";
 	
 
 	private static int TOP_SIZE = 30;
@@ -80,6 +87,19 @@ public class ElasticWorkflow {
 		return false;
 		
 	}
+	
+	public boolean indexElasticGeneralUser(GeneralUserDTO generalUser){
+		String tag = USER_GENERAL_TAG;
+			return saveItemInIndex(new Index.Builder(generalUser).index(tag).type(USER_TYPE).id(generalUser.getId().toString()).build());
+	}
+	
+	public boolean indexElasticVKUser(VKResponseDTO vkUser){
+		String tag = USER_VK_TAG;
+			return saveItemInIndex(new Index.Builder(vkUser).index(tag).type(USER_TYPE).id(vkUser.getId().toString()).build());
+	}
+	
+	
+	
 	private boolean saveItemInIndex(Index index){
 		try {
 			elastic.getClient().execute(index);

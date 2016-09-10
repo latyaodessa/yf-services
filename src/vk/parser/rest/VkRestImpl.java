@@ -15,6 +15,7 @@ import javax.ws.rs.core.MediaType;
 import vk.parser.ParserService;
 import vk.parser.dto.PostDTO;
 import vk.post.PostService;
+import yf.user.dto.VKUserDTO;
 
 @Path("/vk")
 @Produces(MediaType.APPLICATION_JSON)
@@ -25,8 +26,6 @@ public class VkRestImpl {
 		@Inject
 	 	PostService postService;
 
-//		@Inject
-//		RestScheduler restScheduler;
 		@PersistenceContext
 		private EntityManager em;
 		

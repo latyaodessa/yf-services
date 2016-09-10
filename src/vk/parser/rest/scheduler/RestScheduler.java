@@ -20,7 +20,7 @@ public class RestScheduler implements Scheduler{
 
 
 	
-    @Schedule(second = "0", minute = "0", hour = "*")
+    @Schedule(second = "05", minute = "01,03,05", hour = "*")
 	@Timeout
 	public void process() {
     		parserRestClient.checkNewPosts();
