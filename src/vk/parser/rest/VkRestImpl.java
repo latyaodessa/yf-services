@@ -15,7 +15,7 @@ import javax.ws.rs.core.MediaType;
 import vk.parser.ParserService;
 import vk.parser.dto.PostDTO;
 import vk.post.PostService;
-import yf.user.dto.VKUserDTO;
+import yf.user.dto.vk.VKUserDTO;
 
 @Path("/vk")
 @Produces(MediaType.APPLICATION_JSON)

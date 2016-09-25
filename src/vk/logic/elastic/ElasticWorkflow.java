@@ -12,7 +12,10 @@ import io.searchbox.core.SearchResult;
 import io.searchbox.core.SearchResult.Hit;
 import vk.logic.entities.Post;
 import yf.user.dto.GeneralUserDTO;
-import yf.user.dto.VKResponseDTO;
+import yf.user.dto.fb.FBResponseDTO;
+import yf.user.dto.vk.VKResponseDTO;
+import yf.user.entities.usersaved.UserSavedPhotos;
+import yf.user.entities.usersaved.UserSavedPosts;
 
 public class ElasticWorkflow {
 	private static String SETS_TAG= "#sets@youngfolks";
@@ -41,7 +44,11 @@ public class ElasticWorkflow {
 	
 	private static String USER_GENERAL_TAG = "general-user";
 	private static String USER_VK_TAG = "vk-user";
-	private static String USER_TYPE = "user";
+	private static String USER_FB_TAG = "fb-user";
+	public static String USER_SAVED_POST_TAG = "user-saved-post";
+	public static String USER_SAVED_PHOTO_TAG = "user-saved-photo";
+	
+	public static String USER_TYPE = "user";
 	
 
 	private static int TOP_SIZE = 30;
@@ -98,6 +105,20 @@ public class ElasticWorkflow {
 			return saveItemInIndex(new Index.Builder(vkUser).index(tag).type(USER_TYPE).id(vkUser.getId().toString()).build());
 	}
 	
+	public boolean indexElasticFBUser(FBResponseDTO fbResponseDTO){
+		String tag = USER_FB_TAG;
+			return saveItemInIndex(new Index.Builder(fbResponseDTO).index(tag).type(USER_TYPE).id(fbResponseDTO.getId().toString()).build());
+	}
+	
+	public boolean indexElasticUserSavedPost(UserSavedPosts post){
+		String tag = USER_SAVED_POST_TAG;
+			return saveItemInIndex(new Index.Builder(post).index(tag).type(USER_TYPE).id(post.getId().toString()).build());
+	}
+	
+	public boolean indexElasticUserSavedPhoto(UserSavedPhotos postDTO){
+		String tag = USER_SAVED_PHOTO_TAG;
+			return saveItemInIndex(new Index.Builder(postDTO).index(tag).type(USER_TYPE).id(postDTO.getId().toString()).build());
+	}
 	
 	
 	private boolean saveItemInIndex(Index index){
@@ -111,22 +132,35 @@ public class ElasticWorkflow {
 	}
 	
 	public boolean updateItemInIndex(Post post){
-		try {
+//		try {
 			String tag = checkTag(post);
 			if(tag != null){
-				elastic.getClient().execute(new Delete.Builder(post.getId().toString())
-		                .index(tag)
-		                .type(YF_TYPE_PHOTO)
-		                .build());
+//				elastic.getClient().execute(new Delete.Builder(post.getId().toString())
+//		                .index(tag)
+//		                .type(YF_TYPE_PHOTO)
+//		                .build());
+				deleteById(tag,post.getId().toString(),YF_TYPE_PHOTO);
 				
 				saveItemInIndex(new Index.Builder(post).index(tag).type(YF_TYPE_PHOTO).id(post.getId().toString()).build());
 			
 			return true;
 			}
+//		} catch (IOException e) {
+//			e.printStackTrace();
+//		}
+		return false;
+	}
+	
+	public void deleteById(String tag, String id, String type){
+		try {
+			elastic.getClient().execute(new Delete.Builder(id)
+			        .index(tag)
+			        .type(type)
+			        .build());
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		return false;
+	
 	}
 	
 	private void deleteIndex(String index){

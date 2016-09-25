@@ -7,7 +7,8 @@ import javax.persistence.Id;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.persistence.Table;
-import javax.validation.constraints.NotNull;  
+import javax.validation.constraints.NotNull;
+
 
 
 @Entity

@@ -1,12 +1,12 @@
 package yf.user.rest;
 
+import javax.inject.Inject;
 import javax.ws.rs.core.MediaType;
 
 import com.sun.jersey.api.client.Client;
-import com.sun.jersey.api.client.GenericType;
 
-import yf.user.dto.VKUserDTO;
-
+import yf.core.JSONService;
+import yf.user.dto.vk.VKUserDTO;
 public class UserRestClient {
 	public static final String VK_HOST = "https://api.vk.com/method/";
 	public static final String VK_METHOD_GET_USERS = "users.get?";
@@ -15,14 +15,19 @@ public class UserRestClient {
 	public static final String VK_NAME_CASE_NOM = "&name_case=Nom";
 	public static final String VK_API_VERSION_5_53 = "&v=5.53";
 	
-	public VKUserDTO getVKUserDetails(long userId){
+	@Inject
+	JSONService JSONService;
 	
-					VKUserDTO dto = Client.create().
-						resource(userDetailsURI(userId)).accept(MediaType.APPLICATION_JSON)
-						.get(new GenericType<VKUserDTO>(){});
-				
-		return dto;
+	public VKUserDTO getVKUserDetails(long userId){
+		
+					String JSONdto = Client.create().
+							resource(userDetailsURI(userId)).accept(MediaType.APPLICATION_JSON)
+							.get(String.class);
+					
+					return (VKUserDTO) JSONService.JSONtoObject(JSONdto, VKUserDTO.class);			
+
 	}
+
 	
 	private String userDetailsURI(long userId){
 		return VK_HOST + VK_METHOD_GET_USERS + VK_USER_IDS + userId + VK_REQUIRED_FIELDS + VK_NAME_CASE_NOM + VK_API_VERSION_5_53;

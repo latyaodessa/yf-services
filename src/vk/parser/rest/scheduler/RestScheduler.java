@@ -7,6 +7,7 @@ import javax.ejb.Singleton;
 import javax.ejb.Timeout;
 import javax.inject.Inject;
 
+import vk.parser.ParserService;
 import vk.parser.rest.client.ParserRestClient;
 
 @Singleton
@@ -14,7 +15,8 @@ public class RestScheduler implements Scheduler{
 
 	@Inject
 	ParserRestClient parserRestClient;
-	
+	@Inject
+ 	ParserService parserService;
     private Logger logger = Logger.getLogger(RestScheduler.class.getName());
     
 
@@ -24,6 +26,7 @@ public class RestScheduler implements Scheduler{
 	@Timeout
 	public void process() {
     		parserRestClient.checkNewPosts();
+//    		 parserService.triggerPostParserForNewPosts();
     		logger.info("New Posts Rest Call is triggered");
 			
 		

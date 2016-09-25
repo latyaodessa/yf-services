@@ -14,13 +14,18 @@
 
         <init-param>
             <param-name>com.sun.jersey.config.property.packages</param-name>
-            <param-value>ngdemo.rest;vk.parser.rest</param-value>
+            <param-value>vk.parser.rest;yf.user.rest;</param-value>
         </init-param>
 
         <init-param>
             <param-name>com.sun.jersey.api.json.POJOMappingFeature</param-name>
             <param-value>true</param-value>
         </init-param>
+        
+       	<init-param>
+        	<param-name>com.sun.jersey.spi.container.ContainerResponseFilters</param-name>
+       		<param-value>yf.core.CrossOriginResourceSharingFilter</param-value>
+    	</init-param>
 
         <load-on-startup>1</load-on-startup>
     </servlet>

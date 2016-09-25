@@ -1,8 +1,12 @@
 package yf.user.entities;
 
+import javax.persistence.Column;
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
+import javax.persistence.Lob;
 import javax.persistence.Table;
+
+import org.hibernate.annotations.Type;
 
 @Entity
 @Table(name = "user_vk")
@@ -15,10 +19,15 @@ public class VKUser extends User {
 	private String maiden_name;
 	private String domain;
 	private String bdate;
+	@Column(length = 600)
 	private String photo_50;
+	@Column(length = 600)
 	private String photo_100;
+	@Column(length = 600)
 	private String photo_200_orig;
+	@Column(length = 600)
 	private String photo_200;
+	@Column(length = 600)
 	private String photo_400_orig;
 	private String mobile_phone;
 	private String home_phone;
@@ -32,6 +41,9 @@ public class VKUser extends User {
 	private String movies;
 	private String books;
 	private String games;
+	@Lob
+	@Column
+	@Type(type = "org.hibernate.type.TextType")
 	private String about;
 	private String quotes;
 	private String country;
