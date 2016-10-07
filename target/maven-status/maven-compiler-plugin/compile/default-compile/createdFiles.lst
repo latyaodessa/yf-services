@@ -2,6 +2,7 @@ yf/user/dto/fb/FBPictureDTO.class
 vk/parser/workflow/PostConverter.class
 vk/logic/entities/PostVideo.class
 yf/user/dto/vk/VKResponseDTO.class
+vk/parser/workflow/PostRegexTextCleaner.class
 yf/user/dto/vk/VKUserDTO.class
 vk/parser/rest/scheduler/RestScheduler.class
 vk/parser/workflow/PostAudioConverter.class
@@ -11,9 +12,11 @@ yf/user/dto/fb/FBResponseDTO.class
 vk/parser/dto/PostDTO.class
 vk/parser/dto/PostAttachmentDTO.class
 yf/user/workflow/UserConverter.class
+vk/post/rest/VKPostRestImpl.class
 yf/user/dto/save/UserPostSaveDataDTO.class
 vk/logic/entities/PostAudio.class
 vk/logic/elastic/ElasticWorkflow.class
+vk/parser/dto/elastic/PostElasticDTO.class
 vk/parser/rest/scheduler/TopPostsYFScheduler.class
 yf/user/entities/FBUser.class
 vk/parser/rest/client/ParserRestClient.class
@@ -22,6 +25,7 @@ yf/user/entities/usersaved/UserSavedPhotos.class
 yf/user/rest/UserRestImpl.class
 vk/parser/workflow/PostPhotoConverter.class
 yf/user/rest/UserRestClient.class
+yf/core/PropertiesReslover.class
 vk/parser/dto/PostVideoDTO.class
 vk/parser/rest/scheduler/Scheduler.class
 yf/user/entities/usersaved/UserSavedPosts.class
@@ -38,11 +42,15 @@ vk/parser/dto/PostPhotoDTO.class
 vk/parser/rest/VkRestImpl.class
 vk/parser/dto/CountDTO.class
 vk/parser/dto/PostLinkDTO.class
+yf/elastic/reindex/ReindexWorkflow.class
 yf/user/entities/User.class
 vk/post/PostService.class
 vk/logic/entities/Post.class
+yf/elastic/reindex/ElasticBulkFetcher.class
+yf/elastic/reindex/BulkElasticReindexRestImpl.class
 yf/user/workflow/UserWorkflow.class
 vk/parser/rest/client/ParserRestClient$2.class
+yf/elastic/reindex/PostReindexWorkflow.class
 yf/core/JSONService.class
 vk/logic/elastic/ElasticSingleton.class
 vk/parser/workflow/PostVideoConverter.class

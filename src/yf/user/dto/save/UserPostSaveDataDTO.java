@@ -2,14 +2,6 @@ package yf.user.dto.save;
 
 import java.util.Date;
 
-import javax.persistence.CascadeType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.validation.constraints.NotNull;
-
-import yf.user.entities.User;
-
 public class UserPostSaveDataDTO {
 	
 	private Long post_id;

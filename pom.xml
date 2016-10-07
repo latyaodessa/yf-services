@@ -226,6 +226,12 @@
     <version>1.0.0</version>
 </dependency>
 
+<dependency>
+    <groupId>com.ibm.icu</groupId>
+    <artifactId>icu4j</artifactId>
+    <version>57.1</version>
+</dependency>
+
         <!-- Unit testing -->
         <dependency>
             <groupId>junit</groupId>

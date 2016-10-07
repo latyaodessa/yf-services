@@ -1,9 +1,7 @@
 package yf.user.workflow;
 
-import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Optional;
-import java.util.TimeZone;
 
 import yf.user.dto.GeneralUserDTO;
 import yf.user.dto.fb.FBResponseDTO;

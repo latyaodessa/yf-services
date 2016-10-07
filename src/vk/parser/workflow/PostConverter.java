@@ -14,21 +14,27 @@ import vk.logic.entities.PostPhoto;
 import vk.logic.entities.PostVideo;
 import vk.parser.dto.PostAttachmentDTO;
 import vk.parser.dto.PostDTO;
+import vk.parser.dto.elastic.PostElasticDTO;
+import yf.core.PropertiesReslover;
 
-class PostConverter {
+public class PostConverter {
 @Inject
 PostPhotoConverter postPhotoConverter;
 @Inject
 PostAudioConverter postAudioConverter;
 @Inject
 PostVideoConverter postVideoConverter;
-final DateTimeFormatter formatter = 
-DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+@Inject
+PostRegexTextCleaner postRegexTextCleaner;
+@Inject
+PropertiesReslover properties;
+
+final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 	
 	public Post toEntity(PostDTO dto){
 		Post post = new Post();
 		post.setId(dto.getId());
-		post.setFrom_id(dto.getFrom_id());
+		post.setFrom_id(dto.getFrom_id().replaceAll("-", ""));
 		post.setDate(Instant.ofEpochSecond(dto.getDate())
         .atZone(ZoneId.of("GMT-4"))
         .format(formatter));
@@ -57,5 +63,40 @@ DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 		}
 		return post;
 	}
+	
+	public PostElasticDTO toElasticPostDto(Post entity) {
+		PostElasticDTO elasticDTO = new PostElasticDTO();
+		elasticDTO.setId(entity.getId());
+		elasticDTO.setFrom_id(entity.getFrom_id());
+		elasticDTO.setDate(entity.getDate());
+		elasticDTO.setText(entity.getText());
+		elasticDTO.setSigner_id(entity.getSigner_id());
+		elasticDTO.setLikes(entity.getLikes());
+		elasticDTO.setReposts(entity.getReposts());
+		elasticDTO.setPostAudio(entity.getPostAudio());
+		elasticDTO.setPostPhoto(entity.getPostPhoto());
+		elasticDTO.setPostVideo(entity.getPostVideo());
+		
+		elasticDTO = postRegexTextCleaner.getCleanedText(elasticDTO);
+		
+		return elasticDTO;
+	}
+	
+	public PostElasticDTO toEXTERNALPostDto(Post entity){
+		PostElasticDTO elasticDTO = new PostElasticDTO();
+		elasticDTO.setId(entity.getId());
+		elasticDTO.setFrom_id(entity.getFrom_id());
+		elasticDTO.setDate(entity.getDate());
+		elasticDTO.setText(entity.getText().replaceAll("by ", ""));
+		elasticDTO.setSigner_id(entity.getSigner_id());
+		elasticDTO.setLikes(entity.getLikes());
+		elasticDTO.setReposts(entity.getReposts());
+		elasticDTO.setPostAudio(entity.getPostAudio());
+		elasticDTO.setPostPhoto(entity.getPostPhoto());
+		elasticDTO.setPostVideo(entity.getPostVideo());
+				
+		return elasticDTO;
+	}
+	
 
 }

@@ -12,10 +12,11 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
+import vk.logic.elastic.ElasticWorkflow;
 import vk.parser.ParserService;
 import vk.parser.dto.PostDTO;
+import vk.parser.dto.elastic.PostElasticDTO;
 import vk.post.PostService;
-import yf.user.dto.vk.VKUserDTO;
 
 @Path("/vk")
 @Produces(MediaType.APPLICATION_JSON)
@@ -25,7 +26,8 @@ public class VkRestImpl {
 	 	ParserService parserService;
 		@Inject
 	 	PostService postService;
-
+		@Inject
+		ElasticWorkflow elasticWorkflow;
 		@PersistenceContext
 		private EntityManager em;
 		
@@ -52,4 +54,24 @@ public class VkRestImpl {
 				}
 			return null;
 		}
+		
+		@GET
+		@Path("parse/{gropuId}/{firstpage}/{lastpage}/{index}")
+		public List<PostDTO> parseExternalVkPublic(@PathParam("gropuId") int groupId,
+													@PathParam("firstpage") int firstpage,
+													@PathParam("lastpage") int lastpage,
+													@PathParam("index") String index){
+			
+			return parserService.triggerExternalPostParser(groupId, firstpage, lastpage, index);
+
+			
+		}
+		
+		@GET
+		@Path("post/{id}")
+		public PostElasticDTO getPostById(@PathParam("id") String id){
+			return elasticWorkflow.getPostById(id);
+			
+		}
+		
 }

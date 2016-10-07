@@ -9,6 +9,7 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 
 import vk.logic.elastic.ElasticWorkflow;
+import yf.core.PropertiesReslover;
 import yf.user.dto.GeneralUserDTO;
 import yf.user.dto.fb.FBResponseDTO;
 import yf.user.dto.save.UserPhotoSaveDataDTO;
@@ -30,6 +31,8 @@ public class UserWorkflow {
 	UserConverter userConverter;
 	@Inject
 	ElasticWorkflow elasticWorkflow;
+	@Inject
+	PropertiesReslover properties;
 	
 	public GeneralUserDTO getUserById(long userId){
 		User user = em.find(User.class, userId);
@@ -120,7 +123,7 @@ public class UserWorkflow {
 		  
 		  for(UserSavedPosts saved : userSavedPosts){
 			  em.remove(saved);
-			  elasticWorkflow.deleteById(ElasticWorkflow.USER_SAVED_POST_TAG, saved.getId().toString(), ElasticWorkflow.USER_TYPE);
+			  elasticWorkflow.deleteById(properties.get("elastic.index.user.saved.post"), saved.getId().toString(), properties.get("elastic.type.user"));
 		  }
 		  return userSavedPosts;
 	}
@@ -135,7 +138,7 @@ public class UserWorkflow {
 		  }
 		  
 			  em.remove(userSavedPhoto);
-			  elasticWorkflow.deleteById(ElasticWorkflow.USER_SAVED_PHOTO_TAG, userSavedPhoto.getId().toString(), ElasticWorkflow.USER_TYPE);
+			  elasticWorkflow.deleteById(properties.get("elastic.index.user.saved.photo"), userSavedPhoto.getId().toString(), properties.get("elastic.type.user"));
 		  
 		  return userSavedPhoto;
 	}
