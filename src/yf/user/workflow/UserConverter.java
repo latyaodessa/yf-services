@@ -121,6 +121,7 @@ public class UserConverter {
 		entity.setPost_id(dto.getPost_id());
 		entity.setMd(dto.getMd());
 		entity.setPh(dto.getPh());
+		entity.setText(dto.getText());
 		
 		return entity;
 		
