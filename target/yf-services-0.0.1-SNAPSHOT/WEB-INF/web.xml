@@ -26,6 +26,10 @@
         	<param-name>com.sun.jersey.spi.container.ContainerResponseFilters</param-name>
        		<param-value>yf.core.CrossOriginResourceSharingFilter</param-value>
     	</init-param>
+    	 <init-param>
+         <param-name>com.sun.jersey.config.feature.DisableWADL</param-name>
+         <param-value>true</param-value>
+     </init-param>
 
         <load-on-startup>1</load-on-startup>
     </servlet>
