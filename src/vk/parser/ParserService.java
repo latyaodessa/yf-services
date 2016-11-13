@@ -8,12 +8,12 @@ import javax.inject.Inject;
 
 import vk.parser.dto.PostDTO;
 import vk.parser.rest.client.ParserRestClient;
-import vk.parser.workflow.PostWorkflow;
+import vk.parser.workflow.PostParserWorkflow;
 
 @Stateless
 public class ParserService {
 	@Inject
-	private PostWorkflow postWorkflow;
+	private PostParserWorkflow postWorkflow;
 	@Inject 
 	private ParserRestClient parserRestClient;
 	
@@ -47,6 +47,12 @@ public class ParserService {
 		postDTOList = parserRestClient.parseAllPages(YF_GROUP_ID, 0,100);
 		postWorkflow.saveUpdateNewEntry(postDTOList);
 		return postDTOList;
+		
+	}
+	
+	public boolean getAndSaveWeeklyTop(){
+		postWorkflow.saveUpdateWeeklyTop();
+		return true;
 		
 	}
 	

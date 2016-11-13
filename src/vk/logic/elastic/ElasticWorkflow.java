@@ -205,23 +205,7 @@ public class ElasticWorkflow {
 		
 	}
 	
-	public PostElasticDTO getPostById(String id){
-		
-		SearchResult result = null;
-		try {
-			result = elastic.getClient().execute(new Search.Builder("").setParameter("_id", id).build());
-			
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		
-		
-		List<Hit<PostElasticDTO, Void>> posts = result.getHits(PostElasticDTO.class);
-		
-		return posts.get(0).source;
 
-		
-	}
 	
 
 }

@@ -33,10 +33,16 @@ public class PostPhoto{
 	private String text;
 	private String date;
 	private String access_key;
+
+
+	public PostPhoto() {
+		super();
+	}
 	
-	public PostPhoto(Long photo_id, Long id, String album_id, String owner_id, Long user_id, String photo_75, String photo_130,
-			String photo_604, String photo_807, String photo_1280, String photo_2560, int width, int height,
-			String text, String date, String access_key) {
+
+	public PostPhoto(Long photo_id, Long id, String album_id, String owner_id, Long user_id, String photo_75,
+			String photo_130, String photo_604, String photo_807, String photo_1280, String photo_2560, int width,
+			int height, String text, String date, String access_key) {
 		super();
 		this.photo_id = photo_id;
 		this.id = id;
@@ -57,13 +63,6 @@ public class PostPhoto{
 	}
 
 
-
-	public PostPhoto() {
-		super();
-	}
-
-	
-	
 	public Long getId() {
 		return id;
 	}

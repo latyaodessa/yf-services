@@ -5,6 +5,7 @@
 /Users/andrefedorenko/Dropbox/sites/youngfolks/yf-services/src/yf/user/dto/save/UserPhotoSaveDataDTO.java
 /Users/andrefedorenko/Dropbox/sites/youngfolks/yf-services/src/yf/user/entities/VKUser.java
 /Users/andrefedorenko/Dropbox/sites/youngfolks/yf-services/src/vk/logic/elastic/ElasticSingleton.java
+/Users/andrefedorenko/Dropbox/sites/youngfolks/yf-services/src/vk/logic/elastic/NativeElasticSingleton.java
 /Users/andrefedorenko/Dropbox/sites/youngfolks/yf-services/src/yf/elastic/reindex/BulkElasticReindexRestImpl.java
 /Users/andrefedorenko/Dropbox/sites/youngfolks/yf-services/src/yf/user/dto/vk/VKUserDTO.java
 /Users/andrefedorenko/Dropbox/sites/youngfolks/yf-services/src/vk/parser/dto/PostAudioDTO.java

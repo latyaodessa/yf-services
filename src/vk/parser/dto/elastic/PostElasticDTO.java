@@ -3,9 +3,6 @@ package vk.parser.dto.elastic;
 import java.util.List;
 
 import vk.logic.entities.Post;
-import vk.logic.entities.PostAudio;
-import vk.logic.entities.PostPhoto;
-import vk.logic.entities.PostVideo;
 
 public class PostElasticDTO extends Post{
 	
@@ -13,24 +10,55 @@ public class PostElasticDTO extends Post{
 	private String ph;
 	private String md_translit;
 	private String ph_translit;
+	private String thumbnail;
+	private List <String> largePics;
 	
-	
-	public PostElasticDTO(String md, String ph, String md_translit, String pg_translit) {
-		super();
-		this.md = md;
-		this.ph = ph;
-		this.md_translit = md_translit;
-		this.ph_translit = pg_translit;
-	}
 	
 	public PostElasticDTO() {
 		super();
 	}
 
-	public PostElasticDTO(Long id, String from_id, String date, String text, Long signer_id, int likes, int reposts,
-			List<PostAudio> postAudio, List<PostPhoto> postPhoto, List<PostVideo> postVideo) {
-		super(id, from_id, date, text, signer_id, likes, reposts, postAudio, postPhoto, postVideo);
+
+
+
+	public PostElasticDTO(String md, String ph, String md_translit, String ph_translit, String thumbnail,
+			List<String> largePics) {
+		super();
+		this.md = md;
+		this.ph = ph;
+		this.md_translit = md_translit;
+		this.ph_translit = ph_translit;
+		this.thumbnail = thumbnail;
+		this.largePics = largePics;
 	}
+
+	
+
+
+
+	public List<String> getLargePics() {
+		return largePics;
+	}
+
+
+
+
+	public void setLargePics(List<String> largePics) {
+		this.largePics = largePics;
+	}
+
+
+
+
+	public String getThumbnail() {
+		return thumbnail;
+	}
+
+
+	public void setThumbnail(String thumbnail) {
+		this.thumbnail = thumbnail;
+	}
+
 
 	public String getMd() {
 		return md;

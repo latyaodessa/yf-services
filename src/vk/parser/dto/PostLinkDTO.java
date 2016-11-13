@@ -3,7 +3,6 @@ package vk.parser.dto;
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-//@JsonIgnoreProperties
 public class PostLinkDTO {
 	
 	private String url;

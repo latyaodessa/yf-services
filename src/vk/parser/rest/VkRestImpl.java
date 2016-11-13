@@ -16,7 +16,7 @@ import vk.logic.elastic.ElasticWorkflow;
 import vk.parser.ParserService;
 import vk.parser.dto.PostDTO;
 import vk.parser.dto.elastic.PostElasticDTO;
-import vk.post.PostService;
+import yf.post.PostService;
 
 @Path("/vk")
 @Produces(MediaType.APPLICATION_JSON)
@@ -24,8 +24,6 @@ import vk.post.PostService;
 public class VkRestImpl {
 		@Inject
 	 	ParserService parserService;
-		@Inject
-	 	PostService postService;
 		@Inject
 		ElasticWorkflow elasticWorkflow;
 		@PersistenceContext
@@ -49,7 +47,7 @@ public class VkRestImpl {
 			return parserService.triggerPostParserForNewPosts();
 			}
 			if("top".equals(command)){
-				postService.getAndSaveWeeklyTop();
+				parserService.getAndSaveWeeklyTop();
 				return null;
 				}
 			return null;
@@ -64,13 +62,6 @@ public class VkRestImpl {
 			
 			return parserService.triggerExternalPostParser(groupId, firstpage, lastpage, index);
 
-			
-		}
-		
-		@GET
-		@Path("post/{id}")
-		public PostElasticDTO getPostById(@PathParam("id") String id){
-			return elasticWorkflow.getPostById(id);
 			
 		}
 		

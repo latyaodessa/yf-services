@@ -5,170 +5,55 @@
   <version>0.0.1-SNAPSHOT</version>
   <packaging>war</packaging>
     	<properties>
-		<version.elasticsearch>1.7.1</version.elasticsearch>
-		<version.lucene>4.10.4</version.lucene>
-				<version.javers>1.6.7</version.javers>
-		
+		<version.elasticsearch>5.0.0</version.elasticsearch>
+		<version.jersey>1.19.3</version.jersey>
+		<version.jackson>2.8.4</version.jackson>
 	</properties>
  <dependencies>
-         <!-- elastic -->
-         
- 
- 
-<!-- <        <dependency>
+ <!-- native elastic -->
+ <dependency>
     <groupId>org.elasticsearch</groupId>
     <artifactId>elasticsearch</artifactId>
-    <version>2.3.4</version>
+    <version>${version.elasticsearch}</version>
 </dependency>
-
-  <dependency>
-        <groupId>org.codehaus.groovy</groupId>
-        <artifactId>groovy-all</artifactId>
-		<version>2.4.7</version>
-        <classifier>indy</classifier>
-    </dependency> -->
-<!--     <dependency>
-    <groupId>io.searchbox</groupId>
-    <artifactId>jest</artifactId>
-    <version>2.0.3</version>
-</dependency> 
-<dependency>
-    <groupId>org.apache.lucene</groupId>
-    <artifactId>lucene-core</artifactId>
-    <version>5.5.0</version>
-</dependency> -->
+ <dependency>
+    <groupId>org.elasticsearch.client</groupId>
+    <artifactId>transport</artifactId>
+    <version>${version.elasticsearch}</version>
+</dependency>
+      <!--   jest elastic -->
   <dependency>
     <groupId>io.searchbox</groupId>
     <artifactId>jest</artifactId>
     <version>2.0.3</version>
 </dependency> 
-<!-- full text search engine -->
-	<!-- 	<dependency>
-			<groupId>org.elasticsearch</groupId>
-			<artifactId>elasticsearch</artifactId>
-			<version>${version.elasticsearch}</version>
-                        <scope>provided</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.lucene</groupId>
-			<artifactId>lucene-core</artifactId>
-			<version>${version.lucene}</version>
-                        <scope>provided</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.lucene</groupId>
-			<artifactId>lucene-expressions</artifactId>
-			<version>${version.lucene}</version>
-                        <scope>provided</scope>
-		</dependency>
-    
-	<dependency>
-			<groupId>org.apache.lucene</groupId>
-			<artifactId>lucene-spatial</artifactId>
-			<version>${version.lucene}</version>
-                        <scope>provided</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.lucene</groupId>
-			<artifactId>lucene-grouping</artifactId>
-			<version>${version.lucene}</version>
-                        <scope>provided</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.lucene</groupId>
-			<artifactId>lucene-join</artifactId>
-			<version>${version.lucene}</version>
-                        <scope>provided</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.lucene</groupId>
-			<artifactId>lucene-misc</artifactId>
-			<version>${version.lucene}</version>
-                        <scope>provided</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.lucene</groupId>
-			<artifactId>lucene-suggest</artifactId>
-			<version>${version.lucene}</version>
-                        <scope>provided</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.lucene</groupId>
-			<artifactId>lucene-sandbox</artifactId>
-			<version>${version.lucene}</version>
-                        <scope>provided</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.lucene</groupId>
-			<artifactId>lucene-queryparser</artifactId>
-			<version>${version.lucene}</version>
-                        <scope>provided</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.lucene</groupId>
-			<artifactId>lucene-highlighter</artifactId>
-			<version>${version.lucene}</version>
-                        <scope>provided</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.lucene</groupId>
-			<artifactId>lucene-memory</artifactId>
-			<version>${version.lucene}</version>
-                        <scope>provided</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.lucene</groupId>
-			<artifactId>lucene-queries</artifactId>
-			<version>${version.lucene}</version>
-                        <scope>provided</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.lucene</groupId>
-			<artifactId>lucene-analyzers-common</artifactId>
-			<version>${version.lucene}</version>
-                        <scope>provided</scope>
-		</dependency>
-					<dependency>
-				<groupId>org.javers</groupId>
-				<artifactId>javers-core</artifactId>
-				<version>${version.javers}</version>
-				<exclusions>
-				<exclusion>
-					<groupId>org.slf4j</groupId>
-					<artifactId>slf4j-api</artifactId>
-				</exclusion>
-			</exclusions>
-                                <scope>provided</scope>
-			</dependency> -->
-	
-		
         <!-- javax: XML binding -->
-        <dependency>
-            <groupId>javax.xml</groupId>
-            <artifactId>jaxb-api</artifactId>
-            <version>2.1</version>
-        </dependency>
+		<dependency>
+		    <groupId>javax.xml</groupId>
+		    <artifactId>jaxb-api</artifactId>
+		    <version>2.1</version>
+		</dependency>
 
         <!-- RESTful web service: Jersey -->
         <dependency>
             <groupId>com.sun.jersey</groupId>
             <artifactId>jersey-server</artifactId>
-            <version>1.17.1</version>
+   			 <version>${version.jersey}</version>
         </dependency>
         <dependency>
             <groupId>com.sun.jersey</groupId>
             <artifactId>jersey-servlet</artifactId>
-            <version>1.17.1</version>
+   				 <version>${version.jersey}</version>
         </dependency>
 		<dependency>
 		    <groupId>com.sun.jersey</groupId>
 		    <artifactId>jersey-json</artifactId>
-		    <version>1.19.2</version>
+   			 <version>${version.jersey}</version>
 		</dependency>
         <dependency>
     <groupId>com.sun.jersey</groupId>
     <artifactId>jersey-client</artifactId>
-    <version>1.19.1</version>
+    <version>${version.jersey}</version>
 </dependency>
         <dependency>
     <groupId>org.hibernate</groupId>
@@ -183,12 +68,12 @@
 <dependency>
     <groupId>com.fasterxml.jackson.core</groupId>
     <artifactId>jackson-core</artifactId>
-    <version>2.8.0</version>
+    <version>${version.jackson}</version>
 </dependency>
 <dependency>
     <groupId>com.fasterxml.jackson.core</groupId>
     <artifactId>jackson-annotations</artifactId>
-    <version>2.8.0</version>
+    <version>${version.jackson}</version>
 </dependency>
 <dependency>
     <groupId>javax.validation</groupId>
@@ -244,7 +129,7 @@
     
   <build>
     <sourceDirectory>src</sourceDirectory>
-
+    <finalName>${project.artifactId}</finalName>
     
     <plugins>
       <plugin>
@@ -264,16 +149,6 @@
         </configuration>
       </plugin>
       
- <plugin>
-    <groupId>org.mortbay.jetty</groupId>
-    <artifactId>jetty-maven-plugin</artifactId>
-    <version>8.1.9.v20130131</version>
-    <configuration>
-     <stopKey>STOP</stopKey>
-     <stopPort>9999</stopPort>
-     <scanIntervalSeconds>5</scanIntervalSeconds>
-    </configuration>
-   </plugin>
     </plugins>
     
   </build>

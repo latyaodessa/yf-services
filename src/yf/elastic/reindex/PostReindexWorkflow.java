@@ -11,12 +11,12 @@ import javax.inject.Inject;
 import vk.logic.elastic.ElasticWorkflow;
 import vk.logic.entities.Post;
 import vk.parser.dto.elastic.PostElasticDTO;
-import vk.parser.workflow.PostConverter;
+import vk.parser.workflow.ParserPostConverter;
 import yf.core.PropertiesReslover;
 
 public class PostReindexWorkflow {
 	@Inject
-	private PostConverter postConverter;
+	private ParserPostConverter postConverter;
 	@Inject
 	private PropertiesReslover properties;
 	@Inject
