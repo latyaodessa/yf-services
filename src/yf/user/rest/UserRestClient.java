@@ -6,7 +6,7 @@ import javax.ws.rs.core.MediaType;
 import com.sun.jersey.api.client.Client;
 
 import yf.core.JSONService;
-import yf.user.dto.vk.VKUserDTO;
+import yf.user.dto.external.vk.VKUserDTO;
 public class UserRestClient {
 	public static final String VK_HOST = "https://api.vk.com/method/";
 	public static final String VK_METHOD_GET_USERS = "users.get?";

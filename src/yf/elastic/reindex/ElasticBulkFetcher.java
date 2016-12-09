@@ -11,8 +11,6 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
-import vk.logic.entities.Post;
-
 public class ElasticBulkFetcher implements Serializable {
 	private static final long serialVersionUID = 1L;
 	
@@ -22,34 +20,38 @@ public class ElasticBulkFetcher implements Serializable {
 
 	@PersistenceContext
 	private EntityManager em;
-
-	protected List<Post> fetchAllModels(final int offset) {
-        CriteriaBuilder cb = em.getCriteriaBuilder();
-        CriteriaQuery<Post> query = cb.createQuery(Post.class);
-        Root<Post> root = query.from(Post.class);
+	
+	
+	protected <T> List<T> fetchAllModels(final int offset, Class<T> cls){
+		CriteriaBuilder cb = em.getCriteriaBuilder();
+        CriteriaQuery<T> query = cb.createQuery(cls);
+        Root<T> root = query.from(cls);
 
         query.select(root).orderBy(cb.asc(root.get("id")));
-        query.where(limitFetchModels(cb, root, offset));
+        query.where(limitFetchModels(cb, root, offset, cls));
         query.distinct(true);
         return em.createQuery(query).getResultList();
-    }
+	}
+
 	
-    protected Predicate limitFetchModels(final CriteriaBuilder cb,
-            final Root<Post> root,
-            final int offset) {
-    		Long topBorder = getIdOffset(offset + DEFAULT_BULK_SIZE - 1);
+    protected <T> Predicate limitFetchModels(final CriteriaBuilder cb,
+									            final Root<T> root,
+									            final int offset, 
+									            final Class<T> cls) {
+    		Long topBorder = getIdOffset(offset + DEFAULT_BULK_SIZE - 1, cls);
     			if (topBorder != null) {
-    					return cb.between(root.get("id"), getIdOffset(offset), topBorder);
+    					return cb.between(root.get("id"), getIdOffset(offset, cls), topBorder);
     					} else {
-    						return cb.ge(root.get("id"), getIdOffset(offset));
+    						return cb.ge(root.get("id"), getIdOffset(offset, cls));
     					}
     }
     
-    private Long getIdOffset(final int offset) {
+    
+    private <T> Long getIdOffset(final int offset, Class<T> cls) {
 
         CriteriaBuilder cb = em.getCriteriaBuilder();
         CriteriaQuery<Long> query = cb.createQuery(Long.class);
-        Root<Post> root = query.from(Post.class);
+        Root<T> root = query.from(cls);
         query.select(root.get("id")).orderBy(cb.asc(root.get("id")));
         query.distinct(true);
         try {

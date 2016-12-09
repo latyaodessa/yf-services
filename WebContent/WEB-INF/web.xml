@@ -14,7 +14,7 @@
 
         <init-param>
             <param-name>com.sun.jersey.config.property.packages</param-name>
-            <param-value>vk.parser.rest;yf.user.rest;yf.post.rest;yf.elastic.reindex;</param-value>
+            <param-value>yf.post.parser.rest;yf.user.rest;yf.post.rest;yf.elastic.reindex;</param-value>
         </init-param>
 
         <init-param>

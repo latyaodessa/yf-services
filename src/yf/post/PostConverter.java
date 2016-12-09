@@ -1,7 +1,7 @@
 package yf.post;
 
-import vk.parser.dto.elastic.PostElasticDTO;
 import yf.post.dto.PostDetailsDTO;
+import yf.post.dto.PostElasticDTO;
 import yf.post.dto.SharedBasicPostDTO;
 
 public class PostConverter {

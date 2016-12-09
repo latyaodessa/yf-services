@@ -4,16 +4,16 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import yf.user.UserWorkflow;
 import yf.user.dto.GeneralUserDTO;
-import yf.user.dto.fb.FBResponseDTO;
+import yf.user.dto.external.fb.FBResponseDTO;
+import yf.user.dto.external.vk.VKResponseDTO;
+import yf.user.dto.external.vk.VKUserDTO;
 import yf.user.dto.save.UserPhotoSaveDataDTO;
 import yf.user.dto.save.UserPostSaveDataDTO;
-import yf.user.dto.vk.VKResponseDTO;
-import yf.user.dto.vk.VKUserDTO;
 import yf.user.entities.usersaved.UserSavedPhotos;
 import yf.user.entities.usersaved.UserSavedPosts;
 import yf.user.rest.UserRestClient;
-import yf.user.workflow.UserWorkflow;
 
 public class UserService {
 	@Inject

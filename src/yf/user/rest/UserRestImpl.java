@@ -14,10 +14,10 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
 import yf.user.dto.GeneralUserDTO;
-import yf.user.dto.fb.FBResponseDTO;
+import yf.user.dto.external.fb.FBResponseDTO;
+import yf.user.dto.external.vk.VKResponseDTO;
 import yf.user.dto.save.UserPhotoSaveDataDTO;
 import yf.user.dto.save.UserPostSaveDataDTO;
-import yf.user.dto.vk.VKResponseDTO;
 import yf.user.entities.usersaved.UserSavedPhotos;
 import yf.user.entities.usersaved.UserSavedPosts;
 import yf.user.services.UserService;

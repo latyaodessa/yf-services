@@ -17,9 +17,15 @@ public class BulkElasticReindexRestImpl {
 	
 	@GET
 	@Path("vk/posts")
-	public Boolean postsBulkReindex(){
+	public boolean postsBulkReindex(){
 		return reindexWorkflow.reindexPosts();
 		 
+	}
+	
+	@GET
+	@Path("users")
+	public boolean usersBulkReindex(){
+		return reindexWorkflow.reindexUsers();
 	}
 	
 }

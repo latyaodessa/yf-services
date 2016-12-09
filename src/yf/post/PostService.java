@@ -1,17 +1,22 @@
 package yf.post;
 
-import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;
 
-import io.searchbox.core.Search;
-import io.searchbox.core.SearchResult;
-import vk.parser.dto.elastic.PostElasticDTO;
-import yf.core.ElasticSearchExecutor;
+import org.apache.commons.lang3.StringUtils;
+import org.elasticsearch.action.get.GetResponse;
+import org.elasticsearch.action.search.SearchResponse;
+import org.elasticsearch.index.query.QueryBuilders;
+import org.elasticsearch.search.sort.SortOrder;
+
+import yf.core.PropertiesReslover;
+import yf.core.elastic.ElasticSearchExecutor;
+import yf.core.elastic.ElasticToObjectConvertor;
+import yf.elastic.core.NativeElasticSingleton;
 import yf.post.dto.PostDetailsDTO;
+import yf.post.dto.PostElasticDTO;
 import yf.post.dto.SharedBasicPostDTO;
 
 @Stateless
@@ -20,36 +25,71 @@ public class PostService {
 	ElasticSearchExecutor elasticSearchExecutor;
 	@Inject
 	PostConverter basicPostConverter;
+	@Inject
+	NativeElasticSingleton nativeElastiClient;
+	@Inject
+	ElasticToObjectConvertor elasticToObjectConvertor;
+	@Inject
+	PropertiesReslover properties;
 	
-	public PostDetailsDTO getPostDetailsDTO(final Long postId){
+	public PostDetailsDTO getPostDetailsDTO(final String index,  final String type, final String postId){
 		
-		SearchResult result = elasticSearchExecutor.executeSearch(new Search.Builder("")
-				.setParameter("_id", postId)
-				.build());
-		if(!result.getHits(PostElasticDTO.class).isEmpty()){
-		 return	basicPostConverter.toPostDetailsDTO(result.getHits(PostElasticDTO.class).get(0).source);
-		}
-		return null;
+		GetResponse res = nativeElastiClient.getClient().prepareGet(index, type, postId).get();
+		if(!res.isExists()) { return null;}
 		
+		PostElasticDTO searchResult = elasticToObjectConvertor.convertSingleResultToObject(res.getSourceAsString(), PostElasticDTO.class);		
+		return basicPostConverter.toPostDetailsDTO(searchResult);
 	}
 	
-	public List<SharedBasicPostDTO> getNewPostsFromTo(int from, int size, String index){
-		 List<SharedBasicPostDTO> sharedBasicPostDTO = new ArrayList<SharedBasicPostDTO>();
+	public List<SharedBasicPostDTO> getNewPostsFromTo(final String index, final String type, final int from, final int size){		
 		
-		SearchResult result = elasticSearchExecutor.executeSearch(new Search.Builder("")
-				.addIndex(index)
-				.setParameter("size", size)
-				.setParameter("sort", "id:desc")
-				.build());
-
-		
-		result.getHits(PostElasticDTO.class).forEach( post -> {
-			sharedBasicPostDTO.add(basicPostConverter.toSharedBasicPostDTO(post.source));
-		});
-		
-		return sharedBasicPostDTO;
-
+			SearchResponse res = nativeElastiClient.getClient().prepareSearch(index)
+			        .setTypes(type)
+			        .addSort("id", SortOrder.DESC)
+			        .setFrom(from).setSize(size).setExplain(true)
+			        .execute()
+			        .actionGet();
+			
+			return elasticSearchExecutor.executeSearchBasicPostDTO(res);
 	}
 	
+	public List<SharedBasicPostDTO> getTopPostsFromTo(final String index, final String type, final int from,final int size){
 
+			SearchResponse res = nativeElastiClient.getClient().prepareSearch(index)
+			        .setTypes(type)
+			        .addSort("likes", SortOrder.DESC)
+			        .setFrom(from).setSize(size).setExplain(true)
+			        .execute()
+			        .actionGet();
+	
+		return elasticSearchExecutor.executeSearchBasicPostDTO(res);
+	}
+	
+	public List<PostElasticDTO> getElasticTopPostsFromTo(final String index, final String type, final int from,final int size){
+
+		SearchResponse res = nativeElastiClient.getClient().prepareSearch(index)
+		        .setTypes(type)
+		        .addSort("likes", SortOrder.DESC)
+		        .setFrom(from).setSize(size).setExplain(true)
+		        .execute()
+		        .actionGet();
+
+	return elasticSearchExecutor.executePostElasticDTO(res);
+}
+	
+	public List<SharedBasicPostDTO> searchPosts(String query){
+		
+		if(StringUtils.isEmpty(query)) return null;
+				 
+			SearchResponse res = nativeElastiClient.getClient().prepareSearch("*",
+																			"-*"+properties.get("elastic.index.native.top"),
+																			"-*" +properties.get("elastic.index.sets.top"))
+					.setQuery(QueryBuilders.matchPhraseQuery("text", query))      
+			        .addSort("id", SortOrder.DESC)
+			        .setFrom(0).setSize(100).setExplain(true)
+			        .execute()
+			        .actionGet();
+		
+			return elasticSearchExecutor.executeSearchBasicPostDTO(res);
+	}
 }
