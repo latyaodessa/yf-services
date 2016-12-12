@@ -16,10 +16,18 @@ public class BulkElasticReindexRestImpl {
 	ReindexWorkflow reindexWorkflow;
 	
 	@GET
+	@Path("all")
+	public boolean allReindex(){
+		 return(reindexWorkflow.reindexPosts() 
+				 && reindexWorkflow.reindexUsers() 
+				 && reindexWorkflow.reindexDashboardPosts() 
+				 && reindexWorkflow.reindexDashboardPhotos());
+	}
+	
+	@GET
 	@Path("vk/posts")
 	public boolean postsBulkReindex(){
 		return reindexWorkflow.reindexPosts();
-		 
 	}
 	
 	@GET
@@ -28,4 +36,9 @@ public class BulkElasticReindexRestImpl {
 		return reindexWorkflow.reindexUsers();
 	}
 	
+	@GET
+	@Path("dashboard")
+	public boolean dashboardBulkReindex(){
+		return reindexWorkflow.reindexDashboardPosts() && reindexWorkflow.reindexDashboardPhotos();
+	}
 }

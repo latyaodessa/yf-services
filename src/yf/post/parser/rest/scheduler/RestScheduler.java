@@ -25,8 +25,8 @@ public class RestScheduler implements Scheduler{
     @Schedule(second = "05", minute = "01,03,05", hour = "*")
 	@Timeout
 	public void process() {
-    		parserRestClient.checkNewPosts();
-//    		 parserService.triggerPostParserForNewPosts();
+//    		parserRestClient.checkNewPosts();
+    		 parserService.triggerPostParserForNewPosts();
     		logger.info("New Posts Rest Call is triggered");
 			
 		

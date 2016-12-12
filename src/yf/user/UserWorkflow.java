@@ -1,26 +1,24 @@
 package yf.user;
 
-import java.util.List;
-
 import javax.ejb.Stateless;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import javax.persistence.TypedQuery;
+
+import org.elasticsearch.action.get.GetResponse;
+import org.elasticsearch.action.index.IndexResponse;
+import org.elasticsearch.rest.RestStatus;
 
 import yf.core.PropertiesReslover;
+import yf.core.elastic.ElasticToObjectConvertor;
+import yf.dashboard.postphoto.entities.UserSavedPosts;
 import yf.elastic.core.ElasticWorkflow;
-import yf.user.dto.GeneralUserDTO;
+import yf.elastic.core.NativeElasticSingleton;
+import yf.user.dto.UserElasticDTO;
 import yf.user.dto.external.fb.FBResponseDTO;
-import yf.user.dto.external.vk.VKResponseDTO;
 import yf.user.dto.external.vk.VKUserDTO;
-import yf.user.dto.save.UserPhotoSaveDataDTO;
-import yf.user.dto.save.UserPostSaveDataDTO;
 import yf.user.entities.FBUser;
-import yf.user.entities.User;
 import yf.user.entities.VKUser;
-import yf.user.entities.usersaved.UserSavedPhotos;
-import yf.user.entities.usersaved.UserSavedPosts;
 
 @Stateless
 public class UserWorkflow {
@@ -32,11 +30,25 @@ public class UserWorkflow {
 	@Inject
 	ElasticWorkflow elasticWorkflow;
 	@Inject
+	NativeElasticSingleton nativeElastic;
+	@Inject
+	ElasticToObjectConvertor elasticToObjectConvertor;
+	@Inject
 	PropertiesReslover properties;
 	
-	public GeneralUserDTO getUserById(long userId){
-		User user = em.find(User.class, userId);
-		return user !=null ? userConverter.userEntityToGeneralUserDTO(user) : null;
+	public UserElasticDTO getUserById(String userId){
+		GetResponse res = nativeElastic.getClient().prepareGet(properties.get("elastic.index.user"),
+				properties.get("elastic.index.user.type"), userId)
+		        .setOperationThreaded(false)
+		        .get();
+		
+		if(!res.isExists()) { return null; };
+		
+		UserElasticDTO searchResult = elasticToObjectConvertor
+								.convertSingleResultToObject(res.getSourceAsString(), UserElasticDTO.class);		
+
+		
+		return searchResult;
 	}
 	public UserSavedPosts getSavedUserPostById(long postId){
 		UserSavedPosts userSavedPosts = em.find(UserSavedPosts.class, postId);
@@ -44,121 +56,55 @@ public class UserWorkflow {
 
 	}
 	
-	public VKResponseDTO saveVKUser(VKUserDTO vKUserDTO){
+	public UserElasticDTO saveVKUser(VKUserDTO vKUserDTO){
 		
 		VKUser vkUserEntity = userConverter.toVKUsetEntity(vKUserDTO);
-	
-			if(getUserById(vkUserEntity.getId()) == null){
-				
-				
-//				
-//				elasticWorkflow.indexElasticGeneralUser(userConverter.userEntityToGeneralUserDTO(vkUserEntity));
-//				elasticWorkflow.indexElasticVKUser(vKUserDTO.getResponse().get(0));
-                em.persist(vkUserEntity);
-                return vKUserDTO.getResponse().get(0);
-		}
 		
-		return null;
+		if(getUserById(vkUserEntity.getId().toString()) != null){ return null;}
+
+		UserElasticDTO userElasticDto = userConverter.userVKtoUserElastic(vkUserEntity);
+		
+
+		IndexResponse response = nativeElastic.getClient()
+					.prepareIndex(properties.get("elastic.index.user"),
+									properties.get("elastic.index.user.type"), 
+									userElasticDto.getId().toString())
+					.setSource(elasticWorkflow.objectToSource(userElasticDto))
+					.get();
+		
+		if(response.status() != RestStatus.CREATED){
+			return null;
+		}
+	
+                em.persist(vkUserEntity);
+                return userElasticDto;
+		
+		
 	}
 
-	public FBResponseDTO saveFBUser(FBResponseDTO fbResponseDTO) {
+	public UserElasticDTO saveFBUser(FBResponseDTO fbResponseDTO) {
 		FBUser fbUserEntity = userConverter.toFBUserEntity(fbResponseDTO);
 		
-		if(getUserById(fbUserEntity.getId()) == null){
+		if(getUserById(fbUserEntity.getId().toString()) != null){ return null; }
+		
+		
+	UserElasticDTO userElasticDto = userConverter.userFBtoUserElastic(fbUserEntity);
+		
+
+		IndexResponse response = nativeElastic.getClient()
+					.prepareIndex(properties.get("elastic.index.user"),
+									properties.get("elastic.index.user.type"),
+									userElasticDto.getId().toString())
+					.setSource(elasticWorkflow.objectToSource(userElasticDto))
+					.get();
+		
+		if(response.status() != RestStatus.CREATED){
+			return null;
+		}
 			
-			elasticWorkflow.indexElasticGeneralUser(userConverter.userEntityToGeneralUserDTO(fbUserEntity));
-			elasticWorkflow.indexElasticFBUser(fbResponseDTO);
             em.persist(fbUserEntity);
-            return fbResponseDTO;
-	}
+            return userElasticDto;
 	
-		return null;
-	}
-	
-	public boolean isPostAlreadySavedToUser(long user_id, long post_id){
-		  List <UserSavedPosts> userSavedPosts = findUserSavedPostByUserIdAndPostId(user_id, post_id);
-		  return !userSavedPosts.isEmpty();
-	}
-	public boolean isPhotoAlreadySavedToUser(long user_id, String photo_url){
-		  List <UserSavedPhotos> userSavedPosts = findUserSavedPhotosByUserIdAndPhotoUrl(user_id, photo_url);
-		  return !userSavedPosts.isEmpty();
-	}
-	public UserPostSaveDataDTO saveNewPostForUser(UserPostSaveDataDTO post){
-		
-		User user = em.find(User.class, post.getUser_id());
-
-		if(user != null && !isPostAlreadySavedToUser(post.getUser_id(), post.getPost_id())){
-			UserSavedPosts entity = userConverter.savePostDTOtoEntity(post);
-			em.persist(entity);
-			em.flush();
-			elasticWorkflow.indexElasticUserSavedPost(entity);
-
-			return post;
-		}
-		
-		return null;	
-	}
-	
-	public UserPhotoSaveDataDTO saveNewPhotoForUser(UserPhotoSaveDataDTO post){
-		
-		User user = em.find(User.class, post.getUser_id());
-
-		if(user != null && !isPhotoAlreadySavedToUser(post.getUser_id(), post.getPhoto_url())){
-			UserSavedPhotos entity = userConverter.savePhotoDTOtoEntity(post);
-			em.persist(entity);
-			em.flush();
-			elasticWorkflow.indexElasticUserSavedPhoto(entity);
-
-			return post;
-		}
-		
-		return null;	
-	}
-	
-	public List <UserSavedPosts> deletePostFromUser(Long user_id, Long post_id){
-		
-		  List <UserSavedPosts> userSavedPosts = findUserSavedPostByUserIdAndPostId(user_id, post_id);
-		  
-		  if(userSavedPosts == null || userSavedPosts.isEmpty()){
-			  return null;
-		  }
-		  
-		  for(UserSavedPosts saved : userSavedPosts){
-			  em.remove(saved);
-			  elasticWorkflow.deleteById(properties.get("elastic.index.user.saved.post"), saved.getId().toString(), properties.get("elastic.type.user"));
-		  }
-		  return userSavedPosts;
-	}
-	
-	
-	public UserSavedPhotos deletePhotoFromUser(Long user_id, Long photo_id){
-		
-			UserSavedPhotos userSavedPhoto = em.find(UserSavedPhotos.class, photo_id);
-		  
-		  if(userSavedPhoto == null ){
-			  return null;
-		  }
-		  
-			  em.remove(userSavedPhoto);
-			  elasticWorkflow.deleteById(properties.get("elastic.index.user.saved.photo"), userSavedPhoto.getId().toString(), properties.get("elastic.type.user"));
-		  
-		  return userSavedPhoto;
-	}
-	
-	
-	
-	public List <UserSavedPosts> findUserSavedPostByUserIdAndPostId(Long user_id, Long post_id){
-		  TypedQuery <UserSavedPosts> query = em.createNamedQuery(UserSavedPosts.QUERY_FIND_SAVED_POST_AND_BY_USER_ID, UserSavedPosts.class)
-				  .setParameter("user_id", user_id).setParameter("post_id", post_id);
-		
-		  return query.getResultList();
-	}
-	
-	public List <UserSavedPhotos> findUserSavedPhotosByUserIdAndPhotoUrl(Long user_id, String photo_url){
-		  TypedQuery <UserSavedPhotos> query = em.createNamedQuery(UserSavedPhotos.QUERY_FIND_SAVED_PHOTO_AND_BY_USER_ID, UserSavedPhotos.class)
-				  .setParameter("user_id", user_id).setParameter("photo_url", photo_url);
-		
-		  return query.getResultList();
 	}
 	
 

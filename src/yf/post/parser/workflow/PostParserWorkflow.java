@@ -21,10 +21,9 @@ import yf.core.PropertiesReslover;
 import yf.elastic.core.ElasticWorkflow;
 import yf.elastic.core.NativeElasticSingleton;
 import yf.elastic.reindex.BulkOptions;
-import yf.elastic.reindex.PostBulkWorkflow;
+import yf.elastic.reindex.bulkworkflow.PostBulkWorkflow;
 import yf.post.PostService;
 import yf.post.dto.PostElasticDTO;
-import yf.post.dto.SharedBasicPostDTO;
 import yf.post.entities.Post;
 import yf.post.parser.dto.PostDTO;
 @Stateless

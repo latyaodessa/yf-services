@@ -21,12 +21,12 @@
     <artifactId>transport</artifactId>
     <version>${version.elasticsearch}</version>
 </dependency>
-      <!--   jest elastic -->
-  <dependency>
-    <groupId>io.searchbox</groupId>
-    <artifactId>jest</artifactId>
-    <version>2.0.3</version>
-</dependency> 
+
+<dependency>
+    <groupId>org.apache.commons</groupId>
+    <artifactId>commons-lang3</artifactId>
+    <version>3.5</version>
+</dependency>
 
 <!-- log4j -->
 

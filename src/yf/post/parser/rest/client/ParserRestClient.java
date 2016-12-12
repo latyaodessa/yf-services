@@ -14,10 +14,10 @@ public class ParserRestClient {
 	                .get(new GenericType<List<PostDTO>>(){});
 		return postDTOList;
 	}
-	public List<PostDTO> checkNewPosts(){
-		 List<PostDTO> postDTOList = Client.create().resource("http://localhost:8080/yf-services/rest/vk/newposts/execute")
-	                .get(new GenericType<List<PostDTO>>(){});
-		return postDTOList;
-	}
+//	public List<PostDTO> checkNewPosts(){
+//		 List<PostDTO> postDTOList = Client.create().resource("http://localhost:8080/yf-services/rest/vk/newposts/execute")
+//	                .get(new GenericType<List<PostDTO>>(){});
+//		return postDTOList;
+//	}
 
 }

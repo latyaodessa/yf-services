@@ -1,31 +1,16 @@
 package yf.user;
 
-import java.util.Date;
 import java.util.Optional;
 
-import yf.user.dto.GeneralUserDTO;
 import yf.user.dto.UserElasticDTO;
 import yf.user.dto.external.fb.FBResponseDTO;
 import yf.user.dto.external.vk.VKCityCountryDTO;
 import yf.user.dto.external.vk.VKResponseDTO;
 import yf.user.dto.external.vk.VKUserDTO;
-import yf.user.dto.save.UserPhotoSaveDataDTO;
-import yf.user.dto.save.UserPostSaveDataDTO;
 import yf.user.entities.FBUser;
-import yf.user.entities.User;
 import yf.user.entities.VKUser;
-import yf.user.entities.usersaved.UserSavedPhotos;
-import yf.user.entities.usersaved.UserSavedPosts;
 
 public class UserConverter {
-	
-	public GeneralUserDTO userEntityToGeneralUserDTO(User user){
-		GeneralUserDTO dto = new GeneralUserDTO();
-		dto.setId(user.getId());
-		dto.setEmail(user.getEmail());
-		dto.setType(user.getType());
-		return dto;
-	}
 	
 	public UserElasticDTO userVKtoUserElastic(final VKUser entity){
 		UserElasticDTO dto = new UserElasticDTO();
@@ -34,17 +19,20 @@ public class UserConverter {
 		dto.setThumbnail(entity.getPhoto_200_orig());
 		dto.setFirst_name(entity.getFirst_name());
 		dto.setLast_name(entity.getLast_name());
+		dto.setYf_user_type(entity.getYf_user_type());
 		
 		return dto;
 	}
 	
-	public UserElasticDTO userVKtoUserElastic(final FBUser entity){
+	
+	public UserElasticDTO userFBtoUserElastic(final FBUser entity){
 		UserElasticDTO dto = new UserElasticDTO();
 		
 		dto.setId(entity.getId());
 		dto.setThumbnail(entity.getSmall_pic());
 		dto.setFirst_name(entity.getFirst_name());
 		dto.setLast_name(entity.getLast_name());
+		dto.setYf_user_type(entity.getYf_user_type());
 		
 		return dto;
 	}
@@ -58,7 +46,7 @@ public class UserConverter {
 			vkUserEntity.setPassword(null);
 			vkUserEntity.setEmail(null);
 			vkUserEntity.setUserAuthorized(false);
-			vkUserEntity.setType("vk");
+			vkUserEntity.setYf_user_type(UserTypes.VK.name());
 			
 			vkUserEntity.setFirst_name(resDto.getFirst_name());
 			vkUserEntity.setLast_name(resDto.getLast_name());
@@ -100,7 +88,7 @@ public class UserConverter {
 		entity.setPassword(null);
 		entity.setEmail(fbResponseDTO.getEmail());
 		entity.setUserAuthorized(false);
-		entity.setType("fb");
+		entity.setYf_user_type(UserTypes.FB.name());
 		
 		entity.setFirst_name(fbResponseDTO.getFirst_name());
 		entity.setLast_name(fbResponseDTO.getLast_name());
@@ -115,36 +103,4 @@ public class UserConverter {
 
 		return entity;
 	}
-	
-	public UserSavedPosts savePostDTOtoEntity(UserPostSaveDataDTO dto){
-		UserSavedPosts entity = new UserSavedPosts();
-		
-		
-		entity.setDate(new Date());
-		entity.setPost_id(dto.getPost_id());
-		entity.setPost_type(dto.getPost_type());
-		entity.setUser_id(dto.getUser_id());
-		
-		return entity;
-		
-	}
-	
-	public UserSavedPhotos savePhotoDTOtoEntity(UserPhotoSaveDataDTO dto){
-		UserSavedPhotos entity = new UserSavedPhotos();
-		
-		entity.setDate(new Date());
-		entity.setPhoto_url(dto.getPhoto_url());
-		entity.setNote(dto.getNote());
-		entity.setUser_id(dto.getUser_id());
-		
-		entity.setPost_id(dto.getPost_id());
-		entity.setMd(dto.getMd());
-		entity.setPh(dto.getPh());
-		entity.setText(dto.getText());
-		
-		return entity;
-		
-	}
-	
-
 }
