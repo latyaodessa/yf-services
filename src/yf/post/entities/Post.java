@@ -16,15 +16,15 @@ import javax.validation.constraints.NotNull;
 @Entity
 @Table(name = "vk_post")
 @NamedQueries({
-	@NamedQuery(name = Post.QUERY_SELECT_POSTS_FROM_TO, query = "SELECT t FROM Post t")
+	@NamedQuery(name = Post.QUERY_POST_BY_ID, query = "SELECT t FROM Post t WHERE t.id = :post_id")
 })
 public class Post {
 	
-	public static final String QUERY_SELECT_POSTS_FROM_TO = "Post.SelectFromTo";
+	public static final String QUERY_POST_BY_ID = "Post.getPostById";
 
 	@Id
 	@NotNull
-	@Column(name="post_id")
+	@Column(name="id")
 	private Long id;
 	private String from_id;
 	private String date;

@@ -4,8 +4,6 @@ import java.util.List;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
@@ -21,8 +19,6 @@ import yf.post.parser.dto.PostDTO;
 public class VkRestImpl {
 		@Inject
 	 	ParserService parserService;
-		@PersistenceContext
-		private EntityManager em;
 		
 		@GET
 		@Path("alive")

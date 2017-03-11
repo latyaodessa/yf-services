@@ -26,8 +26,14 @@ public class RestScheduler implements Scheduler{
 	@Timeout
 	public void process() {
 //    		parserRestClient.checkNewPosts();
+    	
+    	try{
     		 parserService.triggerPostParserForNewPosts();
-    		logger.info("New Posts Rest Call is triggered");
+     		logger.info("New Posts Rest Call is triggered");
+    	} catch (Exception e){
+     		logger.severe("New Posts Rest Call EXCEPTION! resexp" + e);
+    	  }
+    		
 			
 		
 	}

@@ -9,21 +9,54 @@ public class PostDashboardElasticDTO {
 	private long user_id;
 	private Date date;
 	private String post_type;
+	private String md;
+	private String ph;
+	private String text;
+	private String thumbnail;
 	
+
+	public PostDashboardElasticDTO() {
+		super();
+	}
 	
-	public PostDashboardElasticDTO(Long id, Long post_id, long user_id, Date date, String post_type) {
+	public PostDashboardElasticDTO(Long id, Long post_id, long user_id, Date date, String post_type, String md,
+			String ph, String text, String thumbnail) {
 		super();
 		this.id = id;
 		this.post_id = post_id;
 		this.user_id = user_id;
 		this.date = date;
 		this.post_type = post_type;
-	}
-	
-	public PostDashboardElasticDTO() {
-		super();
+		this.md = md;
+		this.ph = ph;
+		this.text = text;
+		this.thumbnail = thumbnail;
 	}
 
+	public String getMd() {
+		return md;
+	}
+	public void setMd(String md) {
+		this.md = md;
+	}
+	public String getPh() {
+		return ph;
+	}
+	public void setPh(String ph) {
+		this.ph = ph;
+	}
+	public String getText() {
+		return text;
+	}
+	public void setText(String text) {
+		this.text = text;
+	}
+	public String getThumbnail() {
+		return thumbnail;
+	}
+	public void setThumbnail(String thumbnail) {
+		this.thumbnail = thumbnail;
+	}
 	public Long getId() {
 		return id;
 	}

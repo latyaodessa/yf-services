@@ -27,6 +27,7 @@
 /Users/andrefedorenko/Dropbox/sites/youngfolks/yf-services/src/yf/post/parser/dto/PostPhotoDTO.java
 /Users/andrefedorenko/Dropbox/sites/youngfolks/yf-services/src/yf/post/parser/rest/scheduler/TopPostsYFScheduler.java
 /Users/andrefedorenko/Dropbox/sites/youngfolks/yf-services/src/yf/core/JSONService.java
+/Users/andrefedorenko/Dropbox/sites/youngfolks/yf-services/src/yf/core/ElasticException.java
 /Users/andrefedorenko/Dropbox/sites/youngfolks/yf-services/src/yf/post/parser/workflow/PostVideoConverter.java
 /Users/andrefedorenko/Dropbox/sites/youngfolks/yf-services/src/yf/post/PostConverter.java
 /Users/andrefedorenko/Dropbox/sites/youngfolks/yf-services/src/yf/core/CrossOriginResourceSharingFilter.java
@@ -38,6 +39,7 @@
 /Users/andrefedorenko/Dropbox/sites/youngfolks/yf-services/src/yf/dashboard/postphoto/PostPhotoDashboardWorkflow.java
 /Users/andrefedorenko/Dropbox/sites/youngfolks/yf-services/src/yf/elastic/reindex/ElasticBulkFetcher.java
 /Users/andrefedorenko/Dropbox/sites/youngfolks/yf-services/src/yf/user/rest/UserRestImpl.java
+/Users/andrefedorenko/Dropbox/sites/youngfolks/yf-services/src/yf/core/JNDIPropertyHelper.java
 /Users/andrefedorenko/Dropbox/sites/youngfolks/yf-services/src/yf/elastic/reindex/bulkworkflow/PhotoDashboardBulkWorkflow.java
 /Users/andrefedorenko/Dropbox/sites/youngfolks/yf-services/src/yf/user/entities/FBUser.java
 /Users/andrefedorenko/Dropbox/sites/youngfolks/yf-services/src/yf/post/parser/dto/PostDTO.java
@@ -62,13 +64,13 @@
 /Users/andrefedorenko/Dropbox/sites/youngfolks/yf-services/src/yf/post/parser/workflow/PostAudioConverter.java
 /Users/andrefedorenko/Dropbox/sites/youngfolks/yf-services/src/yf/post/parser/workflow/PostPhotoConverter.java
 /Users/andrefedorenko/Dropbox/sites/youngfolks/yf-services/src/yf/post/parser/workflow/PostRegexTextCleaner.java
-/Users/andrefedorenko/Dropbox/sites/youngfolks/yf-services/src/yf/dashboard/postphoto/dto/SavePostDTO.java
 /Users/andrefedorenko/Dropbox/sites/youngfolks/yf-services/src/yf/post/parser/rest/scheduler/RestScheduler.java
 /Users/andrefedorenko/Dropbox/sites/youngfolks/yf-services/src/yf/user/dto/external/fb/FBPictureDTO.java
 /Users/andrefedorenko/Dropbox/sites/youngfolks/yf-services/src/yf/user/dto/external/vk/VKCityCountryDTO.java
 /Users/andrefedorenko/Dropbox/sites/youngfolks/yf-services/src/yf/core/elastic/ElasticSearchExecutor.java
 /Users/andrefedorenko/Dropbox/sites/youngfolks/yf-services/src/yf/post/parser/dto/PostAttachmentDTO.java
 /Users/andrefedorenko/Dropbox/sites/youngfolks/yf-services/src/yf/post/rest/PostRestImpl.java
+/Users/andrefedorenko/Dropbox/sites/youngfolks/yf-services/src/yf/dashboard/postphoto/dto/SavedPostToDashboardDTO.java
 /Users/andrefedorenko/Dropbox/sites/youngfolks/yf-services/src/yf/elastic/reindex/ReindexWorkflow.java
 /Users/andrefedorenko/Dropbox/sites/youngfolks/yf-services/src/yf/post/dto/PostDetailsDTO.java
 /Users/andrefedorenko/Dropbox/sites/youngfolks/yf-services/src/yf/post/parser/dto/CountDTO.java

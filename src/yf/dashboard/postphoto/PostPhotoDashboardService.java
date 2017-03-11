@@ -6,6 +6,7 @@ import javax.inject.Inject;
 
 import org.elasticsearch.action.delete.DeleteResponse;
 import org.elasticsearch.action.search.SearchResponse;
+import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.rest.RestStatus;
 import org.elasticsearch.search.sort.SortOrder;
 
@@ -13,7 +14,7 @@ import yf.core.PropertiesReslover;
 import yf.dashboard.postphoto.dto.PhotoDashboardElasticDTO;
 import yf.dashboard.postphoto.dto.PostDashboardElasticDTO;
 import yf.dashboard.postphoto.dto.SavePhotoDTO;
-import yf.dashboard.postphoto.dto.SavePostDTO;
+import yf.dashboard.postphoto.dto.SavedPostToDashboardDTO;
 import yf.elastic.core.NativeElasticSingleton;
 
 public class PostPhotoDashboardService {
@@ -26,10 +27,15 @@ public class PostPhotoDashboardService {
 	private PropertiesReslover properties;
 
 	
-	public PostDashboardElasticDTO saveNewPostForUser(final SavePostDTO postDto){
-		boolean isEmpty = postPhotoDashboardWorkflow.findUserSavedPostByUserIdAndPostId(postDto.getUser_id(), postDto.getPost_id())
-						.isEmpty();
-	return isEmpty ? postPhotoDashboardWorkflow.saveNewPostForUser(postDto) : null;
+	public void saveNewPostForUser(final SavedPostToDashboardDTO savePostDTO){
+	if(isPostDoesntExist(savePostDTO.getUser_id(), savePostDTO.getPost_id())){
+		 postPhotoDashboardWorkflow.saveNewPostForUser(savePostDTO);
+		}
+	}
+	
+	public boolean isPostDoesntExist(final Long user_id, final Long post_id) {
+		return postPhotoDashboardWorkflow.findUserSavedPostByUserIdAndPostId(user_id, post_id)
+				.isEmpty();
 	}
 	
 	public PhotoDashboardElasticDTO saveNewPhotoForUser(final SavePhotoDTO photoDto){
@@ -45,6 +51,7 @@ public class PostPhotoDashboardService {
 		        .setTypes(properties.get("elastic.type.dashboard"))
 		        .addSort("date", SortOrder.DESC)
 		        .setFrom(from).setSize(size).setExplain(true)
+		        .setQuery(QueryBuilders.boolQuery().must(QueryBuilders.termQuery("user_id", user_id)))
 		        .execute()
 		        .actionGet();
 		
@@ -62,17 +69,17 @@ public class PostPhotoDashboardService {
 		
 		return postPhotoDashboardWorkflow.getSavedDashboardPhotos(res);
 	}
-	public boolean deletePostFromUser(final PostDashboardElasticDTO postDashboardElasticDTO){
+	public boolean deletePostFromUser(final SavedPostToDashboardDTO dto){
 		DeleteResponse response = nativeElastic.getClient().prepareDelete(properties.get("elastic.index.dashboard.saved.post"),
 																		properties.get("elastic.type.dashboard"),
-																		postDashboardElasticDTO.getId().toString())
+																		String.valueOf(dto.getId()))
 															.get();
 		
 		if(response.status() != RestStatus.OK){
 			return false;
 		}
 
-		boolean isRemoved = postPhotoDashboardWorkflow.deletePostFromUser(postDashboardElasticDTO.getUser_id(), postDashboardElasticDTO.getPost_id());
+		boolean isRemoved = postPhotoDashboardWorkflow.deletePostFromUser(dto.getUser_id(), dto.getPost_id());
 		
 		return isRemoved;
 	}
@@ -90,5 +97,7 @@ public class PostPhotoDashboardService {
 			boolean isRemoved = postPhotoDashboardWorkflow.deletePhotoFromUser(photoDashboardElasticDTO.getUser_id(), photoDashboardElasticDTO.getPhoto_url());
 			return isRemoved;
 }
+
+
 	
 }

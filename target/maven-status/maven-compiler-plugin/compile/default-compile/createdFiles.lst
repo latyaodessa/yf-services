@@ -1,3 +1,4 @@
+yf/core/JNDIPropertyHelper.class
 yf/elastic/reindex/bulkworkflow/AbstractBulkReindexWorkflow.class
 yf/post/parser/dto/PostAudioDTO.class
 yf/post/parser/dto/PostLinkDTO.class
@@ -19,9 +20,11 @@ yf/elastic/core/ElasticWorkflow.class
 yf/post/parser/dto/CountDTO.class
 yf/core/elastic/ElasticSearchExecutor.class
 yf/post/parser/workflow/PostAudioConverter.class
+yf/core/ElasticException.class
 yf/post/rest/PostRestImpl.class
 yf/elastic/core/PropertyLookupHelper.class
 yf/user/entities/FBUser.class
+yf/dashboard/postphoto/dto/SavedPostToDashboardDTO.class
 yf/post/parser/rest/scheduler/Scheduler.class
 yf/post/parser/workflow/ParserPostConverter.class
 yf/post/parser/workflow/PostPhotoConverter.class
@@ -69,7 +72,6 @@ yf/user/dto/external/vk/VKResponseDTO.class
 yf/user/services/UserService.class
 yf/user/dto/UserElasticDTO.class
 yf/post/parser/workflow/PostVideoConverter.class
-yf/dashboard/postphoto/dto/SavePostDTO.class
 yf/post/parser/dto/PostPhotoDTO.class
 yf/user/UserTypes.class
 yf/post/parser/dto/PostVideoDTO.class

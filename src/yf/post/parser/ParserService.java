@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.ejb.Stateless;
+import javax.ejb.TransactionAttribute;
 import javax.inject.Inject;
 
 import yf.post.parser.dto.PostDTO;
@@ -29,7 +30,6 @@ public class ParserService {
 		return postDTOList;
 		
 	}
-	
 	public List<PostDTO> triggerPostParserForNewPosts(){
 		List<PostDTO> postDTOList = new ArrayList<PostDTO>();
 		postDTOList = parserRestClient.parseAllPages(YF_GROUP_ID, 0,100);

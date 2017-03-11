@@ -4,8 +4,6 @@ import java.util.List;
 import java.util.logging.Logger;
 
 import javax.inject.Inject;
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
 
 import yf.dashboard.postphoto.entities.UserSavedPhotos;
 import yf.dashboard.postphoto.entities.UserSavedPosts;
@@ -26,8 +24,6 @@ public class ReindexWorkflow {
 	private PostDashboardBulkWorkflow postDashboardBulkWorkflow;
 	@Inject
 	private PhotoDashboardBulkWorkflow photoDashboardBulkWorkflow;
-	@PersistenceContext
-	private EntityManager em;
 	@Inject 
 	private ElasticBulkFetcher elasticBulkFetcher;
 

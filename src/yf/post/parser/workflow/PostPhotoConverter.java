@@ -13,7 +13,7 @@ public class PostPhotoConverter {
 	
 	public PostPhoto toEntity(PostPhotoDTO dto){
 		PostPhoto postPhoto = new PostPhoto();
-		postPhoto.setId(dto.getId());;
+		postPhoto.setId(dto.getId());
 		postPhoto.setAlbum_id(dto.getAlbum_id());
 		postPhoto.setOwner_id(dto.getOwner_id());
 		postPhoto.setUser_id(dto.getUser_id());

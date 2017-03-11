@@ -73,7 +73,7 @@ public class PostBulkWorkflow extends AbstractBulkReindexWorkflow<Post, PostElas
 			} catch (JsonProcessingException e) {
 				e.printStackTrace();
 			}
-		};
+		}
 		
 		BulkResponse bulkResponse = bulkRequest.execute().actionGet();
 		if (bulkResponse.hasFailures()) {
@@ -116,7 +116,8 @@ public class PostBulkWorkflow extends AbstractBulkReindexWorkflow<Post, PostElas
     
     protected IndexRequestBuilder prepareIndex(final PostElasticDTO dto, final String id, String index) {
 					if (dto == null) { return null; }
-					if(index == null) { index = getIndex(dto, TAG_INDEX);  };
+					if(index == null) { index = getIndex(dto, TAG_INDEX);  }
+					
 					try {
 						return index!= null ? nativeElasticClient.getClient()
 												.prepareIndex(index, TYPE, id)
@@ -133,47 +134,48 @@ public class PostBulkWorkflow extends AbstractBulkReindexWorkflow<Post, PostElas
 				return null;
 }
     
-    protected UpdateRequestBuilder prepareUpdateIndex(final PostElasticDTO dto, final String id) {
-		if (dto == null) { return null; }
+	   protected UpdateRequestBuilder prepareUpdateIndex(final PostElasticDTO dto, final String id) {
+			if (dto == null) { return null; }
 
-		try {
-			String index = getIndex(dto, TAG_INDEX);
-			return index!= null ? nativeElasticClient.getClient()
-									.prepareUpdate(index, TYPE, id)
-									.setDoc(new ObjectMapper().writeValueAsString(dto))
-									:null;
-		} catch (JsonGenerationException e) {
-			e.printStackTrace();
-		} catch (JsonMappingException e) {			
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+			try {
+				String index = getIndex(dto, TAG_INDEX);
+				return index!= null ? nativeElasticClient.getClient()
+										.prepareUpdate(index, TYPE, id)
+										.setDoc(new ObjectMapper().writeValueAsString(dto))
+										:null;
+			} catch (JsonGenerationException e) {
+				e.printStackTrace();
+			} catch (JsonMappingException e) {			
+				e.printStackTrace();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 
-	return null;
-}
-    
-    protected DeleteRequestBuilder prepareDeleteIndex(final PostElasticDTO dto, final String id) {
-		if (dto == null) { return null; }
-
-			String index = getIndex(dto, TAG_INDEX);
-			return index!= null ? nativeElasticClient.getClient()
-									.prepareDelete(index, TYPE, id)
-									:null;
-}
-    
-	public String getIndex(Post dto, Map <String, String> tag_index){
-		
-		Entry<String, String> filtered = tag_index.entrySet().stream()
-				.filter(map -> dto.getText().contains(map.getKey()))
-				.findAny().orElse(null);
-		
-		String index = Optional.ofNullable(filtered).map(Entry<String, String>::getValue).orElse(null);	
-		
-		if(index == null){
-			LOGGER.log(java.util.logging.Level.WARNING, "NO INDEX WERE FIND FOR" + dto.getText() 
-			+ " ID " + dto.getId() );
-		}
-		return index;
+		return null;
 	}
+	    
+	    protected DeleteRequestBuilder prepareDeleteIndex(final PostElasticDTO dto, final String id) {
+			if (dto == null) { return null; }
+
+				String index = getIndex(dto, TAG_INDEX);
+				return index!= null ? nativeElasticClient.getClient()
+										.prepareDelete(index, TYPE, id)
+										:null;
+	}
+	    
+		public String getIndex(Post dto, Map <String, String> tag_index){
+			
+			Entry<String, String> filtered = tag_index.entrySet().stream()
+					.filter(map -> dto.getText().contains(map.getKey()))
+					.findAny().orElse(null);
+			
+			String index = Optional.ofNullable(filtered).map(Entry<String, String>::getValue).orElse(null);	
+			
+			if(index == null){
+				LOGGER.log(java.util.logging.Level.WARNING, "NO INDEX WERE FIND FOR" + dto.getText() 
+				+ " ID " + dto.getId() );
+			}
+			return index;
+		}
+
 }

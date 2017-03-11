@@ -38,6 +38,25 @@ public class PostRegexTextCleaner {
 		
 		return dto;
 	}
+	
+	public String getCleanedPh(final String text){
+		String ph_cleaned = executeRegex(text, ph);
+		if(!StringUtils.isBlank(ph_cleaned)){
+			ph_cleaned = removePhTag(ph_cleaned);
+			return ph_cleaned;
+		}
+		return StringUtils.EMPTY;
+
+	}
+	
+	public String getCleanedMd(final String text) {
+		String md_cleaned = executeRegex(text, md);
+		if(!StringUtils.isBlank(md_cleaned)){
+			md_cleaned = removeMdTag(md_cleaned);
+			return md_cleaned;
+		}	
+		return null;
+	}
 
 
 
@@ -59,6 +78,8 @@ public class PostRegexTextCleaner {
 		 Transliterator transliterator = Transliterator.getInstance("Any-Latin; Latin-ASCII;");
 		return transliterator.transliterate(text);
 	}
+
+
 	
 
 }

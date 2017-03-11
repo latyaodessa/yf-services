@@ -19,8 +19,12 @@ public class TopPostsYFScheduler implements Scheduler{
     @Schedule(second = "0", minute = "30", hour = "0", dayOfMonth = "*")
 	@Timeout
 	public void process() {
+    	try {
 		postWorkflow.saveUpdateWeeklyTop();
-		logger.info("Weekly Top Updated");		
+		logger.info("Weekly Top Updated");	
+ 	} catch (Exception e){
+ 		logger.severe("Weekly Top EXCEPTION! resexp" + e);
+	  }
 	}
 	
 }

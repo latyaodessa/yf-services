@@ -42,7 +42,7 @@ public class UserWorkflow {
 		        .setOperationThreaded(false)
 		        .get();
 		
-		if(!res.isExists()) { return null; };
+		if(!res.isExists()) { return null; }
 		
 		UserElasticDTO searchResult = elasticToObjectConvertor
 								.convertSingleResultToObject(res.getSourceAsString(), UserElasticDTO.class);		

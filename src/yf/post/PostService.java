@@ -7,6 +7,8 @@ import javax.inject.Inject;
 
 import org.apache.commons.lang3.StringUtils;
 import org.elasticsearch.action.get.GetResponse;
+import org.elasticsearch.action.get.MultiGetItemResponse;
+import org.elasticsearch.action.get.MultiGetResponse;
 import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.search.sort.SortOrder;
@@ -32,13 +34,23 @@ public class PostService {
 	@Inject
 	PropertiesReslover properties;
 	
-	public PostDetailsDTO getPostDetailsDTO(final String index,  final String type, final String postId){
+	public PostDetailsDTO getPostDetailsDTO(final String postId){
 		
-		GetResponse res = nativeElastiClient.getClient().prepareGet(index, type, postId).get();
-		if(!res.isExists()) { return null;}
+		MultiGetResponse res = nativeElastiClient.getClient().prepareMultiGet()
+				.add(properties.get("elastic.index.native"), properties.get("elastic.type.photo"), postId)
+				.add(properties.get("elastic.index.sets"), properties.get("elastic.type.photo"), postId)
+				.add(properties.get("elastic.index.art"), properties.get("elastic.type.photo"), postId)
+				.get();
+				
+		for (MultiGetItemResponse itemResponse : res) { 
+		    GetResponse response = itemResponse.getResponse();
+		    if (response.isExists()) {                      
+		    	PostElasticDTO searchResult = elasticToObjectConvertor.convertSingleResultToObject(response.getSourceAsString(), PostElasticDTO.class);	
+				return basicPostConverter.toPostDetailsDTO(searchResult);
+		    }
+		}
 		
-		PostElasticDTO searchResult = elasticToObjectConvertor.convertSingleResultToObject(res.getSourceAsString(), PostElasticDTO.class);		
-		return basicPostConverter.toPostDetailsDTO(searchResult);
+		return null;
 	}
 	
 	public List<SharedBasicPostDTO> getNewPostsFromTo(final String index, final String type, final int from, final int size){		
@@ -51,6 +63,23 @@ public class PostService {
 			        .actionGet();
 			
 			return elasticSearchExecutor.executeSearchBasicPostDTO(res);
+	}
+	
+	public SharedBasicPostDTO getBasicPostDtoById(final String postId){
+		MultiGetResponse res = nativeElastiClient.getClient().prepareMultiGet()
+				.add(properties.get("elastic.index.native"), properties.get("elastic.type.photo"), postId)
+				.add(properties.get("elastic.index.sets"), properties.get("elastic.type.photo"), postId)
+				.add(properties.get("elastic.index.art"), properties.get("elastic.type.photo"), postId)
+				.get();
+				
+		for (MultiGetItemResponse itemResponse : res) { 
+		    GetResponse response = itemResponse.getResponse();
+		    if (response.isExists()) {                      
+		    	PostElasticDTO searchResult = elasticToObjectConvertor.convertSingleResultToObject(response.getSourceAsString(), PostElasticDTO.class);	
+				return basicPostConverter.toSharedBasicPostDTO(searchResult);
+		    }
+		}
+		return null;
 	}
 	
 	public List<SharedBasicPostDTO> getTopPostsFromTo(final String index, final String type, final int from,final int size){

@@ -13,16 +13,18 @@ import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.rest.RestStatus;
 import org.elasticsearch.search.SearchHit;
 
+import yf.core.ElasticException;
 import yf.core.PropertiesReslover;
 import yf.core.elastic.ElasticToObjectConvertor;
 import yf.dashboard.postphoto.dto.PhotoDashboardElasticDTO;
 import yf.dashboard.postphoto.dto.PostDashboardElasticDTO;
 import yf.dashboard.postphoto.dto.SavePhotoDTO;
-import yf.dashboard.postphoto.dto.SavePostDTO;
+import yf.dashboard.postphoto.dto.SavedPostToDashboardDTO;
 import yf.dashboard.postphoto.entities.UserSavedPhotos;
 import yf.dashboard.postphoto.entities.UserSavedPosts;
 import yf.elastic.core.ElasticWorkflow;
 import yf.elastic.core.NativeElasticSingleton;
+import yf.post.entities.Post;
 
 public class PostPhotoDashboardWorkflow {
 	
@@ -39,11 +41,15 @@ public class PostPhotoDashboardWorkflow {
 	@Inject
 	ElasticToObjectConvertor elasticToObjectConvertor;
 
-	public PostDashboardElasticDTO saveNewPostForUser(final SavePostDTO postDto){
+	public void saveNewPostForUser(final SavedPostToDashboardDTO postDto){
 				
+		
 			UserSavedPosts entity = converter.savePostDTOtoEntity(postDto);
+			entity.setPost(getPostToSave(postDto.getPost_id()));
+
 			em.persist(entity);
 			em.flush();
+			
 			
 			PostDashboardElasticDTO elasticDto = converter.toPostDashboardElasticDTO(entity);
 			
@@ -54,11 +60,15 @@ public class PostPhotoDashboardWorkflow {
 					.setSource(elasticWorkflow.objectToSource(elasticDto))
 					.get();
 			
-			if(response.status() == RestStatus.CREATED){
-				return elasticDto;
+			if(response.status() != RestStatus.CREATED){
+				throw new ElasticException("Post Wasn't CREATED IN ELASTIC " + response.status());
 			}
-
-			return null;
+	}
+	
+	private Post getPostToSave(final Long post_id){
+		  TypedQuery <Post> query = em.createNamedQuery(Post.QUERY_POST_BY_ID, Post.class)
+				  .setParameter("post_id", post_id);
+		  return query.getSingleResult();
 	}
 	
 	public PhotoDashboardElasticDTO saveNewPhotoForUser(final SavePhotoDTO photoDto){

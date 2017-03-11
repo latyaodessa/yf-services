@@ -90,7 +90,7 @@ final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:m
 		return elasticDTO;
 	}
 	
-	private String findThumbnail(final PostPhoto entity){
+	public String findThumbnail(final PostPhoto entity){
 		if(entity.getPhoto_604() != null) return entity.getPhoto_604();
 		if(entity.getPhoto_807() != null) return entity.getPhoto_807();
 		else return entity.getPhoto_130();

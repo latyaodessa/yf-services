@@ -25,11 +25,9 @@ public class PostRestImpl {
 	private PostService postService;
 	
 	@GET
-	@Path("{index}/{type}/{postId}")
-	public PostDetailsDTO getPostDetailsDTO(@PathParam("index") String index, 
-											@PathParam("type") String type,
-											@PathParam("postId") String postId){		
-		return postService.getPostDetailsDTO(index , type, postId);
+	@Path("{postId}")
+	public PostDetailsDTO getPostDetailsDTO(@PathParam("postId") String postId){		
+		return postService.getPostDetailsDTO(postId);
 	}	
 	
 	@GET

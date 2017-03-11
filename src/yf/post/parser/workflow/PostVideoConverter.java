@@ -12,7 +12,7 @@ public class PostVideoConverter {
 			DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 	public PostVideo toEntity(PostVideoDTO dto){
 		PostVideo postVideo = new PostVideo();
-		postVideo.setId(dto.getId());;
+		postVideo.setId(dto.getId());
 		postVideo.setOwner_id(dto.getOwner_id());
 		postVideo.setTitle(dto.getTitle());
 		postVideo.setDuration(dto.getDuration());

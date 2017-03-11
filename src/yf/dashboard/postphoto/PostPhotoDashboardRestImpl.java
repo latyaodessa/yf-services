@@ -14,7 +14,7 @@ import javax.ws.rs.core.MediaType;
 import yf.dashboard.postphoto.dto.PhotoDashboardElasticDTO;
 import yf.dashboard.postphoto.dto.PostDashboardElasticDTO;
 import yf.dashboard.postphoto.dto.SavePhotoDTO;
-import yf.dashboard.postphoto.dto.SavePostDTO;
+import yf.dashboard.postphoto.dto.SavedPostToDashboardDTO;
 
 
 @Path("dashboard")
@@ -27,8 +27,15 @@ public class PostPhotoDashboardRestImpl {
 	
 	@POST
 	@Path("save/post")
-	public PostDashboardElasticDTO savePostForUser(SavePostDTO post){
-		return postPhotoDashboardService.saveNewPostForUser(post);
+	public void savePostForUser(final SavedPostToDashboardDTO dto){
+		 postPhotoDashboardService.saveNewPostForUser(dto);
+	}
+	
+	@GET
+	@Path("isexist/post/{user_id}/{post_id}")
+	public boolean isPistEmptyByUser(@PathParam("user_id") final Long user_id,
+									@PathParam("post_id") final Long post_id){
+		return !postPhotoDashboardService.isPostDoesntExist(user_id,post_id);
 	}
 	
 	@POST
@@ -55,8 +62,8 @@ public class PostPhotoDashboardRestImpl {
 	
 	@POST
 	@Path("delete/post")
-	public boolean deletePostFromUser(final PostDashboardElasticDTO postDashboardElasticDTO){
-		return postPhotoDashboardService.deletePostFromUser(postDashboardElasticDTO);
+	public boolean deletePostFromUser(final SavedPostToDashboardDTO dto){
+		return postPhotoDashboardService.deletePostFromUser(dto);
 	}
 	
 	@POST
