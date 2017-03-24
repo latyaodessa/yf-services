@@ -8,6 +8,7 @@ import org.apache.commons.lang3.StringUtils;
 import com.ibm.icu.text.Transliterator;
 
 import yf.post.dto.PostElasticDTO;
+import yf.post.entities.Post;
 
 public class PostRegexTextCleaner {
 	
@@ -17,13 +18,17 @@ public class PostRegexTextCleaner {
 	private static final String ph_tag = "Ph";
 	private static final String md_tag = "Md";
 	private static final String REGEX_CLEANER = "\\[.*\\||\\]|:";
+	private static final String REGEX_WEBSITE_LAST_POSITION = "\\nhttp.*";
+	private static final String REGEX_TAG_REMOVE = "#.*\\n";
+	private static final String REGEX_SPEC_CHARACTER_CLEANER = "[^a-zA-Z ]";
+
 
 	
-	public PostElasticDTO getCleanedText(PostElasticDTO dto){
+	public PostElasticDTO getCleanedText(Post entity, PostElasticDTO dto){
 		
 
-		String ph_cleaned = executeRegex(dto.getText(), ph);
-		String md_cleaned = executeRegex(dto.getText(), md);
+		String ph_cleaned = executeRegex(entity.getText(), ph);
+		String md_cleaned = executeRegex(entity.getText(), md);
 		
 		if(!StringUtils.isBlank(ph_cleaned)){
 			ph_cleaned = removePhTag(ph_cleaned);
@@ -36,6 +41,8 @@ public class PostRegexTextCleaner {
 			dto.setMd_translit(transliterate(md_cleaned));
 		}		
 		
+		dto.setText(entity.getText());
+
 		return dto;
 	}
 	
@@ -65,6 +72,12 @@ public class PostRegexTextCleaner {
 	}
 	private String removeMdTag(String text){
 		return text.replaceFirst(md_tag, "").replaceAll(REGEX_CLEANER, StringUtils.EMPTY).trim();
+	}
+	private String generalCleanText(String text){
+
+		return text.replaceAll(REGEX_TAG_REMOVE, "")
+					.replaceAll(REGEX_WEBSITE_LAST_POSITION, "")
+					.replaceAll(REGEX_SPEC_CHARACTER_CLEANER, "");
 	}
 	
 	

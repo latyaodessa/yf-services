@@ -5,7 +5,6 @@ import java.util.List;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
 import javax.ws.rs.GET;
-import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
@@ -48,10 +47,16 @@ public class PostRestImpl {
 		return postService.getTopPostsFromTo(index, type,from, size);
 	}
 	
-	@POST
+	@GET
 	@Path("search")
-	public List<SharedBasicPostDTO> createFBUser(@QueryParam ("query") String query){
-		return postService.searchPosts(query);
+	public List<SharedBasicPostDTO> searchPosts(@QueryParam ("query") final String queries){
+		return postService.searchPosts(queries);
+	}
+	
+	@GET
+	@Path("search/related")
+	public List<SharedBasicPostDTO> searchRelated(@QueryParam ("query") final String queries, @QueryParam ("excludeId") final String excludeId){
+		return postService.searchRelated(queries, excludeId);
 	}
 	
 }

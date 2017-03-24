@@ -29,8 +29,9 @@ public class ElasticSearchExecutor {
 			
 			for(SearchHit hit : hits) {
 				PostElasticDTO dto = elasticToObjectConvertor.convertSingleResultToObject(hit.getSourceAsString(), PostElasticDTO.class); 
-				sharedBasicPostDTO.add(basicPostConverter.toSharedBasicPostDTO(dto));
-				
+				if(dto != null){
+					sharedBasicPostDTO.add(basicPostConverter.toSharedBasicPostDTO(dto));
+				}
 			}
 			return sharedBasicPostDTO;
 

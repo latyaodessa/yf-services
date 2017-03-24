@@ -71,7 +71,6 @@ final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:m
 		elasticDTO.setId(entity.getId());
 		elasticDTO.setFrom_id(entity.getFrom_id());
 		elasticDTO.setDate(entity.getDate());
-		elasticDTO.setText(entity.getText());
 		elasticDTO.setSigner_id(entity.getSigner_id());
 		elasticDTO.setLikes(entity.getLikes());
 		elasticDTO.setReposts(entity.getReposts());
@@ -85,7 +84,7 @@ final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:m
 			elasticDTO.setThumbnail(StringUtils.EMPTY);
 		}
 		
-		elasticDTO = postRegexTextCleaner.getCleanedText(elasticDTO);
+		elasticDTO = postRegexTextCleaner.getCleanedText(entity, elasticDTO);
 		
 		return elasticDTO;
 	}

@@ -10,10 +10,10 @@
            <property name="hibernate.hbm2ddl.auto" value="update"/>
            
 		     <property name="hibernate.connection.url" value="jdbc:postgresql://localhost:5432/yf_db"/>
-			<property name="hibernate.connection.username" value="postgres"/>
-			<property name="hibernate.connection.password" value=""/> 
-<!-- 			<property name="hibernate.connection.username" value="yf_system"/>
-			<property name="hibernate.connection.password" value="a2faSFq87"/> -->
+<!-- 			<property name="hibernate.connection.username" value="postgres"/>
+			<property name="hibernate.connection.password" value=""/>  -->
+			<property name="hibernate.connection.username" value="yf_system"/>
+			<property name="hibernate.connection.password" value="a2faSFq87"/> 
 			<property name="hibernate.connection.driver_class" value="org.postgresql.Driver"/>
 			<property name="hibernate.show_sql" value="false"/>
 			

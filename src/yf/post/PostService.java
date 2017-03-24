@@ -10,6 +10,7 @@ import org.elasticsearch.action.get.GetResponse;
 import org.elasticsearch.action.get.MultiGetItemResponse;
 import org.elasticsearch.action.get.MultiGetResponse;
 import org.elasticsearch.action.search.SearchResponse;
+import org.elasticsearch.index.query.BoolQueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.search.sort.SortOrder;
 
@@ -33,6 +34,8 @@ public class PostService {
 	ElasticToObjectConvertor elasticToObjectConvertor;
 	@Inject
 	PropertiesReslover properties;
+	
+	private static final String REGEX_SPEC_CHARACTER_CLEANER = "[^a-zA-Z а-яА-Я]";
 	
 	public PostDetailsDTO getPostDetailsDTO(final String postId){
 		
@@ -106,19 +109,65 @@ public class PostService {
 	return elasticSearchExecutor.executePostElasticDTO(res);
 }
 	
-	public List<SharedBasicPostDTO> searchPosts(String query){
+	public List<SharedBasicPostDTO> searchPosts(final String queries){
+
 		
-		if(StringUtils.isEmpty(query)) return null;
+		if(StringUtils.isEmpty(queries)) return null;
+		
+		
+		String[] splitedQuery = cleanAndPrepareQuery(queries);
 				 
-			SearchResponse res = nativeElastiClient.getClient().prepareSearch("*",
-																			"-*"+properties.get("elastic.index.native.top"),
-																			"-*" +properties.get("elastic.index.sets.top"))
-					.setQuery(QueryBuilders.matchPhraseQuery("text", query))      
-			        .addSort("id", SortOrder.DESC)
-			        .setFrom(0).setSize(100).setExplain(true)
-			        .execute()
-			        .actionGet();
-		
+			SearchResponse res = nativeElastiClient.getClient().prepareSearch(properties.get("elastic.index.native"),
+																			properties.get("elastic.index.sets"),
+																			properties.get("elastic.index.art"))
+														.setQuery(getBoolQueryForMultipleSearch("text",splitedQuery))
+														.addSort("id", SortOrder.DESC)
+														.setFrom(0).setSize(100).setExplain(true)
+														.execute()
+														.actionGet();
+			
+
+				
 			return elasticSearchExecutor.executeSearchBasicPostDTO(res);
+	}
+	
+	public List<SharedBasicPostDTO> searchRelated(final String queries, final String excludeId){
+
+		
+		if(StringUtils.isEmpty(queries)) return null;
+		
+		String[] splitedQuery = cleanAndPrepareQuery(queries);
+		
+				 
+			SearchResponse res = nativeElastiClient.getClient().prepareSearch(properties.get("elastic.index.native"),
+																			properties.get("elastic.index.sets"))
+														.setQuery(getBoolQueryForMultipleSearch("text",splitedQuery)
+																.mustNot(QueryBuilders.termQuery("id", excludeId)))
+														.addSort("id", SortOrder.DESC)
+														.setExplain(true)
+														.execute()
+														.actionGet();
+			
+
+				
+			return elasticSearchExecutor.executeSearchBasicPostDTO(res);
+	}
+	
+	private BoolQueryBuilder getBoolQueryForMultipleSearch(final String field, final String[] splitedQuery){
+		BoolQueryBuilder boolQuery = QueryBuilders.boolQuery();
+		for(String query : splitedQuery){
+			boolQuery.should(QueryBuilders.matchPhraseQuery(field, query));
+		}
+		
+		boolQuery.minimumNumberShouldMatch(1);
+			
+		return boolQuery;
+	}
+	
+	private String[] cleanAndPrepareQuery(final String queries){
+		String cleanedQueries = queries.replaceAll(REGEX_SPEC_CHARACTER_CLEANER, "");
+		String[] splitedQuery = cleanedQueries.split(" ");
+		
+		return splitedQuery;
 	}
 }

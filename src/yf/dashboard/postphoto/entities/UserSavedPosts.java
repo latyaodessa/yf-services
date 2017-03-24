@@ -28,7 +28,7 @@ public class UserSavedPosts {
 	@Id
 	@GeneratedValue
 	private Long id;
-	@OneToOne(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST,CascadeType.REMOVE}, orphanRemoval = true)
+	@OneToOne(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST})
 	@JoinColumn(name = "post_id", referencedColumnName = "id", nullable = false)
 	@NotNull	
 	private Post post;
