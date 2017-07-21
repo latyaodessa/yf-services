@@ -5,7 +5,7 @@
   <version>0.0.1-SNAPSHOT</version>
   <packaging>war</packaging>
     	<properties>
-		<version.elasticsearch>5.0.0</version.elasticsearch>
+		<version.elasticsearch>5.3.1</version.elasticsearch>
 		<version.jersey>1.19.3</version.jersey>
 		<version.jackson>2.8.4</version.jackson>
 	</properties>
@@ -23,7 +23,7 @@
 </dependency>
 
 <dependency>
-    <groupId>org.apache.commons</groupId>
+    <groupId>org.apache.commons</groupId>F
     <artifactId>commons-lang3</artifactId>
     <version>3.5</version>
 </dependency>
