@@ -1,5 +1,11 @@
 package yf.user.rest;
 
+import yf.user.dto.UserAllDataDto;
+import yf.user.dto.UserDto;
+import yf.user.dto.external.fb.FBUserDTO;
+import yf.user.dto.external.vk.VKUserDTO;
+import yf.user.services.UserService;
+
 import javax.ejb.Stateless;
 import javax.inject.Inject;
 import javax.ws.rs.GET;
@@ -9,33 +15,48 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
-import yf.user.dto.UserElasticDTO;
-import yf.user.dto.external.fb.FBResponseDTO;
-import yf.user.services.UserService;
-
 @Path("user")
 @Produces(MediaType.APPLICATION_JSON)
-@Stateless 
+@Stateless
 public class UserRestImpl {
-	@Inject
-	UserService userService;
-	
-	@GET
-	@Path("get/{id}")
-	public UserElasticDTO getUserById(@PathParam("id") String userId){
-		return userService.getUserById(userId);
-	}
-	
-	@POST
-	@Path("vk/create/{id}")
-	public UserElasticDTO createVKUser(@PathParam("id") long userId){
-		return userService.createVKUser(userId);
-	}
-	
-	@POST
-	@Path("fb/create")
-	public UserElasticDTO createFBUser(FBResponseDTO fbResponseDTO){
-		return userService.createFBUser(fbResponseDTO);
-	}
+    @Inject
+    private UserService userService;
+
+    @GET
+    @Path("{id}")
+    public UserAllDataDto getUserById(@PathParam("id") final Long userId) {
+        return userService.getUserById(userId);
+    }
+
+    @GET
+    @Path("basic/{id}")
+    public UserDto getBasicUserById(@PathParam("id") final Long userId) {
+        return userService.getBasicUserById(userId);
+    }
+
+    @GET
+    @Path("vk/{social_id}/")
+    public VKUserDTO getVkUser(@PathParam("social_id") final Long socialId) {
+        return userService.getVkUser(socialId);
+    }
+
+    @GET
+    @Path("fb/{social_id}/")
+    public FBUserDTO getFbUser(@PathParam("social_id") final Long socialId) {
+        return userService.getFbUser(socialId);
+    }
+
+
+    @POST
+    @Path("vk/create/{id}")
+    public VKUserDTO createVKUser(@PathParam("id") final long userId) {
+        return userService.createVKUser(userId);
+    }
+
+    @POST
+    @Path("fb/create")
+    public FBUserDTO createFBUser(final FBUserDTO fbUserDTO) {
+        return userService.createFBUser(fbUserDTO);
+    }
 
 }

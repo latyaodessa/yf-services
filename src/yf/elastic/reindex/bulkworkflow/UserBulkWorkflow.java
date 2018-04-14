@@ -1,29 +1,23 @@
 package yf.elastic.reindex.bulkworkflow;
 
-import java.util.List;
-
-import javax.annotation.PostConstruct;
-import javax.inject.Inject;
-
+import com.fasterxml.jackson.core.JsonProcessingException;
 import org.elasticsearch.action.bulk.BulkRequestBuilder;
 import org.elasticsearch.action.bulk.BulkResponse;
-import org.elasticsearch.action.index.IndexRequestBuilder;
 import org.elasticsearch.action.support.WriteRequest.RefreshPolicy;
-
-import com.fasterxml.jackson.core.JsonProcessingException;
-
 import yf.core.PropertiesReslover;
 import yf.elastic.core.ElasticWorkflow;
 import yf.elastic.core.NativeElasticSingleton;
 import yf.elastic.reindex.BulkOptions;
 import yf.user.UserConverter;
-import yf.user.UserTypes;
-import yf.user.dto.UserElasticDTO;
-import yf.user.entities.FBUser;
+import yf.user.dto.UserDto;
+import yf.user.dto.UserSocialTypeEnum;
 import yf.user.entities.User;
-import yf.user.entities.VKUser;
 
-public class UserBulkWorkflow extends AbstractBulkReindexWorkflow<User, UserElasticDTO> {
+import javax.annotation.PostConstruct;
+import javax.inject.Inject;
+import java.util.List;
+
+public class UserBulkWorkflow extends AbstractBulkReindexWorkflow<User, UserDto> {
 	@Inject
 	private PropertiesReslover properties;
 	@Inject
@@ -50,13 +44,13 @@ public class UserBulkWorkflow extends AbstractBulkReindexWorkflow<User, UserElas
 		bulkRequest.setRefreshPolicy(RefreshPolicy.IMMEDIATE); // ??
 				
 		for(User entity : entities){
-			 UserElasticDTO dto = null;
+			 UserDto dto = null;
 			 
-			if(entity.getYf_user_type().equals(UserTypes.VK.name())){
-	             dto = userConverter.userVKtoUserElastic((VKUser) entity);
+			if(entity.getType().equals(UserSocialTypeEnum.VK.name())){
+//	             dto = userConverter.userVKtoUserElastic((VKUser) entity);
 			}
-			if(entity.getYf_user_type().equals(UserTypes.FB.name())){
-	             dto = userConverter.userFBtoUserElastic((FBUser) entity);
+			if(entity.getType().equals(UserSocialTypeEnum.FB.name())){
+//	             dto = userConverter.toFbUserDto((FBUser) entity);
 			}
 		
 			try {
@@ -73,12 +67,12 @@ public class UserBulkWorkflow extends AbstractBulkReindexWorkflow<User, UserElas
 	}
 
 	@Override
-	public void addEntityToBulk(UserElasticDTO dto, BulkRequestBuilder bulkRequest, BulkOptions bulkOption)
+	public void addEntityToBulk(UserDto dto, BulkRequestBuilder bulkRequest, BulkOptions bulkOption)
 			throws JsonProcessingException {
 		if(bulkOption == BulkOptions.INDEX){
-	    	IndexRequestBuilder indexBuilder = prepareIndex(dto, elasticWorkflow.getDocumentId(dto.getId()), INDEX.iterator().next());
-			if (indexBuilder == null) { return; }
-			bulkRequest.add(indexBuilder);
+//	    	IndexRequestBuilder indexBuilder = prepareIndex(dto, elasticWorkflow.getDocumentId(dto.getId()), INDEX.iterator().next());
+//			if (indexBuilder == null) { return; }
+//			bulkRequest.add(indexBuilder);
 		}
 		
 	}

@@ -1,15 +1,13 @@
 package yf.post.parser;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.ejb.Stateless;
-import javax.ejb.TransactionAttribute;
-import javax.inject.Inject;
-
 import yf.post.parser.dto.PostDTO;
 import yf.post.parser.rest.client.ParserRestClient;
 import yf.post.parser.workflow.PostParserWorkflow;
+
+import javax.ejb.Stateless;
+import javax.inject.Inject;
+import java.util.ArrayList;
+import java.util.List;
 
 @Stateless
 public class ParserService {

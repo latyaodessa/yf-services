@@ -1,0 +1,1 @@
+ALTER TABLE user_saved_posts ADD FOREIGN KEY(post_id) REFERENCES vk_post(post_id)
