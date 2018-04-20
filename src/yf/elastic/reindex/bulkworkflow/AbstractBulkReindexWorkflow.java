@@ -24,7 +24,7 @@ import yf.elastic.reindex.BulkOptions;
 public abstract class AbstractBulkReindexWorkflow<T, V> {
 	
 	public static final Logger LOGGER = Logger.getLogger(PostBulkWorkflow.class.getName());
-	public final Map<String,String> TAG_INDEX  = new HashMap<String,String>();
+	public final Map<String,String> TAG_INDEX  = new HashMap<>();
 	public final Set<String> INDEX  = new HashSet<String>();
 	public String TYPE = null;
 	

@@ -1,10 +1,13 @@
 package yf.user.dto;
 
+import java.util.Date;
+
 public class UserDto {
     private Long id;
     private String email;
     private UserTypeEnum type;
     private UserStatusEnum status;
+    private Date createdOn;
 
     public Long getId() {
         return id;
@@ -36,5 +39,13 @@ public class UserDto {
 
     public void setStatus(UserStatusEnum status) {
         this.status = status;
+    }
+
+    public Date getCreatedOn() {
+        return createdOn;
+    }
+
+    public void setCreatedOn(Date createdOn) {
+        this.createdOn = createdOn;
     }
 }

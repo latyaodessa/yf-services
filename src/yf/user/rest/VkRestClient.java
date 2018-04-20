@@ -4,7 +4,7 @@ import com.sun.jersey.api.client.Client;
 import org.codehaus.jettison.json.JSONException;
 import org.codehaus.jettison.json.JSONObject;
 import yf.core.JSONService;
-import yf.user.dto.external.vk.VKUserDTO;
+import yf.user.dto.external.VKUserDTO;
 
 import javax.inject.Inject;
 import javax.ws.rs.core.MediaType;

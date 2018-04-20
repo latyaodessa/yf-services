@@ -124,7 +124,7 @@ public class PostBulkWorkflow extends AbstractBulkReindexWorkflow<Post, PostElas
             return null;
         }
         if (index == null) {
-            index = getIndex(dto, TAG_INDEX);
+            index = getIndex(dto.getText(), TAG_INDEX);
         }
 
         try {
@@ -149,15 +149,11 @@ public class PostBulkWorkflow extends AbstractBulkReindexWorkflow<Post, PostElas
         }
 
         try {
-            String index = getIndex(dto, TAG_INDEX);
+            String index = getIndex(dto.getText(), TAG_INDEX);
             return index != null ? nativeElasticClient.getClient()
                     .prepareUpdate(index, TYPE, id)
                     .setDoc(new ObjectMapper().writeValueAsString(dto))
                     : null;
-        } catch (JsonGenerationException e) {
-            e.printStackTrace();
-        } catch (JsonMappingException e) {
-            e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -170,23 +166,26 @@ public class PostBulkWorkflow extends AbstractBulkReindexWorkflow<Post, PostElas
             return null;
         }
 
-        String index = getIndex(dto, TAG_INDEX);
+        String index = getIndex(dto.getText(), TAG_INDEX);
         return index != null ? nativeElasticClient.getClient()
                 .prepareDelete(index, TYPE, id)
                 : null;
     }
 
-    public String getIndex(Post dto, Map<String, String> tag_index) {
+    public String getIndex(final String text, Map<String, String> tag_index) {
+
+        if (text == null) {
+            return null;
+        }
 
         Entry<String, String> filtered = tag_index.entrySet().stream()
-                .filter(map -> dto.getText().contains(map.getKey()))
+                .filter(map -> text.contains(map.getKey()))
                 .findAny().orElse(null);
 
-        String index = Optional.ofNullable(filtered).map(Entry<String, String>::getValue).orElse(null);
+        String index = Optional.ofNullable(filtered).map(Entry::getValue).orElse(null);
 
         if (index == null) {
-            LOGGER.log(java.util.logging.Level.WARNING, "NO INDEX WERE FIND FOR" + dto.getText()
-                    + " ID " + dto.getId());
+            LOGGER.warning("NO INDEX WERE FIND FOR" + text);
         }
         return index;
     }

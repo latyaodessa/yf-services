@@ -1,5 +1,7 @@
 package yf.user.entities;
 
+import yf.core.entities.AbstractVersionEntity;
+
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -17,7 +19,7 @@ import javax.validation.constraints.NotNull;
 @NamedQueries({
         @NamedQuery(name = VKUser.QUERY_GET_VK_USER_BY_USER_ID, query = "SELECT t FROM VKUser t WHERE t.user.id = :user_id")
 })
-public class VKUser {
+public class VKUser extends AbstractVersionEntity {
 
     public static final String QUERY_GET_VK_USER_BY_USER_ID = "VKUser.getVkUserByUserId";
 
@@ -42,10 +44,6 @@ public class VKUser {
     private Boolean verified;
     private String country;
     private String city;
-
-    public static String getQueryGetVkUserByUserId() {
-        return QUERY_GET_VK_USER_BY_USER_ID;
-    }
 
     public Long getId() {
         return id;

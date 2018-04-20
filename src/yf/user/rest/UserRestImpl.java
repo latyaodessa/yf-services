@@ -2,8 +2,8 @@ package yf.user.rest;
 
 import yf.user.dto.UserAllDataDto;
 import yf.user.dto.UserDto;
-import yf.user.dto.external.fb.FBUserDTO;
-import yf.user.dto.external.vk.VKUserDTO;
+import yf.user.dto.external.FBUserDTO;
+import yf.user.dto.external.VKUserDTO;
 import yf.user.services.UserService;
 
 import javax.ejb.Stateless;

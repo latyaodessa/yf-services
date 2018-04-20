@@ -1,5 +1,6 @@
 package yf.user.entities;
 
+import yf.core.entities.AbstractVersionEntity;
 import yf.user.dto.UserStatusEnum;
 import yf.user.dto.UserTypeEnum;
 
@@ -11,11 +12,10 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
-import java.util.Date;
 
 @Entity
 @Table(name = "user_yf")
-public class User {
+public class User extends AbstractVersionEntity {
     @Id
     @NotNull
     @Column(name = "id")
@@ -24,8 +24,6 @@ public class User {
     private String password;
     private String email;
     private boolean authorize;
-    @Column(name = "created_on")
-    private Date createdOn;
     @Enumerated(EnumType.STRING)
     @Column(name = "type")
     private UserTypeEnum type;
@@ -63,14 +61,6 @@ public class User {
 
     public void setAuthorize(boolean authorize) {
         this.authorize = authorize;
-    }
-
-    public Date getCreatedOn() {
-        return createdOn;
-    }
-
-    public void setCreatedOn(Date createdOn) {
-        this.createdOn = createdOn;
     }
 
     public UserTypeEnum getType() {

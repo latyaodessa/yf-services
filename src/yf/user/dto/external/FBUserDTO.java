@@ -1,6 +1,8 @@
-package yf.user.dto.external.fb;
+package yf.user.dto.external;
 
 import yf.user.dto.UserDto;
+
+import java.util.Date;
 
 public class FBUserDTO {
     private Long id;
@@ -12,6 +14,7 @@ public class FBUserDTO {
     private String gender;
     private String birthday;
     private String hometown;
+    private Date createdOn;
 
     public Long getId() {
         return id;
@@ -83,5 +86,13 @@ public class FBUserDTO {
 
     public void setUserDto(UserDto userDto) {
         this.userDto = userDto;
+    }
+
+    public Date getCreatedOn() {
+        return createdOn;
+    }
+
+    public void setCreatedOn(Date createdOn) {
+        this.createdOn = createdOn;
     }
 }

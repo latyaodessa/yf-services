@@ -1,5 +1,7 @@
 package yf.user.entities;
 
+import yf.core.entities.AbstractVersionEntity;
+
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -17,7 +19,7 @@ import javax.validation.constraints.NotNull;
 @NamedQueries({
         @NamedQuery(name = FBUser.QUERY_GET_VK_USER_BY_USER_ID, query = "SELECT t FROM FBUser t WHERE t.user.id = :user_id")
 })
-public class FBUser {
+public class FBUser extends AbstractVersionEntity {
 
     public static final String QUERY_GET_VK_USER_BY_USER_ID = "FBUser.getVkUserByUserId";
 

@@ -1,12 +1,11 @@
 package yf.user;
 
-import yf.dashboard.postphoto.entities.UserSavedPosts;
 import yf.user.dto.UserAllDataDto;
 import yf.user.dto.UserDto;
 import yf.user.dto.UserStatusEnum;
 import yf.user.dto.UserTypeEnum;
-import yf.user.dto.external.fb.FBUserDTO;
-import yf.user.dto.external.vk.VKUserDTO;
+import yf.user.dto.external.FBUserDTO;
+import yf.user.dto.external.VKUserDTO;
 import yf.user.entities.FBUser;
 import yf.user.entities.User;
 import yf.user.entities.VKUser;
@@ -72,14 +71,7 @@ public class UserWorkflow {
                 : null;
     }
 
-
-    public UserSavedPosts getSavedUserPostById(long postId) {
-        UserSavedPosts userSavedPosts = em.find(UserSavedPosts.class, postId);
-        return userSavedPosts;
-
-    }
-
-    public User generateBasicUser() {
+    private User generateBasicUser() {
         User user = new User();
         user.setAuthorize(false);
         user.setCreatedOn(new Date());

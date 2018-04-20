@@ -1,11 +1,13 @@
 package yf.user;
 
 import yf.user.dto.UserDto;
-import yf.user.dto.external.fb.FBUserDTO;
-import yf.user.dto.external.vk.VKUserDTO;
+import yf.user.dto.external.FBUserDTO;
+import yf.user.dto.external.VKUserDTO;
 import yf.user.entities.FBUser;
 import yf.user.entities.User;
 import yf.user.entities.VKUser;
+
+import java.util.Date;
 
 public class UserConverter {
 
@@ -13,6 +15,7 @@ public class UserConverter {
     public UserDto toBasicUserDto(final User entity) {
         UserDto dto = new UserDto();
         dto.setId(entity.getId());
+        dto.setCreatedOn(entity.getCreatedOn());
         dto.setEmail(entity.getEmail());
         dto.setType(entity.getType());
         dto.setStatus(entity.getStatus());
@@ -33,7 +36,7 @@ public class UserConverter {
         vkUserDTO.setVerified(entity.getVerified());
         vkUserDTO.setCity(entity.getCity());
         vkUserDTO.setCountry(entity.getCountry());
-
+        vkUserDTO.setCreatedOn(entity.getCreatedOn());
 
         return vkUserDTO;
     }
@@ -50,6 +53,7 @@ public class UserConverter {
         dto.setLocation(entity.getLocation());
         dto.setGender(entity.getGender());
         dto.setHometown(entity.getHometown());
+        dto.setCreatedOn(entity.getCreatedOn());
 
         final UserDto user = toBasicUserDto(entity.getUser());
         dto.setUserDto(user);
@@ -71,6 +75,7 @@ public class UserConverter {
         vkUserEntity.setVerified(dto.getVerified());
         vkUserEntity.setCity(dto.getCity());
         vkUserEntity.setCountry(dto.getCountry());
+        vkUserEntity.setCreatedOn(new Date());
 
         return vkUserEntity;
 
@@ -90,7 +95,7 @@ public class UserConverter {
         entity.setBirthday(fbUserDTO.getBirthday());
         entity.setHometown(fbUserDTO.getHometown());
         entity.setHometown(fbUserDTO.getHometown());
-
+        entity.setCreatedOn(new Date());
         return entity;
     }
 }

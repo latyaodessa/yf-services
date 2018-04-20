@@ -1,5 +1,7 @@
 package yf.post.entities;
 
+import yf.core.entities.AbstractVersionEntity;
+
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -17,7 +19,7 @@ import java.util.List;
 @NamedQueries({
         @NamedQuery(name = Post.QUERY_POST_BY_ID, query = "SELECT t FROM Post t WHERE t.id = :post_id")
 })
-public class Post {
+public class Post extends AbstractVersionEntity{
 
     public static final String QUERY_POST_BY_ID = "Post.getPostById";
 

@@ -1,7 +1,7 @@
 package yf.user.dto;
 
-import yf.user.dto.external.fb.FBUserDTO;
-import yf.user.dto.external.vk.VKUserDTO;
+import yf.user.dto.external.FBUserDTO;
+import yf.user.dto.external.VKUserDTO;
 
 public class UserAllDataDto {
     public UserDto getUser() {
@@ -16,7 +16,7 @@ public class UserAllDataDto {
         return vkUser;
     }
 
-    public void setVkUser(VKUserDTO vkUser) {
+    public void setVkUser(final VKUserDTO vkUser) {
         this.vkUser = vkUser;
     }
 
@@ -24,7 +24,7 @@ public class UserAllDataDto {
         return fbUser;
     }
 
-    public void setFbUser(FBUserDTO fbUser) {
+    public void setFbUser(final FBUserDTO fbUser) {
         this.fbUser = fbUser;
     }
 

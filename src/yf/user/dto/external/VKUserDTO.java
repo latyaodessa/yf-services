@@ -1,6 +1,8 @@
-package yf.user.dto.external.vk;
+package yf.user.dto.external;
 
 import yf.user.dto.UserDto;
+
+import java.util.Date;
 
 public class VKUserDTO {
     private Long id;
@@ -14,6 +16,7 @@ public class VKUserDTO {
     private Boolean verified;
     private String city;
     private String country;
+    private Date createdOn;
 
     public String getFirstName() {
         return firstName;
@@ -102,5 +105,13 @@ public class VKUserDTO {
 
     public void setUserDto(UserDto userDto) {
         this.userDto = userDto;
+    }
+
+    public Date getCreatedOn() {
+        return createdOn;
+    }
+
+    public void setCreatedOn(Date createdOn) {
+        this.createdOn = createdOn;
     }
 }

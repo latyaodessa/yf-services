@@ -16,12 +16,13 @@ public class RestScheduler implements Scheduler {
     @Schedule(second = "05", minute = "01,03,05", hour = "*")
     @Timeout
     public void process() {
-//    		parserRestClient.checkNewPosts();
-
-
         processor.triggerVkScraper();
+    }
 
-
+    @Schedule(hour = "11")
+    @Timeout
+    public void weeklyTop() {
+        processor.triggerWeeklyTop();
     }
 
 }

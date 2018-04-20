@@ -12,6 +12,7 @@ import java.time.Instant;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class ParserPostConverter {
@@ -34,6 +35,7 @@ public class ParserPostConverter {
         post.setSigner_id(dto.getSigner_id());
         post.setLikes(dto.getLikes().getCount());
         post.setReposts(dto.getReposts().getCount());
+        post.setCreatedOn(new Date());
         List<PostPhoto> postPhoto = new ArrayList<>();
         if (dto.getAttachments() != null) {
             for (PostAttachmentDTO attachmentDto : dto.getAttachments()) {

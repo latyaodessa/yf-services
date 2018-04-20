@@ -15,4 +15,7 @@
     <changeSet author="andre" id="2018_04_11_user_id_change">
         <sqlFile path="migration/2018_04_11_user_id_change.sql" relativeToChangelogFile="true"/>
     </changeSet>
+    <changeSet author="andre" id="2018_04_15_post_change">
+        <sqlFile path="migration/2018_04_15_post_change.sql" relativeToChangelogFile="true"/>
+    </changeSet>
 </databaseChangeLog>
