@@ -42,6 +42,10 @@
     <orderEntry type="library" scope="PROVIDED" name="GlassFish 5.181.0 - EJB" level="application_server_libraries" />
     <orderEntry type="library" scope="PROVIDED" name="GlassFish 5.181.0 - Connector Architecture (JSR 322)" level="application_server_libraries" />
     <orderEntry type="library" scope="PROVIDED" name="GlassFish 5.181.0 - WebSocket" level="application_server_libraries" />
+    <orderEntry type="library" name="Maven: org.apache.logging.log4j:log4j-slf4j-impl:2.7" level="project" />
+    <orderEntry type="library" name="Maven: org.slf4j:slf4j-api:1.7.21" level="project" />
+    <orderEntry type="library" name="Maven: org.apache.logging.log4j:log4j-api:2.7" level="project" />
+    <orderEntry type="library" name="Maven: org.apache.logging.log4j:log4j-core:2.7" level="project" />
     <orderEntry type="library" name="Maven: org.elasticsearch:elasticsearch:5.3.1" level="project" />
     <orderEntry type="library" name="Maven: org.apache.lucene:lucene-core:6.4.2" level="project" />
     <orderEntry type="library" name="Maven: org.apache.lucene:lucene-analyzers-common:6.4.2" level="project" />

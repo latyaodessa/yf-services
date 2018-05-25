@@ -1,8 +1,11 @@
 package yf.post.rest;
 
+import org.joda.time.DateTime;
 import yf.post.PostService;
 import yf.post.dto.PostDetailsDTO;
 import yf.post.dto.SharedBasicPostDTO;
+import yf.post.entities.Post;
+import yf.post.frontend.SitemapGeneratorService;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;
@@ -12,7 +15,9 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
+import java.util.Date;
 import java.util.List;
+
 
 @Path("/post")
 @Produces(MediaType.APPLICATION_JSON)
@@ -21,6 +26,9 @@ public class PostRestImpl {
 
     @Inject
     private PostService postService;
+
+    @Inject
+    private SitemapGeneratorService sitemapGeneratorService;
 
     @GET
     @Path("{postId}")
@@ -56,6 +64,19 @@ public class PostRestImpl {
     @Path("search/related")
     public List<SharedBasicPostDTO> searchRelated(@QueryParam("query") final String queries, @QueryParam("excludeId") final String excludeId) {
         return postService.searchRelated(queries, excludeId);
+    }
+
+    @GET
+    @Path("sitemap/{full}")
+    public List<Post> generateSitemap(@PathParam("full") Boolean full) {
+        final Date date = new Date();
+
+        if (full != null && full) {
+            final Date lastYears = new DateTime(date).minusYears(5).toDate();
+            return sitemapGeneratorService.fetchPostsbyRange(lastYears, date);
+        }
+        final Date yerstarday = new DateTime(date).minusDays(1).toDate();
+        return sitemapGeneratorService.fetchPostsbyRange(yerstarday, date);
     }
 
 }

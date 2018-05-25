@@ -17,11 +17,13 @@ import java.util.List;
 @Entity
 @Table(name = "vk_post")
 @NamedQueries({
-        @NamedQuery(name = Post.QUERY_POST_BY_ID, query = "SELECT t FROM Post t WHERE t.id = :post_id")
+        @NamedQuery(name = Post.QUERY_POST_BY_ID, query = "SELECT t FROM Post t WHERE t.id = :post_id"),
+        @NamedQuery(name = Post.QUERY_POSTS_RANGE, query = "SELECT t FROM Post t WHERE t.date between :from and :end")
 })
-public class Post extends AbstractVersionEntity{
+public class Post extends AbstractVersionEntity {
 
     public static final String QUERY_POST_BY_ID = "Post.getPostById";
+    public static final String QUERY_POSTS_RANGE = "Post.getPostByRange";
 
     @Id
     @NotNull
@@ -108,3 +110,4 @@ public class Post extends AbstractVersionEntity{
     }
 
 }
+v
