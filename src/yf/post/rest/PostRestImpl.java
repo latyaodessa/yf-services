@@ -17,6 +17,7 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 
 @Path("/post")
@@ -68,15 +69,15 @@ public class PostRestImpl {
 
     @GET
     @Path("sitemap/{full}")
-    public List<Post> generateSitemap(@PathParam("full") Boolean full) {
+    public Map<Long, String> generateSitemap(@PathParam("full") Boolean full) {
         final Date date = new Date();
 
         if (full != null && full) {
             final Date lastYears = new DateTime(date).minusYears(5).toDate();
-            return sitemapGeneratorService.fetchPostsbyRange(lastYears, date);
+            return sitemapGeneratorService.execute(lastYears, date);
         }
-        final Date yerstarday = new DateTime(date).minusDays(1).toDate();
-        return sitemapGeneratorService.fetchPostsbyRange(yerstarday, date);
+        final Date yersterday = new DateTime(date).minusDays(1).toDate();
+        return sitemapGeneratorService.execute(yersterday, date);
     }
 
 }
