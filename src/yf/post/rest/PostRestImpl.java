@@ -4,8 +4,8 @@ import org.joda.time.DateTime;
 import yf.post.PostService;
 import yf.post.dto.PostDetailsDTO;
 import yf.post.dto.SharedBasicPostDTO;
-import yf.post.entities.Post;
 import yf.post.frontend.SitemapGeneratorService;
+import yf.post.frontend.SitemapUrlDto;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;
@@ -17,7 +17,6 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import java.util.Date;
 import java.util.List;
-import java.util.Map;
 
 
 @Path("/post")
@@ -69,7 +68,7 @@ public class PostRestImpl {
 
     @GET
     @Path("sitemap/{full}")
-    public Map<Long, String> generateSitemap(@PathParam("full") Boolean full) {
+    public List<SitemapUrlDto> generateSitemap(@PathParam("full") Boolean full) {
         final Date date = new Date();
 
         if (full != null && full) {
