@@ -9,7 +9,7 @@
            value="create"/> -->
            <property name="hibernate.hbm2ddl.auto" value="update"/>
            
-		     <property name="hibernate.connection.url" value="jdbc:postgresql://localhost:5432/yf_db"/>
+		     <property name="hibernate.connection.url" value="jdbc:postgresql://database:5432/yf_db"/>
 <!-- 			<property name="hibernate.connection.username" value="postgres"/>
 			<property name="hibernate.connection.password" value=""/>  -->
 			<property name="hibernate.connection.username" value="yf_system"/>

@@ -1,7 +1,11 @@
 FROM payara/server-full:4.181
 
-COPY setup/server/postgresql-42.2.2.jar glassfish/domains/domain1/lib
+COPY docker/postgresql-42.2.2.jar glassfish/domains/domain1/lib/postgresql-42.2.2.jar
+COPY docker/config/domain_custom.xml glassfish/domains/domain1/config/domain.xml
+COPY docker/config/admin-keyfile glassfish/domains/domain1/config/admin-keyfile
 
-COPY setup/server/config/domain.xml glassfish/domains/domain1/config
+COPY docker/yf-services.war glassfish/domains/domain1/autodeploy/yf-services.war
 
-COPY target/yf-services.war glassfish/domains/domain1/autodeploy
+EXPOSE 4848
+EXPOSE 8080
+EXPOSE 8181

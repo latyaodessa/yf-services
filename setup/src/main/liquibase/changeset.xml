@@ -3,12 +3,12 @@
         xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
          http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
-    <changeSet author="andre" id="2017_03_05_update_saved_posts_table">
-        <sqlFile path="migration/2017_03_05_update_saved_posts_table.sql" relativeToChangelogFile="true"/>
-    </changeSet>
-    <changeSet author="andre" id="2017_03_05_vk_post_table_mapping">
-        <sqlFile path="migration/2017_03_05_vk_post_table_mapping.sql" relativeToChangelogFile="true"/>
-    </changeSet>
+    <!--<changeSet author="andre" id="2017_03_05_update_saved_posts_table">-->
+        <!--<sqlFile path="migration/2017_03_05_update_saved_posts_table.sql" relativeToChangelogFile="true"/>-->
+    <!--</changeSet>-->
+    <!--<changeSet author="andre" id="2017_03_05_vk_post_table_mapping">-->
+        <!--<sqlFile path="migration/2017_03_05_vk_post_table_mapping.sql" relativeToChangelogFile="true"/>-->
+    <!--</changeSet>-->
     <changeSet author="andre" id="2018_04_11_remove_audio_post">
         <sqlFile path="migration/2018_04_11_remove_audio_post.sql" relativeToChangelogFile="true"/>
     </changeSet>
