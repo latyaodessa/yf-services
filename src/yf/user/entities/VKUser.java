@@ -31,15 +31,15 @@ public class VKUser extends AbstractVersionEntity {
     @JoinColumn(name = "user_id", referencedColumnName = "id", nullable = false)
     @NotNull
     private User user;
-    @JoinColumn(name = "first_name")
+    @Column(name = "first_name")
     private String firstName;
-    @JoinColumn(name = "last_name")
+    @Column(name = "last_name")
     private String lastName;
     private String sex;
     private String bdate;
-    @JoinColumn(name = "mobile_phone")
+    @Column(name = "mobile_phone")
     private String mobilePhone;
-    @JoinColumn(name = "home_phone")
+    @Column(name = "home_phone")
     private String homePhone;
     private Boolean verified;
     private String country;

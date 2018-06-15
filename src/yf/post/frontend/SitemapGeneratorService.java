@@ -3,7 +3,6 @@ package yf.post.frontend;
 import com.sun.jersey.api.client.Client;
 import com.sun.jersey.api.client.ClientResponse;
 import yf.core.JNDIPropertyHelper;
-import yf.elastic.reindex.bulkworkflow.PostBulkWorkflow;
 import yf.post.entities.Post;
 
 import javax.ejb.Stateless;
@@ -75,7 +74,7 @@ public class SitemapGeneratorService {
         final String enDate = format.format(end);
 
 
-        TypedQuery<Post> query = em.createNamedQuery(Post.QUERY_POSTS_RANGE, Post.class)
+        TypedQuery<Post> query = em.createNamedQuery(Post.QUERY_SETS_NATIVE_POSTS_RANGE, Post.class)
                 .setParameter("from", frmDate)
                 .setParameter("end", enDate);
         final List<Post> resultList = query.getResultList();

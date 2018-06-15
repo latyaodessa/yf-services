@@ -36,12 +36,49 @@ public class UserWorkflow {
 
     }
 
+    public UserAllDataDto getUserByVkSocialId(final Long socialId) {
+
+        final VKUser vkUser = userGetDao.getVkUser(socialId);
+
+        if(vkUser == null) {
+            return null;
+        }
+
+        final User user = vkUser.getUser();
+        UserAllDataDto userAllDataDto = new UserAllDataDto();
+        userAllDataDto.setUser(
+                userConverter.toBasicUserDto(user));
+        userAllDataDto.setVkUser(userConverter.toVkUserDto(vkUser));
+        userAllDataDto.setFbUser(getFbUserByUserId(user.getId()));
+
+        return userAllDataDto;
+    }
+
+    public UserAllDataDto getUserByFbSocialId(final Long socialId) {
+
+        final FBUser fbUser = userGetDao.getFbUser(socialId);
+
+        if(fbUser == null) {
+            return null;
+        }
+
+        final User user = fbUser.getUser();
+        UserAllDataDto userAllDataDto = new UserAllDataDto();
+        userAllDataDto.setUser(
+                userConverter.toBasicUserDto(user));
+        userAllDataDto.setFbUser(userConverter.toFbUserDto(fbUser));
+        userAllDataDto.setVkUser(getVkUserByUserId(user.getId()));
+
+        return userAllDataDto;
+    }
+
     public UserDto getBasicUserById(final Long userId) {
         final User user = userGetDao.getUserById(userId);
         return user != null ?
                 userConverter.toBasicUserDto(user)
                 : null;
     }
+
 
     public VKUserDTO getVkUser(final Long socialId) {
         final VKUser vkUser = userGetDao.getVkUser(socialId);

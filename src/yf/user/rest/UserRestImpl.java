@@ -36,13 +36,13 @@ public class UserRestImpl {
 
     @GET
     @Path("vk/{social_id}/")
-    public VKUserDTO getVkUser(@PathParam("social_id") final Long socialId) {
+    public UserAllDataDto getVkUser(@PathParam("social_id") final Long socialId) {
         return userService.getVkUser(socialId);
     }
 
     @GET
     @Path("fb/{social_id}/")
-    public FBUserDTO getFbUser(@PathParam("social_id") final Long socialId) {
+    public UserAllDataDto getFbUser(@PathParam("social_id") final Long socialId) {
         return userService.getFbUser(socialId);
     }
 

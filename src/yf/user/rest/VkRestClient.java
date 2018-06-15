@@ -33,6 +33,7 @@ public class VkRestClient {
     private static final String VK_HOST = "https://api.vk.com/method/";
     private static final String VK_METHOD_GET_USERS = "users.get?";
     private static final String VK_USER_IDS = "user_ids=";
+    private static final String ACCESS_TOKEN = "&access_token=3330abc53330abc5338cbd53bf337693d6333303330abc56b8218aba6875d65ba4e6e34";
     private static final String VK_REQUIRED_FIELDS = "&fields=" + String.join(",", new String[]{
             SEX_FIELD,
             MIDDLENAME_FIELD,
@@ -43,7 +44,7 @@ public class VkRestClient {
             VERIIFIED_FIELD});
 
     private static final String VK_NAME_CASE_NOM = "&name_case=Nom";
-    private static final String VK_API_VERSION = "&v=5.74";
+    private static final String VK_API_VERSION = "&v=5.75";
 
     @Inject
     private JSONService jsonService;
@@ -95,6 +96,6 @@ public class VkRestClient {
 
 
     private String userDetailsURI(long userId) {
-        return VK_HOST + VK_METHOD_GET_USERS + VK_USER_IDS + userId + VK_REQUIRED_FIELDS + VK_NAME_CASE_NOM + VK_API_VERSION;
+        return VK_HOST + VK_METHOD_GET_USERS + VK_USER_IDS + userId + ACCESS_TOKEN + VK_REQUIRED_FIELDS + VK_NAME_CASE_NOM + VK_API_VERSION;
     }
 }

@@ -24,13 +24,13 @@ public class UserService {
         return userWorkflow.getBasicUserById(userId);
     }
 
-    public VKUserDTO getVkUser(final Long socialId) {
-        return userWorkflow.getVkUser(socialId);
+    public UserAllDataDto getVkUser(final Long socialId) {
+        return userWorkflow.getUserByVkSocialId(socialId);
 
     }
 
-    public FBUserDTO getFbUser(final Long socialId) {
-        return userWorkflow.getFbUser(socialId);
+    public UserAllDataDto getFbUser(final Long socialId) {
+        return userWorkflow.getUserByFbSocialId(socialId);
 
     }
 

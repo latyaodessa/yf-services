@@ -19,7 +19,6 @@ public class BulkElasticReindexRestImpl {
 	@Path("all")
 	public boolean allReindex(){
 		return reindexWorkflow.reindexPosts()
-				&& reindexWorkflow.reindexUsers()
 				&& reindexWorkflow.reindexDashboardPosts()
 				&& reindexWorkflow.reindexDashboardPhotos();
 	}
@@ -29,12 +28,7 @@ public class BulkElasticReindexRestImpl {
 	public boolean postsBulkReindex(){
 		return reindexWorkflow.reindexPosts();
 	}
-	
-	@GET
-	@Path("users")
-	public boolean usersBulkReindex(){
-		return reindexWorkflow.reindexUsers();
-	}
+
 	
 	@GET
 	@Path("dashboard")

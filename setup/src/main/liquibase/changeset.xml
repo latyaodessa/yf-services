@@ -18,4 +18,7 @@
     <changeSet author="andre" id="2018_04_15_post_change">
         <sqlFile path="migration/2018_04_15_post_change.sql" relativeToChangelogFile="true"/>
     </changeSet>
+    <changeSet author="andre" id="2018_06_10_dashboards_posts">
+        <sqlFile path="migration/2018_06_10_dashboards_posts.sql" relativeToChangelogFile="true"/>
+    </changeSet>
 </databaseChangeLog>
