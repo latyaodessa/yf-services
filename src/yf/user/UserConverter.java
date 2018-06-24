@@ -19,6 +19,10 @@ public class UserConverter {
         dto.setEmail(entity.getEmail());
         dto.setType(entity.getType());
         dto.setStatus(entity.getStatus());
+        dto.setFirstName(entity.getFirstName());
+        dto.setLastName(entity.getLastName());
+        dto.setNickName(entity.getNickName());
+        dto.setAvatar(entity.getAvatar());
         return dto;
     }
 

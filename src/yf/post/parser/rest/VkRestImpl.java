@@ -10,6 +10,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 import java.util.List;
 
 @Path("/vk")
@@ -34,13 +35,14 @@ public class VkRestImpl {
 
     @GET
     @Path("newposts/{command}")
-    public void checkNewPostMethod(@PathParam("command") String command) {
+    public Response checkNewPostMethod(@PathParam("command") String command) {
         if ("execute".equals(command)) {
             parserService.triggerPostParserForNewPosts();
         }
         if ("top".equals(command)) {
             parserService.getAndSaveWeeklyTop();
         }
+        return Response.ok().build();
     }
 
 }

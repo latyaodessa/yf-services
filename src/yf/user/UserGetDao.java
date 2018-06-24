@@ -11,11 +11,22 @@ import javax.persistence.TypedQuery;
 
 public class UserGetDao {
 
+
     @PersistenceContext
     private EntityManager em;
 
     public User getUserById(final Long id) {
         return em.find(User.class, id);
+    }
+
+    public User getUserByNicknameOrEmail(final String user) {
+        TypedQuery<User> query = em.createNamedQuery(User.QUERY_GET_USER_BY_EMAIL_OR_NICKNAME, User.class)
+                .setParameter("user", user);
+        try {
+            return query.getSingleResult();
+        } catch (NoResultException e) {
+            return null;
+        }
     }
 
     public VKUser getVkUser(final Long socialId) {

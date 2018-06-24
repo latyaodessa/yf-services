@@ -6,7 +6,6 @@ import org.codehaus.jackson.map.DeserializationConfig;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jettison.json.JSONException;
 import org.codehaus.jettison.json.JSONObject;
-import yf.user.rest.VkRestClient;
 
 import java.io.IOException;
 import java.util.logging.Level;
@@ -22,6 +21,15 @@ public class JSONService {
             return configureMapperForUnknownProperties().readValue(JSONInput, c);
         } catch (IOException e) {
             e.printStackTrace();
+        }
+        return null;
+    }
+
+    public String objectToJSON(final Object dto) {
+        try {
+            return new ObjectMapper().writerWithDefaultPrettyPrinter().writeValueAsString(dto);
+        } catch (IOException e) {
+            LOG.severe("Could not parse content dto");
         }
         return null;
     }

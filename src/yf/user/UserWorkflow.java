@@ -1,13 +1,16 @@
 package yf.user;
 
+import yf.user.dto.LoginDTO;
 import yf.user.dto.UserAllDataDto;
 import yf.user.dto.UserDto;
 import yf.user.dto.UserStatusEnum;
 import yf.user.dto.UserTypeEnum;
+import yf.user.dto.VerificationTypesEnum;
 import yf.user.dto.external.FBUserDTO;
 import yf.user.dto.external.VKUserDTO;
 import yf.user.entities.FBUser;
 import yf.user.entities.User;
+import yf.user.entities.UserVerifications;
 import yf.user.entities.VKUser;
 
 import javax.ejb.Stateless;
@@ -40,7 +43,7 @@ public class UserWorkflow {
 
         final VKUser vkUser = userGetDao.getVkUser(socialId);
 
-        if(vkUser == null) {
+        if (vkUser == null) {
             return null;
         }
 
@@ -58,7 +61,7 @@ public class UserWorkflow {
 
         final FBUser fbUser = userGetDao.getFbUser(socialId);
 
-        if(fbUser == null) {
+        if (fbUser == null) {
             return null;
         }
 
@@ -153,6 +156,71 @@ public class UserWorkflow {
 
         fbUserDTO.setUserDto(userConverter.toBasicUserDto(user));
         return fbUserDTO;
+
+    }
+
+
+    public UserAllDataDto getUserSocialAccounts(final User user) {
+
+        if (user != null) {
+            UserAllDataDto userAllDataDto = new UserAllDataDto();
+            userAllDataDto.setUser(userConverter.toBasicUserDto(user));
+            userAllDataDto.setVkUser(getVkUserByUserId(user.getId()));
+            userAllDataDto.setFbUser(getFbUserByUserId(user.getId()));
+            return userAllDataDto;
+        }
+
+        return null;
+    }
+
+    public User getUserByEmailNickName(final String emailOrNickname) {
+        return userGetDao.getUserByNicknameOrEmail(emailOrNickname);
+    }
+
+    public User registerUser(final LoginDTO loginDTO) {
+        UserVerifications verifications = UserVerifications.generateEmptyVerification();
+        em.persist(verifications);
+
+        User user = generateBasicUser();
+        user.setEmail(loginDTO.getUser());
+        user.setPassword(loginDTO.getPassword());
+        user.setVerifications(verifications);
+        em.persist(user);
+        return user;
+    }
+
+    public User changeUserPassword(final Long userId, final String password) {
+        final User user = userGetDao.getUserById(userId);
+        if (user == null) {
+            return null;
+        }
+        user.setPassword(password);
+        em.persist(user);
+        return user;
+
+    }
+
+    public User verifyUserVerification(final Long userId, final VerificationTypesEnum verificationTypesEnum) {
+        final User user = userGetDao.getUserById(userId);
+        if (user == null) {
+            return null;
+        }
+        final UserVerifications userVerifications = user.getVerifications();
+
+        switch (verificationTypesEnum) {
+            case EMAIL:
+                userVerifications.setEmail(true);
+                break;
+            case PHONE:
+                userVerifications.setPhone(true);
+                break;
+            default:
+                break;
+
+        }
+        em.persist(userVerifications);
+        em.persist(user);
+        return user;
 
     }
 
