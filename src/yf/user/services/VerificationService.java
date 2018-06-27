@@ -33,7 +33,7 @@ public class VerificationService {
     }
 
     public Verifications validateVerification(final String verification) {
-        final Verifications entity = verificationDao.getVerificationByVerification(verification);
+        final Verifications entity = getVerification(verification);
 
         if (entity == null) {
             return null;
@@ -46,6 +46,10 @@ public class VerificationService {
         }
 
         return null;
+    }
+
+    public Verifications getVerification(final String verification) {
+        return verificationDao.getVerificationByVerification(verification);
     }
 
 }

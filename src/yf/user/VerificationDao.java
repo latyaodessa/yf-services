@@ -28,7 +28,7 @@ public class VerificationDao {
         try {
             return query.getSingleResult();
         } catch (NoResultException e) {
-            LOG.severe("VERIFICATION TEMPLATE: " + e);
+            LOG.warning("VERIFICATION TEMPLATE: " + e);
             return null;
         }
     }

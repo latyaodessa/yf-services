@@ -45,6 +45,7 @@ public class LoginRestImpl {
         return userService.resetPassword(verification, newPassword, repeatPassword);
     }
 
+    // verification of email, phone etc ...
     @GET
     @Path("verify/{verification}")
     public Response verifyUser(@PathParam("verification") String verification) {
@@ -53,9 +54,15 @@ public class LoginRestImpl {
 
 
     @GET
-    @Path("token/validate/{userId}/{token}")
+    @Path("validate/token/{userId}/{token}")
     public Response validateToken(@PathParam("userId") Long userId, @PathParam("token") String token) {
         return userService.validateToken(userId, token);
+    }
+
+    @GET
+    @Path("validate/{uuid}")
+    public Response validateUIID(@PathParam("uuid") String uuid) {
+        return userService.validateUiidVerification(uuid);
     }
 
 }

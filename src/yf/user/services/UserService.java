@@ -1,8 +1,6 @@
 package yf.user.services;
 
-import yf.core.JSONService;
 import yf.mail.services.EmailService;
-import yf.user.UserGetDao;
 import yf.user.UserWorkflow;
 import yf.user.dto.AuthResponseStatusesEnum;
 import yf.user.dto.LoginDTO;
@@ -15,9 +13,9 @@ import yf.user.entities.Verifications;
 import yf.user.rest.VkRestClient;
 
 import javax.inject.Inject;
-import javax.ws.rs.core.Cookie;
-import javax.ws.rs.core.NewCookie;
 import javax.ws.rs.core.Response;
+import java.util.HashMap;
+import java.util.Map;
 
 public class UserService {
     @Inject
@@ -26,8 +24,6 @@ public class UserService {
     private VkRestClient userRestClient;
     @Inject
     private EmailService emailService;
-    @Inject
-    private JSONService jsonService;
     @Inject
     private JWTService jwtService;
     @Inject
@@ -75,10 +71,11 @@ public class UserService {
 
         final UserAllDataDto userSocialAccounts = userWorkflow.getUserSocialAccounts(user);
 
-        return Response.ok()
-                .cookie(new NewCookie(new Cookie("user", jsonService.objectToJSON(userSocialAccounts)), "user", 86400, true))
-                .cookie(new NewCookie(new Cookie("token", jwtService.createToken(userSocialAccounts.getUser())), "token", 86400, true))
-                .build();
+        Map<String, Object> resp = new HashMap<>();
+        resp.put("user", userSocialAccounts);
+        resp.put("token", jwtService.createToken(userSocialAccounts.getUser()));
+
+        return Response.status(200).entity(resp).build();
     }
 
     public Response registerUser(final LoginDTO loginDTO) {
@@ -87,21 +84,33 @@ public class UserService {
             return Response.status(401).entity(AuthResponseStatusesEnum.USER_ALREADY_EXIST).build();
         }
 
+        if (loginDTO.getPassword().length() < 7 || loginDTO.getPassword().matches("\\s+")) {
+            return Response.status(401).entity(AuthResponseStatusesEnum.PASSWORD_NOT_VALID).build();
+        }
+
         final User userToRegister = userWorkflow.registerUser(loginDTO);
         emailService.sendVerificationEmail(userToRegister);
 
         final UserAllDataDto userSocialAccounts = userWorkflow.getUserSocialAccounts(userToRegister);
 
+        Map<String, Object> resp = new HashMap<>();
+        resp.put("user", userSocialAccounts);
+        resp.put("token", jwtService.createToken(userSocialAccounts.getUser()));
 
-        return Response.ok()
-                .cookie(new NewCookie(new Cookie("user", jsonService.objectToJSON(userSocialAccounts)), "user", 86400, true))
-                .cookie(new NewCookie(new Cookie("token", jwtService.createToken(userSocialAccounts.getUser())), "token", 86400, true))
-                .build();
+        return Response.status(200).entity(resp).build();
     }
 
     public Response validateToken(final Long userId, final String token) {
         final Boolean isValid = jwtService.isValidToken(token, userId);
         return Response.ok().entity(isValid).build();
+    }
+
+    public Response validateUiidVerification(final String verification) {
+        final Verifications ver = verificationService.getVerification(verification);
+        if (ver == null) {
+            return Response.status(401).entity(AuthResponseStatusesEnum.VERIFICATION_NOT_VALID).build();
+        }
+        return Response.status(200).entity(ver).build();
     }
 
 
@@ -118,6 +127,11 @@ public class UserService {
 
 
     public Response resetPassword(final String verification, final String newPassword, final String repeatPassword) {
+
+
+        if (newPassword.length() < 7 || newPassword.matches("\\s+") || repeatPassword.matches("\\s+")) {
+            return Response.status(401).entity(AuthResponseStatusesEnum.PASSWORD_NOT_VALID).build();
+        }
 
         if (!newPassword.equals(repeatPassword)) {
             return Response.status(401).entity(AuthResponseStatusesEnum.PASSWORDS_NOT_MATCING).build();
@@ -142,7 +156,7 @@ public class UserService {
 
     public Response verifyUserVerification(final String verification) {
         final Verifications ver = verificationService.validateVerification(verification);
-        if (verification == null) {
+        if (ver == null) {
             return Response.status(401).entity(AuthResponseStatusesEnum.VERIFICATION_NOT_VALID).build();
         }
 
