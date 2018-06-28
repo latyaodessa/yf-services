@@ -1,9 +1,11 @@
 package yf.user.rest;
 
+import yf.user.dto.LoginDTO;
 import yf.user.dto.UserAllDataDto;
 import yf.user.dto.UserDto;
 import yf.user.dto.external.FBUserDTO;
 import yf.user.dto.external.VKUserDTO;
+import yf.user.services.JWTService;
 import yf.user.services.UserService;
 
 import javax.ejb.Stateless;
@@ -14,6 +16,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 
 @Path("user")
 @Produces(MediaType.APPLICATION_JSON)
@@ -21,6 +24,7 @@ import javax.ws.rs.core.MediaType;
 public class UserRestImpl {
     @Inject
     private UserService userService;
+
 
     @GET
     @Path("{id}")
@@ -36,7 +40,7 @@ public class UserRestImpl {
 
     @GET
     @Path("vk/{social_id}/")
-    public UserAllDataDto getVkUser(@PathParam("social_id") final Long socialId) {
+    public Response getVkUser(@PathParam("social_id") final Long socialId) {
         return userService.getVkUser(socialId);
     }
 
@@ -49,8 +53,8 @@ public class UserRestImpl {
 
     @POST
     @Path("vk/create/{id}")
-    public VKUserDTO createVKUser(@PathParam("id") final long userId) {
-        return userService.createVKUser(userId);
+    public VKUserDTO createVKUser(@PathParam("id") final long userId, final LoginDTO loginDTO) {
+        return userService.createVKUser(userId, loginDTO);
     }
 
     @POST

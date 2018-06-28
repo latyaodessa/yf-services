@@ -120,16 +120,17 @@ public class UserWorkflow {
         return user;
     }
 
-    public VKUserDTO saveAndVerifyVKUser(final VKUserDTO vKUserDTO) {
+    public VKUserDTO saveAndVerifyVKUser(final VKUserDTO vKUserDTO, final User user) {
 
-        VKUserDTO existingVkUser = getVkUser(vKUserDTO.getId());
+//        VKUserDTO existingVkUser = getVkUser(vKUserDTO.getId());
+//
+//        if (existingVkUser != null) {
+//            return existingVkUser;
+//        }
+//
+//        em.persist(user);
 
-        if (existingVkUser != null) {
-            return existingVkUser;
-        }
-
-        User user = generateBasicUser();
-        em.persist(user);
+        //TODO
 
         VKUser vkUserEntity = userConverter.toVKUsetEntity(vKUserDTO, user);
         em.persist(vkUserEntity);
