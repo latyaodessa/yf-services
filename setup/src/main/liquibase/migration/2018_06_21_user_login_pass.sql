@@ -51,3 +51,5 @@ CREATE TABLE verifications (
    verified BOOLEAN NOT NULL
 );
 
+
+ALTER TABLE user_yf ADD COLUMN gender VARCHAR;

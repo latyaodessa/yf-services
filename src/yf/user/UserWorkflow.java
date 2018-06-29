@@ -1,5 +1,6 @@
 package yf.user;
 
+import yf.mail.services.EmailService;
 import yf.user.dto.LoginDTO;
 import yf.user.dto.UserAllDataDto;
 import yf.user.dto.UserDto;
@@ -26,9 +27,10 @@ public class UserWorkflow {
     private EntityManager em;
     @Inject
     private UserConverter userConverter;
-
     @Inject
-    private UserGetDao userGetDao;
+    private EmailService emailService;
+    @Inject
+    private UserDao userDao;
 
     public UserAllDataDto getUserById(final Long userId) {
         UserAllDataDto userAllDataDto = new UserAllDataDto();
@@ -41,7 +43,7 @@ public class UserWorkflow {
 
     public UserAllDataDto getUserByVkSocialId(final Long socialId) {
 
-        final VKUser vkUser = userGetDao.getVkUser(socialId);
+        final VKUser vkUser = userDao.getVkUser(socialId);
 
         if (vkUser == null) {
             return null;
@@ -59,7 +61,7 @@ public class UserWorkflow {
 
     public UserAllDataDto getUserByFbSocialId(final Long socialId) {
 
-        final FBUser fbUser = userGetDao.getFbUser(socialId);
+        final FBUser fbUser = userDao.getFbUser(socialId);
 
         if (fbUser == null) {
             return null;
@@ -76,7 +78,7 @@ public class UserWorkflow {
     }
 
     public UserDto getBasicUserById(final Long userId) {
-        final User user = userGetDao.getUserById(userId);
+        final User user = userDao.getUserById(userId);
         return user != null ?
                 userConverter.toBasicUserDto(user)
                 : null;
@@ -84,28 +86,28 @@ public class UserWorkflow {
 
 
     public VKUserDTO getVkUser(final Long socialId) {
-        final VKUser vkUser = userGetDao.getVkUser(socialId);
+        final VKUser vkUser = userDao.getVkUser(socialId);
         return vkUser != null ?
                 userConverter.toVkUserDto(vkUser)
                 : null;
     }
 
     private VKUserDTO getVkUserByUserId(final Long userId) {
-        final VKUser vkUser = userGetDao.getVkUserByUserId(userId);
+        final VKUser vkUser = userDao.getVkUserByUserId(userId);
         return vkUser != null ?
                 userConverter.toVkUserDto(vkUser)
                 : null;
     }
 
     public FBUserDTO getFbUser(final Long socialId) {
-        final FBUser fbUser = userGetDao.getFbUser(socialId);
+        final FBUser fbUser = userDao.getFbUser(socialId);
         return fbUser != null ?
                 userConverter.toFbUserDto(fbUser)
                 : null;
     }
 
     private FBUserDTO getFbUserByUserId(final Long userId) {
-        final FBUser fbUser = userGetDao.getFbUserByUserId(userId);
+        final FBUser fbUser = userDao.getFbUserByUserId(userId);
         return fbUser != null ?
                 userConverter.toFbUserDto(fbUser)
                 : null;
@@ -120,44 +122,17 @@ public class UserWorkflow {
         return user;
     }
 
-    public VKUserDTO saveAndVerifyVKUser(final VKUserDTO vKUserDTO, final User user) {
-
-//        VKUserDTO existingVkUser = getVkUser(vKUserDTO.getId());
-//
-//        if (existingVkUser != null) {
-//            return existingVkUser;
-//        }
-//
-//        em.persist(user);
-
-        //TODO
-
-        VKUser vkUserEntity = userConverter.toVKUsetEntity(vKUserDTO, user);
-        em.persist(vkUserEntity);
-
-        vKUserDTO.setUserDto(userConverter.toBasicUserDto(user));
-
-        return vKUserDTO;
+    public VKUser createVKUser(final VKUserDTO vKUserDTO, final User user) {
+        VKUser entity = userConverter.toVKUsetEntity(vKUserDTO, user);
+        em.persist(entity);
+        return entity;
 
     }
 
-    public FBUserDTO saveFBUser(final FBUserDTO fbUserDTO) {
-
-        FBUserDTO existingFbUser = getFbUser(fbUserDTO.getId());
-
-        if (existingFbUser != null) {
-            return existingFbUser;
-        }
-
-        User user = generateBasicUser();
-        em.persist(user);
-
+    public FBUser createFBUser(final FBUserDTO fbUserDTO, final User user) {
         FBUser fbUserEntity = userConverter.toFBUserEntity(fbUserDTO, user);
         em.persist(fbUserEntity);
-
-        fbUserDTO.setUserDto(userConverter.toBasicUserDto(user));
-        return fbUserDTO;
-
+        return fbUserEntity;
     }
 
 
@@ -174,8 +149,34 @@ public class UserWorkflow {
         return null;
     }
 
+    public UserAllDataDto getUserSocialAccounts(final User user, final VKUser vkUser) {
+
+        if (user != null) {
+            UserAllDataDto userAllDataDto = new UserAllDataDto();
+            userAllDataDto.setUser(userConverter.toBasicUserDto(user));
+            userAllDataDto.setVkUser(userConverter.toVkUserDto(vkUser));
+            userAllDataDto.setFbUser(getFbUserByUserId(user.getId()));
+            return userAllDataDto;
+        }
+
+        return null;
+    }
+
+    public UserAllDataDto getUserSocialAccounts(final User user, final FBUser fbUser) {
+
+        if (user != null) {
+            UserAllDataDto userAllDataDto = new UserAllDataDto();
+            userAllDataDto.setUser(userConverter.toBasicUserDto(user));
+            userAllDataDto.setVkUser(getVkUserByUserId(user.getId()));
+            userAllDataDto.setFbUser(userConverter.toFbUserDto(fbUser));
+            return userAllDataDto;
+        }
+
+        return null;
+    }
+
     public User getUserByEmailNickName(final String emailOrNickname) {
-        return userGetDao.getUserByNicknameOrEmail(emailOrNickname);
+        return userDao.getUserByNicknameOrEmail(emailOrNickname);
     }
 
     public User registerUser(final LoginDTO loginDTO) {
@@ -186,12 +187,35 @@ public class UserWorkflow {
         user.setEmail(loginDTO.getUser());
         user.setPassword(loginDTO.getPassword());
         user.setVerifications(verifications);
+        user.setAuthorize(true);
         em.persist(user);
+
+        emailService.sendVerificationEmail(user);
+
+        return user;
+    }
+
+    public User registerExistingUser(final User user, final LoginDTO loginDTO) {
+        UserVerifications userVerifications = user.getVerifications();
+
+        if(userVerifications == null) {
+            userVerifications = UserVerifications.generateEmptyVerification();
+        }
+
+        user.setEmail(loginDTO.getUser());
+        user.setPassword(loginDTO.getPassword());
+        user.setVerifications(userVerifications);
+        user.setAuthorize(true);
+        em.persist(userVerifications);
+        em.persist(user);
+
+        emailService.sendVerificationEmail(user);
+
         return user;
     }
 
     public User changeUserPassword(final Long userId, final String password) {
-        final User user = userGetDao.getUserById(userId);
+        final User user = userDao.getUserById(userId);
         if (user == null) {
             return null;
         }
@@ -202,7 +226,7 @@ public class UserWorkflow {
     }
 
     public User verifyUserVerification(final Long userId, final VerificationTypesEnum verificationTypesEnum) {
-        final User user = userGetDao.getUserById(userId);
+        final User user = userDao.getUserById(userId);
         if (user == null) {
             return null;
         }

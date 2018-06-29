@@ -1,11 +1,5 @@
 package yf.user.services;
 
-import java.util.HashMap;
-import java.util.Map;
-
-import javax.inject.Inject;
-import javax.ws.rs.core.Response;
-
 import yf.mail.services.EmailService;
 import yf.user.UserWorkflow;
 import yf.user.dto.AuthResponseStatusesEnum;
@@ -14,9 +8,16 @@ import yf.user.dto.UserAllDataDto;
 import yf.user.dto.UserDto;
 import yf.user.dto.external.FBUserDTO;
 import yf.user.dto.external.VKUserDTO;
+import yf.user.entities.FBUser;
 import yf.user.entities.User;
+import yf.user.entities.VKUser;
 import yf.user.entities.Verifications;
 import yf.user.rest.VkRestClient;
+
+import javax.inject.Inject;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import javax.ws.rs.core.Response;
 
 public class UserService {
     @Inject
@@ -29,6 +30,8 @@ public class UserService {
     private JWTService jwtService;
     @Inject
     private VerificationService verificationService;
+    @PersistenceContext
+    private EntityManager em;
 
     public UserAllDataDto getUserById(final Long userId) {
         return userWorkflow.getUserById(userId);
@@ -38,92 +41,55 @@ public class UserService {
         return userWorkflow.getBasicUserById(userId);
     }
 
-    public Response getVkUser(final Long socialId) {
-        UserAllDataDto dto = userWorkflow.getUserByVkSocialId(socialId);
-        if (dto == null) {
-            return Response.status(401)
-                    .entity(AuthResponseStatusesEnum.NOT_EXIST)
-                    .build();
-        }
 
-        if (dto.getUser()
-                .getAuthorized() == null
-                || !dto.getUser()
-                        .getAuthorized()) {
-            return Response.status(401)
-                    .entity(AuthResponseStatusesEnum.NOT_AUTHORIZED)
-                    .entity(dto)
-                    .build();
-        }
-
-        return Response.ok()
-                .entity(dto)
-                .build();
-
-    }
-
-    public UserAllDataDto getFbUser(final Long socialId) {
-        return userWorkflow.getUserByFbSocialId(socialId);
-
-    }
-
-    public VKUserDTO createVKUser(final long userId, final LoginDTO loginDTO) {
-        final User user  = registerUser(loginDTO);
-        /// TODO
+    public UserAllDataDto registerUserFromVKUser(final long userId, final LoginDTO loginDTO, final VKUser vkUser) {
+        User user;
         final VKUserDTO vKUserDTO = userRestClient.getVKUserDetails(userId);
-        return userWorkflow.saveAndVerifyVKUser(vKUserDTO, user);
-    }
 
-    public FBUserDTO createFBUser(final FBUserDTO fbUserDTO) {
-        return userWorkflow.saveFBUser(fbUserDTO);
-    }
-
-    public Response getUserByEmailNickNameAndPassword(final LoginDTO loginDTO) {
-        final User user = userWorkflow.getUserByEmailNickName(loginDTO.getUser());
-        if (user == null) {
-            return Response.status(401).entity(AuthResponseStatusesEnum.NOT_EXIST).build();
-        }
-//        if (!user.isAuthorize()) {
-//            return Response.status(401).entity(AuthResponseStatusesEnum.NOT_AUTHORIZED).build();
-//        }
-        if (!user.getPassword().equals(loginDTO.getPassword())) {
-            return Response.status(401).entity(AuthResponseStatusesEnum.WRONG_PASSWORD).build();
+        if (vkUser == null) {
+            user = userWorkflow.registerUser(loginDTO);
+            user.setFirstName(vKUserDTO.getFirstName());
+            user.setLastName(vKUserDTO.getLastName());
+            em.persist(user);
+            final VKUser vkUserEntity = userWorkflow.createVKUser(vKUserDTO, user);
+            return userWorkflow.getUserSocialAccounts(user, vkUserEntity);
+        } else {
+            user = userWorkflow.registerExistingUser(vkUser.getUser(), loginDTO);
+            user.setFirstName(vKUserDTO.getFirstName());
+            user.setLastName(vKUserDTO.getLastName());
+            em.persist(user);
+            return userWorkflow.getUserSocialAccounts(user, vkUser);
         }
 
-        final UserAllDataDto userSocialAccounts = userWorkflow.getUserSocialAccounts(user);
 
-        Map<String, Object> resp = new HashMap<>();
-        resp.put("user", userSocialAccounts);
-        resp.put("token", jwtService.createToken(userSocialAccounts.getUser()));
-
-        return Response.status(200).entity(resp).build();
     }
 
-    public User registerUser(final LoginDTO loginDTO) {
-        final User userToRegister = userWorkflow.registerUser(loginDTO);
-        emailService.sendVerificationEmail(userToRegister);
-        return userToRegister;
+    public UserAllDataDto registerUserFromFBUser(final FBUserDTO fbUserDTO, final LoginDTO loginDTO, final FBUser fbUser) {
+
+        User user;
+
+        if (fbUser == null) {
+            user = userWorkflow.registerUser(loginDTO);
+            user.setGender(fbUserDTO.getGender());
+            user.setFirstName(fbUserDTO.getFirst_name());
+            user.setLastName(fbUserDTO.getLast_name());
+            em.persist(user);
+            final FBUser fbUserEntity = userWorkflow.createFBUser(fbUserDTO, user);
+            return userWorkflow.getUserSocialAccounts(user, fbUserEntity);
+        } else {
+            user = userWorkflow.registerExistingUser(fbUser.getUser(), loginDTO);
+            user.setFirstName(fbUserDTO.getFirst_name());
+            user.setLastName(fbUserDTO.getLast_name());
+            user.setGender(fbUserDTO.getGender());
+            em.persist(user);
+            return userWorkflow.getUserSocialAccounts(user, fbUser);
+        }
+
     }
 
     public User getUserByEmailNickName(final LoginDTO loginDTO) {
         return userWorkflow.getUserByEmailNickName(loginDTO.getUser());
     }
-
-    public AuthResponseStatusesEnum newUserValidityCheck(final User user,
-                                                          final LoginDTO loginDTO) {
-        if (user != null) {
-            return AuthResponseStatusesEnum.USER_ALREADY_EXIST;
-        }
-
-        if (loginDTO.getPassword()
-                .length() < 7 || loginDTO.getPassword()
-                        .matches("\\s+")) {
-            return AuthResponseStatusesEnum.PASSWORD_NOT_VALID;
-        }
-        // no error => is ok
-        return null;
-
-    };
 
     public Response validateToken(final Long userId,
                                   final String token) {

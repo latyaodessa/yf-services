@@ -60,6 +60,7 @@ public class User extends AbstractVersionEntity {
     private String lastName;
     @Column(name = "first_name")
     private String firstName;
+    private String gender;
     private String avatar;
     private String phone;
     private String passport;
@@ -172,4 +173,13 @@ public class User extends AbstractVersionEntity {
     public void setVerifications(UserVerifications verifications) {
         this.verifications = verifications;
     }
+
+    public String getGender() {
+        return gender;
+    }
+
+    public void setGender(String gender) {
+        this.gender = gender;
+    }
+
 }

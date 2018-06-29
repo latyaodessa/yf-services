@@ -1,7 +1,10 @@
 package yf.user.rest;
 
-import java.util.HashMap;
-import java.util.Map;
+import yf.user.UserWorkflow;
+import yf.user.dto.LoginDTO;
+import yf.user.dto.UserAllDataDto;
+import yf.user.entities.User;
+import yf.user.services.UserService;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;
@@ -12,14 +15,7 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-
-import yf.user.UserWorkflow;
-import yf.user.dto.AuthResponseStatusesEnum;
-import yf.user.dto.LoginDTO;
-import yf.user.dto.UserAllDataDto;
-import yf.user.entities.User;
-import yf.user.services.JWTService;
-import yf.user.services.UserService;
+import java.util.Map;
 
 @Path("auth")
 @Produces(MediaType.APPLICATION_JSON)
@@ -29,14 +25,28 @@ public class LoginRestImpl {
     @Inject
     private UserService userService;
     @Inject
-    private JWTService jwtService;
-    @Inject
     private UserWorkflow userWorkflow;
+    @Inject
+    private AuthRestHelper authRestHelper;
 
     @POST
     @Path("login")
     public Response login(final LoginDTO loginDTO) {
-        return userService.getUserByEmailNickNameAndPassword(loginDTO);
+        final User user = userService.getUserByEmailNickName(loginDTO);
+
+        Response errorResponse = authRestHelper.isAuthValid(loginDTO, user);
+
+        if (errorResponse != null) {
+            return errorResponse;
+        }
+
+        final UserAllDataDto userSocialAccounts = userWorkflow.getUserSocialAccounts(user);
+
+        Map<String, Object> resp = authRestHelper.userAuthResponseEntityMap(userSocialAccounts);
+
+        return Response.status(200)
+                .entity(resp)
+                .build();
     }
 
     @POST
@@ -44,23 +54,16 @@ public class LoginRestImpl {
     public Response register(final LoginDTO loginDTO) {
         final User user = userService.getUserByEmailNickName(loginDTO);
 
-        AuthResponseStatusesEnum error = userService.newUserValidityCheck(user,
-                loginDTO);
+        Response errorResponse = authRestHelper.isRegistrationValid(loginDTO);
 
-        if (error != null) {
-            return Response.status(401)
-                    .entity(error)
-                    .build();
+        if (errorResponse != null) {
+            return errorResponse;
         }
 
-        final User registeredUsed = userService.registerUser(loginDTO);
+        final User registeredUsed = userWorkflow.registerUser(loginDTO);
         final UserAllDataDto dto = userWorkflow.getUserSocialAccounts(registeredUsed);
 
-        Map<String, Object> resp = new HashMap<>();
-        resp.put("user",
-                dto);
-        resp.put("token",
-                jwtService.createToken(dto.getUser()));
+        Map<String, Object> resp = authRestHelper.userAuthResponseEntityMap(dto);
 
         return Response.status(200)
                 .entity(resp)

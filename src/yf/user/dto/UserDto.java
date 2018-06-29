@@ -12,6 +12,7 @@ public class UserDto {
     private String lastName;
     private String firstName;
     private String avatar;
+    private String gender;
     private Boolean authorized;
 
     public Long getId() {
@@ -92,6 +93,14 @@ public class UserDto {
 
     public void setAuthorized(Boolean authorized) {
         this.authorized = authorized;
+    }
+
+    public String getGender() {
+        return gender;
+    }
+
+    public void setGender(String gender) {
+        this.gender = gender;
     }
 
 }

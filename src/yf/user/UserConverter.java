@@ -23,6 +23,7 @@ public class UserConverter {
         dto.setLastName(entity.getLastName());
         dto.setNickName(entity.getNickName());
         dto.setAvatar(entity.getAvatar());
+        dto.setGender(entity.getGender());
         dto.setAuthorized(entity.isAuthorize());
         return dto;
     }
