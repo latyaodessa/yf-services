@@ -1,6 +1,5 @@
 package yf.user.services;
 
-import com.sun.tools.javac.util.Assert;
 import yf.mail.services.EmailService;
 import yf.user.UserWorkflow;
 import yf.user.dto.AuthResponseStatusesEnum;
@@ -18,7 +17,6 @@ import yf.user.rest.VkRestClient;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import javax.ws.rs.PathParam;
 import javax.ws.rs.core.Response;
 
 public class UserService {
