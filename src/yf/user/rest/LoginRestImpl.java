@@ -97,8 +97,11 @@ public class LoginRestImpl {
     @Path("validate/token/{userId}/{token}")
     public Response validateToken(@PathParam("userId") Long userId,
                                   @PathParam("token") String token) {
-        return userService.validateToken(userId,
+        final Boolean isValid = userService.validateToken(userId,
                 token);
+        return Response.ok()
+                .entity(isValid)
+                .build();
     }
 
     @GET

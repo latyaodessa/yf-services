@@ -198,7 +198,7 @@ public class UserWorkflow {
     public User registerExistingUser(final User user, final LoginDTO loginDTO) {
         UserVerifications userVerifications = user.getVerifications();
 
-        if(userVerifications == null) {
+        if (userVerifications == null) {
             userVerifications = UserVerifications.generateEmptyVerification();
         }
 
@@ -245,6 +245,25 @@ public class UserWorkflow {
         }
         em.persist(userVerifications);
         em.persist(user);
+        return user;
+
+    }
+
+    public User updateUserFirstLastName(final Long userId,
+                                        final String firstName,
+                                        final String lastName) {
+        User user = userDao.getUserById(userId);
+        user.setFirstName(firstName);
+        user.setLastName(lastName);
+        em.merge(user);
+        return user;
+    }
+
+    public User updateNickName(final Long userId,
+                               final String nickname) {
+        User user = userDao.getUserById(userId);
+        user.setNickName(nickname);
+        em.merge(user);
         return user;
 
     }

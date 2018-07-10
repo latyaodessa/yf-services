@@ -2,6 +2,7 @@ package yf.user.rest;
 
 import yf.user.UserDao;
 import yf.user.UserWorkflow;
+import yf.user.dto.AuthResponseStatusesEnum;
 import yf.user.dto.LoginDTO;
 import yf.user.dto.UserAllDataDto;
 import yf.user.dto.UserDto;
@@ -108,7 +109,9 @@ public class UserRestImpl {
     public Response createFBUser(final FBUserDTO fbUserDTO, @PathParam("user") final String user,
                                  @PathParam("password") final String password) {
 
-        LoginDTO loginDTO = new LoginDTO(user, password);
+        LoginDTO loginDTO = new LoginDTO();
+        loginDTO.setUser(user);
+        loginDTO.setPassword(password);
 
         final FBUser fbUser = userDao.getFbUser(fbUserDTO.getId());
 
@@ -120,6 +123,53 @@ public class UserRestImpl {
 
         final UserAllDataDto dto = userService.registerUserFromFBUser(fbUserDTO, loginDTO, fbUser);
         Map<String, Object> resp = authRestHelper.userAuthResponseEntityMap(dto);
+
+        return Response.status(200)
+                .entity(resp)
+                .build();
+    }
+
+    @POST
+    @Path("update/name/{userId}/{token}/{firstName}/{lastName}")
+    public Response updateFirstLastName(@PathParam("userId") final Long userId,
+                                        @PathParam("token") final String token,
+                                        @PathParam("firstName") final String firstName,
+                                        @PathParam("lastName") final String lastName) {
+        final Boolean isValid = userService.validateToken(userId,
+                token);
+        if (!isValid) {
+            Response.status(403).entity(AuthResponseStatusesEnum.TOKEN_NOT_VALID).build();
+        }
+
+        final User user = userService.updateUserFirstLastName(userId, firstName, lastName);
+        final UserAllDataDto userSocialAccounts = userWorkflow.getUserSocialAccounts(user);
+        Map<String, Object> resp = authRestHelper.userAuthResponseEntityMap(userSocialAccounts);
+
+        return Response.status(200)
+                .entity(resp)
+                .build();
+    }
+
+
+    @POST
+    @Path("update/nickname/{userId}/{token}/{nickname}")
+    public Response updateFirstLastName(@PathParam("userId") final Long userId,
+                                        @PathParam("token") final String token,
+                                        @PathParam("nickname") final String nickname) {
+
+        final Boolean isValid = userService.validateToken(userId,
+                token);
+        if (!isValid) {
+            Response.status(403).entity(AuthResponseStatusesEnum.TOKEN_NOT_VALID).build();
+        }
+
+        if (!nickname.matches("[a-zA-Z0-9]*")) {
+            Response.status(403).entity(AuthResponseStatusesEnum.ONLY_LETTER_NUMBER_ALLOWED).build();
+        }
+
+        final User user = userService.updateUserNickname(userId, nickname);
+        final UserAllDataDto userSocialAccounts = userWorkflow.getUserSocialAccounts(user);
+        Map<String, Object> resp = authRestHelper.userAuthResponseEntityMap(userSocialAccounts);
 
         return Response.status(200)
                 .entity(resp)

@@ -1,5 +1,6 @@
 package yf.user.services;
 
+import com.sun.tools.javac.util.Assert;
 import yf.mail.services.EmailService;
 import yf.user.UserWorkflow;
 import yf.user.dto.AuthResponseStatusesEnum;
@@ -17,6 +18,7 @@ import yf.user.rest.VkRestClient;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.core.Response;
 
 public class UserService {
@@ -91,13 +93,11 @@ public class UserService {
         return userWorkflow.getUserByEmailNickName(loginDTO.getUser());
     }
 
-    public Response validateToken(final Long userId,
-                                  final String token) {
-        final Boolean isValid = jwtService.isValidToken(token,
+    public Boolean validateToken(final Long userId,
+                                 final String token) {
+        return jwtService.isValidToken(token,
                 userId);
-        return Response.ok()
-                .entity(isValid)
-                .build();
+
     }
 
     public Response validateUiidVerification(final String verification) {
@@ -179,4 +179,14 @@ public class UserService {
                 .build();
     }
 
+    public User updateUserFirstLastName(final Long userId,
+                                        final String firstName,
+                                        final String lastName) {
+        return userWorkflow.updateUserFirstLastName(userId, firstName, lastName);
+    }
+
+    public User updateUserNickname(final Long userId,
+                                   final String nickname) {
+        return userWorkflow.updateNickName(userId, nickname);
+    }
 }
