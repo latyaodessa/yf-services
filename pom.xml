@@ -47,9 +47,9 @@
             <version>2.7</version>
         </dependency>
         <!--<dependency>-->
-            <!--<groupId>org.slf4j</groupId>-->
-            <!--<artifactId>slf4j-jdk14</artifactId>-->
-            <!--<version>1.7.22</version>-->
+        <!--<groupId>org.slf4j</groupId>-->
+        <!--<artifactId>slf4j-jdk14</artifactId>-->
+        <!--<version>1.7.22</version>-->
         <!--</dependency>-->
 
         <!-- javax: XML binding -->
@@ -152,9 +152,9 @@
 
         <!--SOCIAL-->
         <!--<dependency>-->
-            <!--<groupId>com.vk.api</groupId>-->
-            <!--<artifactId>sdk</artifactId>-->
-            <!--<version>0.5.12</version>-->
+        <!--<groupId>com.vk.api</groupId>-->
+        <!--<artifactId>sdk</artifactId>-->
+        <!--<version>0.5.12</version>-->
         <!--</dependency>-->
 
         <!--JWT-->
@@ -163,6 +163,21 @@
             <artifactId>java-jwt</artifactId>
             <version>3.4.0</version>
         </dependency>
+
+        <!--Backblaze-->
+        <dependency>
+            <groupId>com.backblaze.b2</groupId>
+            <artifactId>b2-sdk-core</artifactId>
+            <version>1.4.0</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.backblaze.b2</groupId>
+            <artifactId>b2-sdk-httpclient</artifactId>
+            <version>1.4.0</version>
+            <scope>compile</scope>
+        </dependency>
+
     </dependencies>
 
     <build>

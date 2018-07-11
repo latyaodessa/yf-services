@@ -159,15 +159,25 @@ public class UserRestImpl {
 
         final Boolean isValid = userService.validateToken(userId,
                 token);
+
+
         if (!isValid) {
             Response.status(403).entity(AuthResponseStatusesEnum.TOKEN_NOT_VALID).build();
         }
 
-        if (!nickname.matches("[a-zA-Z0-9]*")) {
-            Response.status(403).entity(AuthResponseStatusesEnum.ONLY_LETTER_NUMBER_ALLOWED).build();
+        final String lowerCaseNickname = nickname.toLowerCase();
+
+        if (!lowerCaseNickname.matches("[a-zA-Z0-9]+") || lowerCaseNickname.length() < 4 || lowerCaseNickname.contains(" ")) {
+            return Response.status(403).entity(AuthResponseStatusesEnum.NICKNAME_WRONG).build();
         }
 
-        final User user = userService.updateUserNickname(userId, nickname);
+        final User userByEmailNickName = userWorkflow.getUserByEmailNickName(lowerCaseNickname);
+
+        if(userByEmailNickName != null && !userByEmailNickName.getId().equals(userId)) {
+            return Response.status(403).entity(AuthResponseStatusesEnum.NICKNAME_ALREADY_EXIST).build();
+        }
+
+        final User user = userService.updateUserNickname(userId, lowerCaseNickname);
         final UserAllDataDto userSocialAccounts = userWorkflow.getUserSocialAccounts(user);
         Map<String, Object> resp = authRestHelper.userAuthResponseEntityMap(userSocialAccounts);
 

@@ -14,7 +14,7 @@
 
         <init-param>
             <param-name>com.sun.jersey.config.property.packages</param-name>
-            <param-value>yf.post.parser.rest;yf.user.rest;yf.post.rest;yf.elastic.reindex;yf.dashboard.postphoto;yf.mail.rest;</param-value>
+            <param-value>yf.post.parser.rest;yf.user.rest;yf.post.rest;yf.elastic.reindex;yf.dashboard.postphoto;yf.mail.rest;yf.storage.rest;</param-value>
         </init-param>
 
         <init-param>
