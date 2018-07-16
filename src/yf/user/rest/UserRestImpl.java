@@ -4,6 +4,7 @@ import yf.user.UserDao;
 import yf.user.UserWorkflow;
 import yf.user.dto.AuthResponseStatusesEnum;
 import yf.user.dto.LoginDTO;
+import yf.user.dto.ProfilePictureDTO;
 import yf.user.dto.UserAllDataDto;
 import yf.user.dto.UserDto;
 import yf.user.dto.external.FBUserDTO;
@@ -16,6 +17,7 @@ import javax.ejb.Stateless;
 import javax.inject.Inject;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
@@ -184,6 +186,24 @@ public class UserRestImpl {
         return Response.status(200)
                 .entity(resp)
                 .build();
+    }
+
+    @PUT
+    @Path("update/profilepic/{userId}/{token}")
+    public Response updateFirstLastName(@PathParam("userId") final Long userId,
+                                        @PathParam("token") final String token,
+                                        final ProfilePictureDTO dto) {
+        final Boolean isValid = userService.validateToken(userId,
+                token);
+
+
+        if (!isValid) {
+            Response.status(403).entity(AuthResponseStatusesEnum.TOKEN_NOT_VALID).build();
+        }
+
+        userService.updateUserProfilePic(userId, dto);
+
+        return Response.ok().build();
     }
 
 }

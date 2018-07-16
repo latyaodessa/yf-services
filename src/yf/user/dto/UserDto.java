@@ -11,9 +11,9 @@ public class UserDto {
     private String nickName;
     private String lastName;
     private String firstName;
-    private String avatar;
     private String gender;
     private Boolean authorized;
+    private ProfilePictureDTO profilePictureDTO;
 
     public Long getId() {
         return id;
@@ -79,14 +79,6 @@ public class UserDto {
         this.firstName = firstName;
     }
 
-    public String getAvatar() {
-        return avatar;
-    }
-
-    public void setAvatar(String avatar) {
-        this.avatar = avatar;
-    }
-
     public Boolean getAuthorized() {
         return authorized;
     }
@@ -103,4 +95,11 @@ public class UserDto {
         this.gender = gender;
     }
 
+    public ProfilePictureDTO getProfilePictureDTO() {
+        return profilePictureDTO;
+    }
+
+    public void setProfilePictureDTO(ProfilePictureDTO profilePictureDTO) {
+        this.profilePictureDTO = profilePictureDTO;
+    }
 }

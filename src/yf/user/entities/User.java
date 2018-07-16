@@ -61,9 +61,12 @@ public class User extends AbstractVersionEntity {
     @Column(name = "first_name")
     private String firstName;
     private String gender;
-    private String avatar;
     private String phone;
     private String passport;
+
+    @OneToOne(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST})
+    @JoinColumn(name = "profil_picture", referencedColumnName = "id", nullable = false)
+    private ProfilePicture profilePicture;
 
     @OneToOne(fetch = FetchType.LAZY, cascade = {CascadeType.ALL})
     @JoinColumn(name = "verification_id", referencedColumnName = "id", nullable = false)
@@ -142,14 +145,6 @@ public class User extends AbstractVersionEntity {
         this.firstName = firstName;
     }
 
-    public String getAvatar() {
-        return avatar;
-    }
-
-    public void setAvatar(String avatar) {
-        this.avatar = avatar;
-    }
-
     public String getPhone() {
         return phone;
     }
@@ -182,4 +177,11 @@ public class User extends AbstractVersionEntity {
         this.gender = gender;
     }
 
+    public ProfilePicture getProfilePicture() {
+        return profilePicture;
+    }
+
+    public void setProfilePicture(ProfilePicture profilePicture) {
+        this.profilePicture = profilePicture;
+    }
 }

@@ -6,8 +6,10 @@ import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTCreationException;
 import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.auth0.jwt.interfaces.DecodedJWT;
+import yf.user.dto.ProfilePictureDTO;
 import yf.user.dto.UserDto;
 
+import java.util.Optional;
 import java.util.logging.Logger;
 
 public class JWTService {
@@ -26,7 +28,9 @@ public class JWTService {
                     .withClaim("firstName", userDto.getFirstName())
                     .withClaim("lastName", userDto.getLastName())
                     .withClaim("nickName", userDto.getNickName())
-                    .withClaim("avatar", userDto.getAvatar())
+                    .withClaim("avatar",
+                            Optional.ofNullable(userDto.getProfilePictureDTO())
+                                    .map(ProfilePictureDTO::getFileId).orElse(null))
                     .withIssuer(ISSUSER)
                     .sign(algorithm);
         } catch (JWTCreationException e) {

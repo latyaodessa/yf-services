@@ -164,20 +164,6 @@
             <version>3.4.0</version>
         </dependency>
 
-        <!--Backblaze-->
-        <dependency>
-            <groupId>com.backblaze.b2</groupId>
-            <artifactId>b2-sdk-core</artifactId>
-            <version>1.4.0</version>
-            <scope>compile</scope>
-        </dependency>
-        <dependency>
-            <groupId>com.backblaze.b2</groupId>
-            <artifactId>b2-sdk-httpclient</artifactId>
-            <version>1.4.0</version>
-            <scope>compile</scope>
-        </dependency>
-
     </dependencies>
 
     <build>

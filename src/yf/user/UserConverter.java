@@ -7,10 +7,13 @@ import yf.user.entities.FBUser;
 import yf.user.entities.User;
 import yf.user.entities.VKUser;
 
+import javax.inject.Inject;
 import java.util.Date;
 
 public class UserConverter {
 
+    @Inject
+    private ProfilePictureConverter profilePictureConverter;
 
     public UserDto toBasicUserDto(final User entity) {
         UserDto dto = new UserDto();
@@ -22,11 +25,12 @@ public class UserConverter {
         dto.setFirstName(entity.getFirstName());
         dto.setLastName(entity.getLastName());
         dto.setNickName(entity.getNickName());
-        dto.setAvatar(entity.getAvatar());
+        dto.setProfilePictureDTO(profilePictureConverter.toDto(entity.getProfilePicture()));
         dto.setGender(entity.getGender());
         dto.setAuthorized(entity.isAuthorize());
         return dto;
     }
+
 
     public VKUserDTO toVkUserDto(final VKUser entity) {
 

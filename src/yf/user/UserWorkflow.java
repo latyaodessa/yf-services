@@ -2,6 +2,7 @@ package yf.user;
 
 import yf.mail.services.EmailService;
 import yf.user.dto.LoginDTO;
+import yf.user.dto.ProfilePictureDTO;
 import yf.user.dto.UserAllDataDto;
 import yf.user.dto.UserDto;
 import yf.user.dto.UserStatusEnum;
@@ -10,6 +11,7 @@ import yf.user.dto.VerificationTypesEnum;
 import yf.user.dto.external.FBUserDTO;
 import yf.user.dto.external.VKUserDTO;
 import yf.user.entities.FBUser;
+import yf.user.entities.ProfilePicture;
 import yf.user.entities.User;
 import yf.user.entities.UserVerifications;
 import yf.user.entities.VKUser;
@@ -19,6 +21,7 @@ import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import java.util.Date;
+import java.util.Optional;
 
 @Stateless
 public class UserWorkflow {
@@ -31,6 +34,8 @@ public class UserWorkflow {
     private EmailService emailService;
     @Inject
     private UserDao userDao;
+    @Inject
+    private ProfilePictureConverter profilePictureConverter;
 
     public UserAllDataDto getUserById(final Long userId) {
         UserAllDataDto userAllDataDto = new UserAllDataDto();
@@ -265,6 +270,36 @@ public class UserWorkflow {
         user.setNickName(nickname);
         em.merge(user);
         return user;
+
+    }
+
+    public void updateUserProfilePic(final Long userId, final ProfilePictureDTO dto) {
+        User user = userDao.getUserById(userId);
+        if(user == null) {
+            return;
+        }
+
+        final Long oldProfileId = Optional.ofNullable(user.getProfilePicture())
+                .map(ProfilePicture::getId).orElse(null);
+
+        if(oldProfileId != null) {
+
+            ProfilePicture profilePictureOld = em.find(ProfilePicture.class, oldProfileId);
+
+            if (profilePictureOld != null) {
+                user.setProfilePicture(null);
+                em.merge(user);
+                em.remove(profilePictureOld);
+            }
+        }
+
+
+        ProfilePicture profilePictureEntity = profilePictureConverter.toEntity(dto);
+        em.persist(profilePictureEntity);
+
+        user.setProfilePicture(profilePictureEntity);
+        em.merge(user);
+
 
     }
 

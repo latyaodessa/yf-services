@@ -4,6 +4,7 @@ import yf.mail.services.EmailService;
 import yf.user.UserWorkflow;
 import yf.user.dto.AuthResponseStatusesEnum;
 import yf.user.dto.LoginDTO;
+import yf.user.dto.ProfilePictureDTO;
 import yf.user.dto.UserAllDataDto;
 import yf.user.dto.UserDto;
 import yf.user.dto.external.FBUserDTO;
@@ -186,5 +187,9 @@ public class UserService {
     public User updateUserNickname(final Long userId,
                                    final String nickname) {
         return userWorkflow.updateNickName(userId, nickname);
+    }
+
+    public void updateUserProfilePic(final Long userId, final ProfilePictureDTO dto) {
+        userWorkflow.updateUserProfilePic(userId, dto);
     }
 }
