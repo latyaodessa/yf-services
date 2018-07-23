@@ -45,4 +45,12 @@ public class VkRestImpl {
         return Response.ok().build();
     }
 
+
+    @GET
+    @Path("find/published/{postId}")
+    public Response findPublished(@PathParam("postId") String postId) {
+
+        return Response.ok().build();
+    }
+
 }
