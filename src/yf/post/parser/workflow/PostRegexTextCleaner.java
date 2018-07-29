@@ -5,6 +5,8 @@ import org.apache.commons.lang3.StringUtils;
 import yf.post.dto.PostElasticDTO;
 import yf.post.entities.Post;
 
+import java.util.HashSet;
+import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -16,6 +18,7 @@ public class PostRegexTextCleaner {
     private static final String ph_tag = "Ph";
     private static final String md_tag = "Md";
     private static final String REGEX_CLEANER = "\\[.*\\||\\]|:";
+    private static final String ID_FINDER = "id\\d+";
 
     public PostElasticDTO getCleanedText(Post entity, PostElasticDTO dto) {
 
@@ -77,6 +80,32 @@ public class PostRegexTextCleaner {
     private String transliterate(String text) {
         Transliterator transliterator = Transliterator.getInstance("Any-Latin; Latin-ASCII;");
         return transliterator.transliterate(text);
+    }
+
+    public Set<Long> getPhIds(final String text) {
+        final String ph_cleaned = executeRegex(text, ph);
+        return getIds(ph_cleaned);
+    }
+
+    public Set<Long> getMdIds(final String text) {
+        final String md_cleaned = executeRegex(text, md);
+        return getIds(md_cleaned);
+    }
+
+
+    private Set<Long> getIds(final String cleanedText) {
+        if (cleanedText == null) {
+            return new HashSet<>();
+        }
+        Matcher matcher = Pattern.compile(ID_FINDER,
+                Pattern.CASE_INSENSITIVE).matcher(cleanedText);
+        Set<Long> result = new HashSet<>();
+
+        while (matcher.find()) {
+            result.add(Long.parseLong(matcher.group().replace("id", "")));
+        }
+
+        return result;
     }
 
 

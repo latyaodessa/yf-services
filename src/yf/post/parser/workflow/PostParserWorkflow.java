@@ -11,17 +11,27 @@ import yf.elastic.reindex.BulkOptions;
 import yf.elastic.reindex.bulkworkflow.PostBulkWorkflow;
 import yf.post.PostService;
 import yf.post.dto.PostElasticDTO;
+import yf.post.entities.Post;
 import yf.post.parser.dto.PostDTO;
+import yf.publications.PublicationDao;
+import yf.publications.PublicationService;
+import yf.publications.entities.MdProfile;
+import yf.publications.entities.PhProfile;
+import yf.publications.entities.Publication;
+import yf.user.UserProfileService;
+import yf.user.rest.VkRestClient;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.TypedQuery;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
 
 @Stateless
 public class PostParserWorkflow {
@@ -40,6 +50,16 @@ public class PostParserWorkflow {
     private PostBulkWorkflow postBulkWorkflow;
     @Inject
     private ElasticWorkflow elasticWorkflow;
+    @Inject
+    private PostRegexTextCleaner postRegexTextCleaner;
+    @Inject
+    private VkRestClient vkRestClient;
+    @Inject
+    private UserProfileService userProfileService;
+    @Inject
+    private PublicationService publicationService;
+    @Inject
+    private PublicationDao publicationDao;
 
     private static final Logger LOGGER = Logger.getLogger(PostBulkWorkflow.class.getName());
 
@@ -133,4 +153,50 @@ public class PostParserWorkflow {
 
     }
 
+    public void addVkPostAndParticipantsToPublication(final Long postId) {
+
+        Publication existingPublication = publicationDao.getPublicationByVkPostId(postId);
+
+        if (existingPublication != null) {
+            return;
+        }
+
+        TypedQuery<Post> query = em.createNamedQuery(Post.QUERY_POST_BY_ID, Post.class)
+                .setParameter("post_id", postId);
+
+        if (query == null) {
+            return;
+        }
+        Post post = query.getSingleResult();
+
+        Set<PhProfile> phProfiles = handlePhIds(post.getText());
+        Set<MdProfile> mdProfiles = handleMdIds(post.getText());
+
+
+        Publication publication = publicationService.createPublicationFromVkPost(post);
+
+        phProfiles.forEach(phProfile -> userProfileService.addPublicationToPhProfile(publication, phProfile));
+        mdProfiles.forEach(mdProfile -> userProfileService.addPublicationToMdProfile(publication, mdProfile));
+
+        em.flush();
+    }
+
+
+    private Set<PhProfile> handlePhIds(final String rowText) {
+        final Set<Long> phUserVkId = postRegexTextCleaner.getPhIds(rowText);
+        return phUserVkId.stream()
+                .map(id -> vkRestClient.getVKUserDetails(id))
+                .map(vkUserDTO -> userProfileService.getOrRegisterPhProfileUser(vkUserDTO))
+                .collect(Collectors.toSet());
+
+    }
+
+    private Set<MdProfile> handleMdIds(final String rowText) {
+        final Set<Long> mdVkIds = postRegexTextCleaner.getMdIds(rowText);
+        return mdVkIds.stream()
+                .map(id -> vkRestClient.getVKUserDetails(id))
+                .map(vkUserDTO -> userProfileService.getOrRegisterMdProfileUser(vkUserDTO))
+                .collect(Collectors.toSet());
+
+    }
 }

@@ -20,9 +20,9 @@ public class ElasticBulkFetcher implements Serializable {
 
 	@PersistenceContext
 	private EntityManager em;
-	
-	
-	protected <T> List<T> fetchAllModels(final int offset, Class<T> cls){
+
+
+	public  <T> List<T> fetchAllModels(final int offset, Class<T> cls){
 		CriteriaBuilder cb = em.getCriteriaBuilder();
         CriteriaQuery<T> query = cb.createQuery(cls);
         Root<T> root = query.from(cls);

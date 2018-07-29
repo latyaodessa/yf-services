@@ -200,6 +200,28 @@ public class UserWorkflow {
         return user;
     }
 
+    public User registerAnonymousUser() {
+        UserVerifications verifications = UserVerifications.generateEmptyVerification();
+        em.persist(verifications);
+        User user = generateBasicUser();
+        user.setVerifications(verifications);
+        em.persist(user);
+        return user;
+    }
+
+    public void handleEmptyUserFields(final User user, final VKUser vkUser) {
+        if (user.getFirstName() == null) {
+            user.setFirstName(vkUser.getFirstName());
+        }
+        if (user.getLastName() == null) {
+            user.setLastName(vkUser.getLastName());
+        }
+        if (user.getGender() == null) {
+            user.setGender(vkUser.getSex());
+        }
+        em.merge(user);
+    }
+
     public User registerExistingUser(final User user, final LoginDTO loginDTO) {
         UserVerifications userVerifications = user.getVerifications();
 
@@ -275,14 +297,14 @@ public class UserWorkflow {
 
     public void updateUserProfilePic(final Long userId, final ProfilePictureDTO dto) {
         User user = userDao.getUserById(userId);
-        if(user == null) {
+        if (user == null) {
             return;
         }
 
         final Long oldProfileId = Optional.ofNullable(user.getProfilePicture())
                 .map(ProfilePicture::getId).orElse(null);
 
-        if(oldProfileId != null) {
+        if (oldProfileId != null) {
 
             ProfilePicture profilePictureOld = em.find(ProfilePicture.class, oldProfileId);
 

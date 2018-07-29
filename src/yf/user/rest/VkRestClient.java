@@ -80,7 +80,8 @@ public class VkRestClient {
         dto.setLastName(jsonService.getStringFromJsonObject(jsonObject, LASTNAME_FIELD));
         dto.setSex(jsonService.getStringFromJsonObject(jsonObject, SEX_FIELD));
         dto.setBdate(jsonService.getStringFromJsonObject(jsonObject, BDAY_FIELD));
-        dto.setVerified(jsonService.getIntegerFromJsonObject(jsonObject, VERIIFIED_FIELD) != 0);
+        dto.setVerified(jsonService.getIntegerFromJsonObject(jsonObject, VERIIFIED_FIELD) != null
+                && jsonService.getIntegerFromJsonObject(jsonObject, VERIIFIED_FIELD) != 0);
 
         JSONObject counryData = jsonService.getJsonObjectFromJsonObject(jsonObject, COUNTRY_FIELD);
         if (counryData != null) {

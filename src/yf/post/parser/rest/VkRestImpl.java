@@ -47,9 +47,16 @@ public class VkRestImpl {
 
 
     @GET
-    @Path("find/published/{postId}")
-    public Response findPublished(@PathParam("postId") String postId) {
+    @Path("parse/published/{postId}")
+    public Response findPublished(@PathParam("postId") final Long postId) {
+        parserService.addVkPostAndParticipantsToPublication(postId);
+        return Response.ok().build();
+    }
 
+    @GET
+    @Path("parse/all/published")
+    public Response findPublished() {
+        parserService.parseAllVkToPublished();
         return Response.ok().build();
     }
 

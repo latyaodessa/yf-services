@@ -42,7 +42,6 @@ public class UserService {
         return userWorkflow.getBasicUserById(userId);
     }
 
-
     public UserAllDataDto registerUserFromVKUser(final long userId, final LoginDTO loginDTO, final VKUser vkUser) {
         User user;
         final VKUserDTO vKUserDTO = userRestClient.getVKUserDetails(userId);

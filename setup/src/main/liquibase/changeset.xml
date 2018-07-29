@@ -27,4 +27,7 @@
     <changeSet author="andre" id="2018_07_15_update_user_profile">
         <sqlFile path="migration/2018_07_15_update_user_profile.sql" relativeToChangelogFile="true"/>
     </changeSet>
+    <changeSet author="andre" id="2018_07_26_ph_md_profiles">
+        <sqlFile path="migration/2018_07_26_ph_md_profiles.sql" relativeToChangelogFile="true"/>
+    </changeSet>
 </databaseChangeLog>
