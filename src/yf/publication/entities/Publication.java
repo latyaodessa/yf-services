@@ -1,4 +1,4 @@
-package yf.publications.entities;
+package yf.publication.entities;
 
 import yf.core.entities.AbstractVersionEntity;
 import yf.post.entities.Post;

@@ -1,7 +1,7 @@
 package yf.user;
 
-import yf.publications.entities.MdProfile;
-import yf.publications.entities.PhProfile;
+import yf.publication.entities.MdProfile;
+import yf.publication.entities.PhProfile;
 
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;

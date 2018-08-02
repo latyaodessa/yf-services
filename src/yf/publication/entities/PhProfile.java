@@ -1,4 +1,4 @@
-package yf.publications.entities;
+package yf.publication.entities;
 
 import yf.core.entities.AbstractVersionEntity;
 import yf.user.entities.User;
@@ -21,13 +21,13 @@ import java.util.Date;
 import java.util.List;
 
 @Entity
-@Table(name = "md_profile")
+@Table(name = "ph_profile")
 @NamedQueries({
-        @NamedQuery(name = MdProfile.QUERY_GET_MD_PROFILE_BY_USER_ID, query = "SELECT t FROM MdProfile t WHERE t.user.id = :user_id")
+        @NamedQuery(name = PhProfile.QUERY_GET_PG_PROFILE_BY_USER_ID, query = "SELECT t FROM PhProfile t WHERE t.user.id = :user_id")
 })
-public class MdProfile extends AbstractVersionEntity {
+public class PhProfile extends AbstractVersionEntity {
 
-    public static final String QUERY_GET_MD_PROFILE_BY_USER_ID = "EmailTemplate.getMdProfileByUserId";
+    public static final String QUERY_GET_PG_PROFILE_BY_USER_ID = "EmailTemplate.getPhProfileByUserId";
 
     @Id
     @NotNull
@@ -46,11 +46,12 @@ public class MdProfile extends AbstractVersionEntity {
     @OneToOne(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST})
     @JoinColumn(name = "user_id", referencedColumnName = "id", nullable = false)
     private User user;
+
     @OneToMany(fetch = FetchType.LAZY, cascade = {CascadeType.MERGE, CascadeType.PERSIST})
     @JoinColumn(name = "user_id", referencedColumnName = "id")
     private List<PublicationUser> publicationUsers;
 
-    public MdProfile() {
+    public PhProfile() {
         publicationUsers = new ArrayList<>();
         setCreatedOn(new Date());
     }
@@ -71,6 +72,13 @@ public class MdProfile extends AbstractVersionEntity {
         this.instagram = instagram;
     }
 
+    public Long getVk() {
+        return vk;
+    }
+
+    public void setVk(Long vk) {
+        this.vk = vk;
+    }
 
     public String getFacebook() {
         return facebook;
@@ -134,14 +142,6 @@ public class MdProfile extends AbstractVersionEntity {
 
     public void setPublicationUsers(List<PublicationUser> publicationUsers) {
         this.publicationUsers = publicationUsers;
-    }
-
-    public Long getVk() {
-        return vk;
-    }
-
-    public void setVk(Long vk) {
-        this.vk = vk;
     }
 
 //    public List<PublicationUser> getPublicationParticipants() {

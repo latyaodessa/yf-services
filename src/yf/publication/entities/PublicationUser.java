@@ -1,9 +1,8 @@
-package yf.publications.entities;
+package yf.publication.entities;
 
-import yf.publications.ProfileUserTypeEnum;
+import yf.publication.ProfileUserTypeEnum;
 import yf.user.entities.User;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -11,14 +10,20 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
 @Entity
 @Table(name = "publication_user")
+@NamedQueries({
+        @NamedQuery(name = PublicationUser.QUERY_GET_PUBLICATIONS_BY_USER, query = "SELECT t FROM PublicationUser t WHERE user.id = :user_id")
+})
 public class PublicationUser {
+
+    public static final String QUERY_GET_PUBLICATIONS_BY_USER = "PublicationUser.getPublicationsByUser";
 
     @Id
     @GeneratedValue

@@ -1,11 +1,13 @@
-package yf.publications;
+package yf.publication;
 
-import yf.publications.entities.Publication;
+import yf.publication.entities.Publication;
+import yf.publication.entities.PublicationUser;
 
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
+import java.util.List;
 
 public class PublicationDao {
 
@@ -21,6 +23,16 @@ public class PublicationDao {
                 .setParameter("vk_post_id", vkPostId);
         try {
             return query.getSingleResult();
+        } catch (NoResultException e) {
+            return null;
+        }
+    }
+
+    public List<PublicationUser> getPublishedSetsByUserId(final Long userId) {
+        TypedQuery<PublicationUser> query = em.createNamedQuery(PublicationUser.QUERY_GET_PUBLICATIONS_BY_USER, PublicationUser.class)
+                .setParameter("user_id", userId);
+        try {
+            return query.getResultList();
         } catch (NoResultException e) {
             return null;
         }

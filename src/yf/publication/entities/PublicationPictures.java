@@ -1,4 +1,4 @@
-package yf.publications.entities;
+package yf.publication.entities;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;

@@ -1,11 +1,10 @@
 package yf.user;
 
-import yf.publications.ProfileUserTypeEnum;
-import yf.publications.entities.MdProfile;
-import yf.publications.entities.PhProfile;
-import yf.publications.entities.Publication;
-import yf.publications.entities.PublicationUser;
-import yf.user.entities.User;
+import yf.publication.ProfileUserTypeEnum;
+import yf.publication.entities.MdProfile;
+import yf.publication.entities.PhProfile;
+import yf.publication.entities.Publication;
+import yf.publication.entities.PublicationUser;
 import yf.user.entities.VKUser;
 
 import javax.persistence.EntityManager;

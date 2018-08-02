@@ -1,4 +1,4 @@
-package yf.publications;
+package yf.publication;
 
 public enum ProfileUserTypeEnum {
     PH,

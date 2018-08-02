@@ -13,11 +13,11 @@ import yf.post.PostService;
 import yf.post.dto.PostElasticDTO;
 import yf.post.entities.Post;
 import yf.post.parser.dto.PostDTO;
-import yf.publications.PublicationDao;
-import yf.publications.PublicationService;
-import yf.publications.entities.MdProfile;
-import yf.publications.entities.PhProfile;
-import yf.publications.entities.Publication;
+import yf.publication.PublicationDao;
+import yf.publication.PublicationService;
+import yf.publication.entities.MdProfile;
+import yf.publication.entities.PhProfile;
+import yf.publication.entities.Publication;
 import yf.user.UserProfileService;
 import yf.user.rest.VkRestClient;
 

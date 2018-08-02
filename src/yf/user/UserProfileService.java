@@ -1,8 +1,8 @@
 package yf.user;
 
-import yf.publications.entities.MdProfile;
-import yf.publications.entities.PhProfile;
-import yf.publications.entities.Publication;
+import yf.publication.entities.MdProfile;
+import yf.publication.entities.PhProfile;
+import yf.publication.entities.Publication;
 import yf.user.dto.external.VKUserDTO;
 import yf.user.entities.User;
 import yf.user.entities.VKUser;

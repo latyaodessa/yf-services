@@ -1,4 +1,4 @@
-package yf.elastic.reindex.bulkworkflow;
+package yf.publication.bulkworkflow;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import org.codehaus.jackson.JsonGenerationException;
@@ -14,6 +14,7 @@ import yf.core.PropertiesReslover;
 import yf.elastic.core.ElasticWorkflow;
 import yf.elastic.core.NativeElasticSingleton;
 import yf.elastic.reindex.BulkOptions;
+import yf.elastic.reindex.bulkworkflow.AbstractBulkReindexWorkflow;
 import yf.post.dto.PostElasticDTO;
 import yf.post.entities.Post;
 import yf.post.parser.workflow.ParserPostConverter;
@@ -26,7 +27,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Optional;
 
-public class PostBulkWorkflow extends AbstractBulkReindexWorkflow<Post, PostElasticDTO> {
+public class PublicationBulkWorkflow extends AbstractBulkReindexWorkflow<Post, PostElasticDTO> {
     @Inject
     private ParserPostConverter postConverter;
     @Inject
@@ -39,15 +40,15 @@ public class PostBulkWorkflow extends AbstractBulkReindexWorkflow<Post, PostElas
 
     @PostConstruct
     protected void initIndecies() {
-        TAG_INDEX.put(properties.get("tag.vk.native"), properties.get("elastic.index.native"));
-        TAG_INDEX.put(properties.get("tag.vk.sets"), properties.get("elastic.index.sets"));
-        TAG_INDEX.put(properties.get("tag.vk.soft"), properties.get("elastic.index.soft"));
-        TAG_INDEX.put(properties.get("tag.vk.black"), properties.get("elastic.index.black"));
-        TAG_INDEX.put(properties.get("tag.vk.silhouettes"), properties.get("elastic.index.silhouettes"));
-        TAG_INDEX.put(properties.get("tag.vk.80s90s"), properties.get("elastic.index.80s90s"));
-        TAG_INDEX.put(properties.get("tag.vk.legs"), properties.get("elastic.index.legs"));
-        TAG_INDEX.put(properties.get("tag.vk.art"), properties.get("elastic.index.art"));
-
+//        TAG_INDEX.put(properties.get("tag.vk.native"), properties.get("elastic.index.native"));
+//        TAG_INDEX.put(properties.get("tag.vk.sets"), properties.get("elastic.index.sets"));
+//        TAG_INDEX.put(properties.get("tag.vk.soft"), properties.get("elastic.index.soft"));
+//        TAG_INDEX.put(properties.get("tag.vk.black"), properties.get("elastic.index.black"));
+//        TAG_INDEX.put(properties.get("tag.vk.silhouettes"), properties.get("elastic.index.silhouettes"));
+//        TAG_INDEX.put(properties.get("tag.vk.80s90s"), properties.get("elastic.index.80s90s"));
+//        TAG_INDEX.put(properties.get("tag.vk.legs"), properties.get("elastic.index.legs"));
+//        TAG_INDEX.put(properties.get("tag.vk.art"), properties.get("elastic.index.art"));
+        TAG_INDEX.put(properties.get("elastic.index.publications"), properties.get("elastic.index.publications"));
         TYPE = properties.get("elastic.type.photo");
 
     }
@@ -64,7 +65,12 @@ public class PostBulkWorkflow extends AbstractBulkReindexWorkflow<Post, PostElas
         bulkRequest.setRefreshPolicy(RefreshPolicy.IMMEDIATE); // ??
 
         for (Post p : posts) {
+
+
             PostElasticDTO dto = postConverter.toElasticPostDto(p);
+
+
+
             try {
                 addEntityToBulk(dto, bulkRequest, BulkOptions.INDEX);
             } catch (JsonProcessingException e) {
