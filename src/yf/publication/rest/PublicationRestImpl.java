@@ -1,7 +1,9 @@
 package yf.publication.rest;
 
+import yf.post.dto.SharedBasicPostDTO;
 import yf.publication.PublicationService;
-import yf.publication.dtos.PublicationDTO;
+import yf.publication.dtos.PublicationElasticDTO;
+import yf.publication.dtos.PublicationTypeEnum;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;
@@ -10,7 +12,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
-import java.util.Set;
+import java.util.List;
 
 @Path("publication")
 @Produces(MediaType.APPLICATION_JSON)
@@ -22,9 +24,18 @@ public class PublicationRestImpl {
     private PublicationService publicationService;
 
     @GET
-    @Path("published/vk/{user_id}")
-    public Set<PublicationDTO> getPublishedSetsInVk(@PathParam("user_id") final Long userId) {
-        return publicationService.getPublishedSetsFromVk(userId);
+    @Path("{publication_id}")
+    public PublicationElasticDTO getPulicationById(@PathParam("publication_id") final String publicationId) {
+        return publicationService.getPublicationById(publicationId);
     }
+
+    @GET
+    @Path("get/{type}/{from}/{size}")
+    public List<SharedBasicPostDTO> getPublicationsByTypeFromTo(@PathParam("type") final PublicationTypeEnum typeEnum,
+                                                                @PathParam("from") final int from,
+                                                                @PathParam("size") final int size) {
+        return publicationService.getPublicationsByTypeFromTo(typeEnum, from, size);
+    }
+
 
 }

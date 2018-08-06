@@ -28,8 +28,7 @@ public class PostService {
     private PostConverter basicPostConverter;
     @Inject
     private NativeElasticSingleton nativeElastiClient;
-    @Inject
-    private ElasticToObjectConvertor elasticToObjectConvertor;
+
     @Inject
     private PropertiesReslover properties;
 
@@ -46,7 +45,7 @@ public class PostService {
         for (MultiGetItemResponse itemResponse : res) {
             GetResponse response = itemResponse.getResponse();
             if (response.isExists()) {
-                PostElasticDTO searchResult = elasticToObjectConvertor.convertSingleResultToObject(response.getSourceAsString(), PostElasticDTO.class);
+                PostElasticDTO searchResult = ElasticToObjectConvertor.convertSingleResultToObject(response.getSourceAsString(), PostElasticDTO.class);
                 return basicPostConverter.toPostDetailsDTO(searchResult);
             }
         }
@@ -66,22 +65,6 @@ public class PostService {
         return elasticSearchExecutor.executeSearchBasicPostDTO(res);
     }
 
-    //TODO
-//    public List<SharedBasicPostDTO> getNativePostsByIds(final String... ids) {
-//
-//        MultiGetResponse res = nativeElastiClient.getClient().prepareMultiGet()
-//                .add(properties.get("elastic.index.native"), properties.get("elastic.type.photo"), ids)
-//                .get();
-//
-//        for (MultiGetItemResponse itemResponse : res) {
-//            GetResponse response = itemResponse.getResponse();
-//            if (response.isExists()) {
-//                PostElasticDTO searchResult = elasticToObjectConvertor.convertSingleResultToObject(response.getSourceAsString(), PostElasticDTO.class);
-//                 elasticSearchExecutor.postElasticToBasicDto(searchResult);
-//            }
-//        }
-//    }
-
 
     public SharedBasicPostDTO getBasicPostDtoById(final String postId) {
         MultiGetResponse res = nativeElastiClient.getClient().prepareMultiGet()
@@ -93,7 +76,7 @@ public class PostService {
         for (MultiGetItemResponse itemResponse : res) {
             GetResponse response = itemResponse.getResponse();
             if (response.isExists()) {
-                PostElasticDTO searchResult = elasticToObjectConvertor.convertSingleResultToObject(response.getSourceAsString(), PostElasticDTO.class);
+                PostElasticDTO searchResult = ElasticToObjectConvertor.convertSingleResultToObject(response.getSourceAsString(), PostElasticDTO.class);
                 return basicPostConverter.toSharedBasicPostDTO(searchResult);
             }
         }

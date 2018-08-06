@@ -41,11 +41,11 @@ public class PostBulkWorkflow extends AbstractBulkReindexWorkflow<Post, PostElas
     protected void initIndecies() {
         TAG_INDEX.put(properties.get("tag.vk.native"), properties.get("elastic.index.native"));
         TAG_INDEX.put(properties.get("tag.vk.sets"), properties.get("elastic.index.sets"));
-        TAG_INDEX.put(properties.get("tag.vk.soft"), properties.get("elastic.index.soft"));
-        TAG_INDEX.put(properties.get("tag.vk.black"), properties.get("elastic.index.black"));
-        TAG_INDEX.put(properties.get("tag.vk.silhouettes"), properties.get("elastic.index.silhouettes"));
-        TAG_INDEX.put(properties.get("tag.vk.80s90s"), properties.get("elastic.index.80s90s"));
-        TAG_INDEX.put(properties.get("tag.vk.legs"), properties.get("elastic.index.legs"));
+//        TAG_INDEX.put(properties.get("tag.vk.soft"), properties.get("elastic.index.soft"));
+//        TAG_INDEX.put(properties.get("tag.vk.black"), properties.get("elastic.index.black"));
+//        TAG_INDEX.put(properties.get("tag.vk.silhouettes"), properties.get("elastic.index.silhouettes"));
+//        TAG_INDEX.put(properties.get("tag.vk.80s90s"), properties.get("elastic.index.80s90s"));
+//        TAG_INDEX.put(properties.get("tag.vk.legs"), properties.get("elastic.index.legs"));
         TAG_INDEX.put(properties.get("tag.vk.art"), properties.get("elastic.index.art"));
 
         TYPE = properties.get("elastic.type.photo");

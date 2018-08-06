@@ -3,6 +3,7 @@ package yf.post;
 import yf.post.dto.PostDetailsDTO;
 import yf.post.dto.PostElasticDTO;
 import yf.post.dto.SharedBasicPostDTO;
+import yf.publication.dtos.PublicationElasticDTO;
 
 public class PostConverter {
 	
@@ -18,6 +19,20 @@ public class PostConverter {
 		
 		return sharedBasicPostDTO;
 		
+	}
+
+	public SharedBasicPostDTO publicationToSharedBasicPostDTO(final PublicationElasticDTO dto){
+
+		SharedBasicPostDTO sharedBasicPostDTO = new SharedBasicPostDTO();
+
+		sharedBasicPostDTO.setId(dto.getId());
+		sharedBasicPostDTO.setMd(dto.getMdSimple());
+		sharedBasicPostDTO.setPh(dto.getPhSimple());
+		sharedBasicPostDTO.setText(dto.getText());
+		sharedBasicPostDTO.setThumbnail(dto.getThumbnail());
+
+		return sharedBasicPostDTO;
+
 	}
 	
 	public PostDetailsDTO toPostDetailsDTO(final PostElasticDTO dto){

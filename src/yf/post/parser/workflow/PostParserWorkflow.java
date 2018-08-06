@@ -64,27 +64,27 @@ public class PostParserWorkflow {
     private static final Logger LOGGER = Logger.getLogger(PostBulkWorkflow.class.getName());
 
 
-    public List<PostDTO> saveNewPostData(List<PostDTO> listPostDTO) {
-        BulkRequestBuilder bulkRequest = nativeElasticClient.getClient().prepareBulk();
-        bulkRequest.setRefreshPolicy(RefreshPolicy.IMMEDIATE);
+    public Set<Post> saveNewPostData(List<PostDTO> listPostDTO) {
+//        BulkRequestBuilder bulkRequest = nativeElasticClient.getClient().prepareBulk();
+//        bulkRequest.setRefreshPolicy(RefreshPolicy.IMMEDIATE);
 
-        persistPosts(listPostDTO, bulkRequest);
+        final Set<Post> posts = persistPosts(listPostDTO);
 
         em.flush();
         em.clear();
 
 
-        return listPostDTO;
+        return posts;
     }
 
-
-    public void saveUpdateNewEntry(final List<PostDTO> postDTO) {
-        BulkRequestBuilder bulkRequest = nativeElasticClient.getClient().prepareBulk();
-        bulkRequest.setRefreshPolicy(RefreshPolicy.IMMEDIATE);
-
-        persistPosts(postDTO, bulkRequest);
-
-    }
+//
+//    public Set<Post> saveUpdateNewEntry(final List<PostDTO> postDTO) {
+////        BulkRequestBuilder bulkRequest = nativeElasticClient.getClient().prepareBulk();
+////        bulkRequest.setRefreshPolicy(RefreshPolicy.IMMEDIATE);
+//
+//        return persistPosts(postDTO);
+//
+//    }
 
     private void bulkPersistToElastic(final BulkRequestBuilder bulkRequest) {
         BulkResponse bulkResponse = bulkRequest.execute().actionGet();
@@ -93,25 +93,31 @@ public class PostParserWorkflow {
         }
     }
 
-    private void persistPosts(final List<PostDTO> postDTO, final BulkRequestBuilder bulkRequest) {
-        postDTO.stream()
+    private Set<Post> persistPosts(final List<PostDTO> postDTO) {
+        Set<Post> posts = postDTO.stream()
                 .filter(dto -> postBulkWorkflow.getIndex(dto.getText(), postBulkWorkflow.TAG_INDEX) != null)
-                .map(dto -> postConverter.toEntity(dto))
-                .forEach(post -> {
+                .map(dto -> postConverter.toEntity(dto)).collect(Collectors.toSet());
+//                .forEach(post -> {
 
-                    em.merge(post);
-                    PostElasticDTO postElasticDTO = postConverter.toElasticPostDto(post);
+//                    em.merge(post);
+//                    em.flush();
 
-                    try {
-                        postBulkWorkflow.addEntityToBulk(postElasticDTO, bulkRequest, BulkOptions.DELETE);
-                        postBulkWorkflow.addEntityToBulk(postElasticDTO, bulkRequest, BulkOptions.INDEX);
-                    } catch (JsonProcessingException e) {
-                        LOGGER.severe("PARSE ERROR: " + e);
-                    }
+        // TODO REMOVED SAVE TO ELASTIC
+//                    PostElasticDTO postElasticDTO = postConverter.toElasticPostDto(post);
+//
+//                    try {
+//                        postBulkWorkflow.addEntityToBulk(postElasticDTO, bulkRequest, BulkOptions.DELETE);
+//                        postBulkWorkflow.addEntityToBulk(postElasticDTO, bulkRequest, BulkOptions.INDEX);
+//                    } catch (JsonProcessingException e) {
+//                        LOGGER.severe("PARSE ERROR: " + e);
+//                    }
 
 
-                });
-        bulkPersistToElastic(bulkRequest);
+//                });
+//        bulkPersistToElastic(bulkRequest);]
+        em.merge(posts);
+//        em.flush();
+        return posts;
 
     }
 
@@ -153,22 +159,39 @@ public class PostParserWorkflow {
 
     }
 
-    public void addVkPostAndParticipantsToPublication(final Long postId) {
+    public Publication addVkPostAndParticipantsToPublication(final Long postId) {
 
         Publication existingPublication = publicationDao.getPublicationByVkPostId(postId);
 
         if (existingPublication != null) {
-            return;
+            return existingPublication;
         }
 
         TypedQuery<Post> query = em.createNamedQuery(Post.QUERY_POST_BY_ID, Post.class)
                 .setParameter("post_id", postId);
 
         if (query == null) {
-            return;
+            return null;
         }
         Post post = query.getSingleResult();
 
+        return parsePhMdFromPost(post);
+    }
+
+    public Publication addVkPostAndParticipantsToPublication(final Post post) {
+
+        Publication existingPublication = publicationDao.getPublicationByVkPostId(post.getId());
+
+        if (existingPublication != null) {
+            return existingPublication;
+        }
+
+        return parsePhMdFromPost(post);
+
+
+    }
+
+    private Publication parsePhMdFromPost(final Post post) {
         Set<PhProfile> phProfiles = handlePhIds(post.getText());
         Set<MdProfile> mdProfiles = handleMdIds(post.getText());
 
@@ -179,6 +202,8 @@ public class PostParserWorkflow {
         mdProfiles.forEach(mdProfile -> userProfileService.addPublicationToMdProfile(publication, mdProfile));
 
         em.flush();
+
+        return publication;
     }
 
 

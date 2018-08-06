@@ -164,6 +164,13 @@
             <version>3.4.0</version>
         </dependency>
 
+        <!--KAFKA-->
+        <dependency>
+            <groupId>org.apache.kafka</groupId>
+            <artifactId>kafka_2.12</artifactId>
+            <version>0.11.0.1</version>
+        </dependency>
+
     </dependencies>
 
     <build>

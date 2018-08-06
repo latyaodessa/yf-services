@@ -5,8 +5,8 @@ import java.io.IOException;
 import org.codehaus.jackson.map.ObjectMapper;
 
 public class ElasticToObjectConvertor {
-	
-		public <T> T convertSingleResultToObject(String searchResult, Class<T> cls) {
+
+		public static <T> T convertSingleResultToObject(String searchResult, Class<T> cls) {
 			
 			try {
 				return new ObjectMapper().readValue(searchResult,cls);

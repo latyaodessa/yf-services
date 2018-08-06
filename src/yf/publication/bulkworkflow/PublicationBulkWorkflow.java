@@ -1,74 +1,59 @@
 package yf.publication.bulkworkflow;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import org.codehaus.jackson.JsonGenerationException;
-import org.codehaus.jackson.map.JsonMappingException;
-import org.codehaus.jackson.map.ObjectMapper;
 import org.elasticsearch.action.bulk.BulkRequestBuilder;
 import org.elasticsearch.action.bulk.BulkResponse;
-import org.elasticsearch.action.delete.DeleteRequestBuilder;
 import org.elasticsearch.action.index.IndexRequestBuilder;
-import org.elasticsearch.action.support.WriteRequest.RefreshPolicy;
-import org.elasticsearch.action.update.UpdateRequestBuilder;
+import org.elasticsearch.action.support.WriteRequest;
 import yf.core.PropertiesReslover;
 import yf.elastic.core.ElasticWorkflow;
 import yf.elastic.core.NativeElasticSingleton;
 import yf.elastic.reindex.BulkOptions;
 import yf.elastic.reindex.bulkworkflow.AbstractBulkReindexWorkflow;
-import yf.post.dto.PostElasticDTO;
-import yf.post.entities.Post;
-import yf.post.parser.workflow.ParserPostConverter;
+import yf.publication.PublicationConverter;
+import yf.publication.dtos.PublicationElasticDTO;
+import yf.publication.entities.Publication;
 
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
-import java.io.IOException;
 import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.Optional;
+import java.util.logging.Level;
 
-public class PublicationBulkWorkflow extends AbstractBulkReindexWorkflow<Post, PostElasticDTO> {
-    @Inject
-    private ParserPostConverter postConverter;
+public class PublicationBulkWorkflow extends AbstractBulkReindexWorkflow<Publication, PublicationElasticDTO> {
+
     @Inject
     private PropertiesReslover properties;
     @Inject
     private ElasticWorkflow elasticWorkflow;
     @Inject
     private NativeElasticSingleton nativeElasticClient;
+    @Inject
+    private PublicationConverter publicationConverter;
 
 
     @PostConstruct
     protected void initIndecies() {
-//        TAG_INDEX.put(properties.get("tag.vk.native"), properties.get("elastic.index.native"));
-//        TAG_INDEX.put(properties.get("tag.vk.sets"), properties.get("elastic.index.sets"));
-//        TAG_INDEX.put(properties.get("tag.vk.soft"), properties.get("elastic.index.soft"));
-//        TAG_INDEX.put(properties.get("tag.vk.black"), properties.get("elastic.index.black"));
-//        TAG_INDEX.put(properties.get("tag.vk.silhouettes"), properties.get("elastic.index.silhouettes"));
-//        TAG_INDEX.put(properties.get("tag.vk.80s90s"), properties.get("elastic.index.80s90s"));
-//        TAG_INDEX.put(properties.get("tag.vk.legs"), properties.get("elastic.index.legs"));
-//        TAG_INDEX.put(properties.get("tag.vk.art"), properties.get("elastic.index.art"));
-        TAG_INDEX.put(properties.get("elastic.index.publications"), properties.get("elastic.index.publications"));
+        INDEX.add(properties.get("elastic.index.publication"));
         TYPE = properties.get("elastic.type.photo");
 
     }
 
-
+    @Override
     public void deleteIndicies() {
-        elasticWorkflow.deleteIndicies(TAG_INDEX);
+        elasticWorkflow.deleteIndicies(INDEX);
+
     }
 
-    public void execute(List<Post> posts) {
-
+    @Override
+    public void execute(List<Publication> entities) {
 
         BulkRequestBuilder bulkRequest = nativeElasticClient.getClient().prepareBulk();
-        bulkRequest.setRefreshPolicy(RefreshPolicy.IMMEDIATE); // ??
+        bulkRequest.setRefreshPolicy(WriteRequest.RefreshPolicy.IMMEDIATE); // ??
 
-        for (Post p : posts) {
+        for (Publication p : entities) {
 
 
-            PostElasticDTO dto = postConverter.toElasticPostDto(p);
-
+            PublicationElasticDTO dto = publicationConverter.publicationToElasticDTO(p);
 
 
             try {
@@ -80,120 +65,18 @@ public class PublicationBulkWorkflow extends AbstractBulkReindexWorkflow<Post, P
 
         BulkResponse bulkResponse = bulkRequest.execute().actionGet();
         if (bulkResponse.hasFailures()) {
-            LOGGER.log(java.util.logging.Level.WARNING, "BULK REINDEX FAILUER");
+            LOGGER.log(Level.SEVERE, "BULK REINDEX FAILURE");
         }
     }
 
-    public void addEntityToBulkWithCustomIndex(final PostElasticDTO dto, BulkRequestBuilder bulkRequest, BulkOptions bulkOption, String index) throws JsonProcessingException {
-
+    @Override
+    public void addEntityToBulk(PublicationElasticDTO dto, BulkRequestBuilder bulkRequest, BulkOptions bulkOption) throws JsonProcessingException {
         if (bulkOption == BulkOptions.INDEX) {
-            IndexRequestBuilder indexBuilder = prepareIndex(dto, elasticWorkflow.getDocumentId(dto.getId()), index);
+            IndexRequestBuilder indexBuilder = prepareIndex(dto, elasticWorkflow.getDocumentId(dto.getId()), INDEX.iterator().next());
             if (indexBuilder == null) {
                 return;
             }
             bulkRequest.add(indexBuilder);
         }
     }
-
-    public void addEntityToBulk(final PostElasticDTO dto, BulkRequestBuilder bulkRequest, BulkOptions bulkOption) throws JsonProcessingException {
-
-        if (bulkOption == BulkOptions.INDEX) {
-            IndexRequestBuilder indexBuilder = prepareIndex(dto, elasticWorkflow.getDocumentId(dto.getId()), null);
-            if (indexBuilder == null) {
-                return;
-            }
-            bulkRequest.add(indexBuilder);
-        }
-
-        // throw exception if doc missing
-        if (bulkOption == BulkOptions.UPDATE) {
-            UpdateRequestBuilder indexBuilder = prepareUpdateIndex(dto, elasticWorkflow.getDocumentId(dto.getId()));
-            if (indexBuilder == null) {
-                return;
-            }
-            bulkRequest.add(indexBuilder);
-        }
-
-        if (bulkOption == BulkOptions.DELETE) {
-            DeleteRequestBuilder indexBuilder = prepareDeleteIndex(dto, elasticWorkflow.getDocumentId(dto.getId()));
-            if (indexBuilder == null) {
-                return;
-            }
-            bulkRequest.add(indexBuilder);
-        }
-
-
-    }
-
-    protected IndexRequestBuilder prepareIndex(final PostElasticDTO dto, final String id, String index) {
-        if (dto == null) {
-            return null;
-        }
-        if (index == null) {
-            index = getIndex(dto.getText(), TAG_INDEX);
-        }
-
-        try {
-            return index != null ? nativeElasticClient.getClient()
-                    .prepareIndex(index, TYPE, id)
-                    .setSource(new ObjectMapper().writeValueAsString(dto))
-                    : null;
-        } catch (JsonGenerationException e) {
-            e.printStackTrace();
-        } catch (JsonMappingException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        return null;
-    }
-
-    protected UpdateRequestBuilder prepareUpdateIndex(final PostElasticDTO dto, final String id) {
-        if (dto == null) {
-            return null;
-        }
-
-        try {
-            String index = getIndex(dto.getText(), TAG_INDEX);
-            return index != null ? nativeElasticClient.getClient()
-                    .prepareUpdate(index, TYPE, id)
-                    .setDoc(new ObjectMapper().writeValueAsString(dto))
-                    : null;
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        return null;
-    }
-
-    protected DeleteRequestBuilder prepareDeleteIndex(final PostElasticDTO dto, final String id) {
-        if (dto == null) {
-            return null;
-        }
-
-        String index = getIndex(dto.getText(), TAG_INDEX);
-        return index != null ? nativeElasticClient.getClient()
-                .prepareDelete(index, TYPE, id)
-                : null;
-    }
-
-    public String getIndex(final String text, Map<String, String> tag_index) {
-
-        if (text == null) {
-            return null;
-        }
-
-        Entry<String, String> filtered = tag_index.entrySet().stream()
-                .filter(map -> text.contains(map.getKey()))
-                .findAny().orElse(null);
-
-        String index = Optional.ofNullable(filtered).map(Entry::getValue).orElse(null);
-
-        if (index == null) {
-            LOGGER.warning("NO INDEX WERE FIND FOR" + text);
-        }
-        return index;
-    }
-
 }

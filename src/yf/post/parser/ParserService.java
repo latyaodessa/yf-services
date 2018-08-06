@@ -6,12 +6,16 @@ import yf.post.entities.Post;
 import yf.post.parser.dto.PostDTO;
 import yf.post.parser.rest.client.ParserRestClient;
 import yf.post.parser.workflow.PostParserWorkflow;
+import yf.publication.bulkworkflow.PublicationBulkWorkflow;
+import yf.publication.entities.Publication;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
 
 @Stateless
 public class ParserService {
@@ -23,6 +27,8 @@ public class ParserService {
     private ElasticBulkFetcher elasticBulkFetcher;
     @Inject
     private PropertiesReslover properties;
+    @Inject
+    private PublicationBulkWorkflow publicationBulkWorkflow;
 
     private static final Logger LOG = Logger.getLogger(ParserService.class.getName());
     private static final long YF_GROUP_ID = 26020797;
@@ -34,14 +40,33 @@ public class ParserService {
         for (int i = firstpage; i + 100 <= lastpage; i += 100) {
             postDTOList.addAll(parserRestClient.parseAllPages(YF_GROUP_ID, i, i + 100));
         }
-        postWorkflow.saveNewPostData(postDTOList);
+        final Set<Post> posts = postWorkflow.saveNewPostData(postDTOList);
+
+        List<Publication> publications = posts
+                .stream()
+                .map(post ->
+                        postWorkflow.addVkPostAndParticipantsToPublication(post))
+                .collect(Collectors.toList());
+
+        publicationBulkWorkflow.execute(publications);
+
         return postDTOList;
 
     }
 
     public void triggerPostParserForNewPosts() {
         List<PostDTO> postDTOList = parserRestClient.parseAllPages(YF_GROUP_ID, 0, 100);
-        postWorkflow.saveUpdateNewEntry(postDTOList);
+        final Set<Post> posts = postWorkflow.saveNewPostData(postDTOList);
+
+        List<Publication> publications = posts
+                .stream()
+                .map(post ->
+                        postWorkflow.addVkPostAndParticipantsToPublication(post))
+                .collect(Collectors.toList());
+
+        publicationBulkWorkflow.execute(publications);
+
+
     }
 
     public void getAndSaveWeeklyTop() {
@@ -63,9 +88,12 @@ public class ParserService {
             if (entities == null || entities.isEmpty()) {
                 break;
             }
-            entities.stream()
-                    .filter(post -> post.getText().contains(properties.get("tag.vk.native")))
-                    .forEach(post -> postWorkflow.addVkPostAndParticipantsToPublication(post.getId()));
+            final List<Publication> publications = entities.stream()
+                    .filter(post -> isPostContainTagForPublication(post.getText()))
+                    .map(post -> postWorkflow.addVkPostAndParticipantsToPublication(post.getId()))
+                    .collect(Collectors.toList());
+
+            publicationBulkWorkflow.execute(publications);
 
             offset += entities.size();
 
@@ -73,5 +101,11 @@ public class ParserService {
         } while (entities.isEmpty() || entities.size() >= ElasticBulkFetcher.getDefaultBulkSize());
     }
 
+
+    private boolean isPostContainTagForPublication(final String text) {
+        return text.contains(properties.get("tag.vk.native"))
+                || text.contains(properties.get("tag.vk.sets"))
+                || text.contains(properties.get("tag.vk.art"));
+    }
 
 }

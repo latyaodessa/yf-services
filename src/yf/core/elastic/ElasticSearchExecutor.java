@@ -6,6 +6,7 @@ import org.elasticsearch.search.SearchHit;
 import yf.post.PostConverter;
 import yf.post.dto.PostElasticDTO;
 import yf.post.dto.SharedBasicPostDTO;
+import yf.publication.dtos.PublicationElasticDTO;
 
 import javax.inject.Inject;
 import java.util.ArrayList;
@@ -28,6 +29,21 @@ public class ElasticSearchExecutor {
             PostElasticDTO dto = elasticToObjectConvertor.convertSingleResultToObject(hit.getSourceAsString(), PostElasticDTO.class);
             if (dto != null) {
                 sharedBasicPostDTO.add(basicPostConverter.toSharedBasicPostDTO(dto));
+            }
+        }
+        return sharedBasicPostDTO;
+
+    }
+
+    public List<SharedBasicPostDTO> executePublicationSearchBasicPostDTO(final SearchResponse res) {
+        List<SharedBasicPostDTO> sharedBasicPostDTO = new ArrayList<>();
+
+        SearchHit[] hits = res.getHits().getHits();
+
+        for (SearchHit hit : hits) {
+            PublicationElasticDTO dto = elasticToObjectConvertor.convertSingleResultToObject(hit.getSourceAsString(), PublicationElasticDTO.class);
+            if (dto != null) {
+                sharedBasicPostDTO.add(basicPostConverter.publicationToSharedBasicPostDTO(dto));
             }
         }
         return sharedBasicPostDTO;

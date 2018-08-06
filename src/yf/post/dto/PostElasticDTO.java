@@ -4,7 +4,7 @@ import java.util.List;
 
 import yf.post.entities.Post;
 
-public class PostElasticDTO extends Post{
+public class PostElasticDTO extends Post {
 	
 	private String md;
 	private String ph;
