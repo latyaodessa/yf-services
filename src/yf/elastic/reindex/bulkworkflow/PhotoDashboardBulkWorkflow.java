@@ -37,7 +37,7 @@ public class PhotoDashboardBulkWorkflow extends AbstractBulkReindexWorkflow<User
 	}
 
 	@Override
-	public void deleteIndicies() {
+	public void recreateIndex() {
 		elasticWorkflow.deleteIndicies(INDEX);				
 	}
 

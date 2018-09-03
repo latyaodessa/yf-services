@@ -1,6 +1,6 @@
 package yf.publication.entities;
 
-import yf.core.entities.AbstractVersionEntity;
+import yf.core.entities.AbstractDateEntity;
 import yf.post.entities.Post;
 
 import javax.persistence.CascadeType;
@@ -23,11 +23,15 @@ import java.util.List;
 @Entity
 @Table(name = "publication")
 @NamedQueries({
-        @NamedQuery(name = Publication.QUERY_GET_PUBLICATION_BY_VK_POST, query = "SELECT t FROM Publication t WHERE t.vkPost.id = :vk_post_id ")
+        @NamedQuery(name = Publication.QUERY_GET_PUBLICATION_BY_VK_POST, query = "SELECT t FROM Publication t WHERE t.vkPost.id = :vk_post_id "),
+        @NamedQuery(name = Publication.QUERY_GET_PUBLICATION_BY_LINK, query = "SELECT t FROM Publication t WHERE t.link = :link "),
+        @NamedQuery(name = Publication.QUERY_SETS_NATIVE_POSTS_RANGE, query = "SELECT t FROM Publication t WHERE t.createdOn between :from and :end")
 })
-public class Publication extends AbstractVersionEntity {
+public class Publication extends AbstractDateEntity {
 
     public static final String QUERY_GET_PUBLICATION_BY_VK_POST = "Publication.getPublicationsByVkPost";
+    public static final String QUERY_GET_PUBLICATION_BY_LINK = "Publication.getPublicationsByLink";
+    public static final String QUERY_SETS_NATIVE_POSTS_RANGE = "Publication.getPostByRange";
 
     @Id
     @NotNull
@@ -48,6 +52,7 @@ public class Publication extends AbstractVersionEntity {
     private String additionalMds;
     @Column(name = "ph_techincal")
     private String phTechnical;
+    private Integer likes;
 
     @OneToMany(fetch = FetchType.LAZY, cascade = {CascadeType.MERGE, CascadeType.PERSIST})
     @JoinColumn(name = "publication_id", referencedColumnName = "id")
@@ -64,7 +69,7 @@ public class Publication extends AbstractVersionEntity {
     public Publication() {
         publicationPictures = new ArrayList<>();
         publicationUsers = new ArrayList<>();
-        setCreatedOn(new Date());
+        setCreatedOn(new Date().getTime());
     }
 
     public Long getId() {
@@ -179,4 +184,13 @@ public class Publication extends AbstractVersionEntity {
     public void setPublicationUsers(List<PublicationUser> publicationUsers) {
         this.publicationUsers = publicationUsers;
     }
+
+    public Integer getLikes() {
+        return likes;
+    }
+
+    public void setLikes(Integer likes) {
+        this.likes = likes;
+    }
+
 }

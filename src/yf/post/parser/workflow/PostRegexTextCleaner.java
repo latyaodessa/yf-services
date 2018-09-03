@@ -77,7 +77,7 @@ public class PostRegexTextCleaner {
     }
 
 
-    private String transliterate(String text) {
+    public String transliterate(String text) {
         Transliterator transliterator = Transliterator.getInstance("Any-Latin; Latin-ASCII;");
         return transliterator.transliterate(text);
     }

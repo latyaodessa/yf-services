@@ -10,7 +10,7 @@ CREATE TABLE publication (
   additional_phs  VARCHAR,
   additional_mds  VARCHAR,
   ph_techincal    VARCHAR,
-  created_on      DATE,
+  created_on      BIGINT,
   vk_post_id      BIGINT REFERENCES vk_post (id)
 );
 
@@ -61,4 +61,10 @@ CREATE TABLE md_profile (
   user_id    BIGINT REFERENCES user_yf (id)
 );
 
+ALTER TABLE user_saved_posts ADD COLUMN publication_id BIGINT;
+ALTER TABLE user_saved_posts ADD FOREIGN KEY (publication_id)  REFERENCES publication (id);
+UPDATE user_saved_posts SET publication_id = publication.id FROM publication WHERE publication.vk_post_id = user_saved_posts.post_id;
 
+ALTER TABLE user_saved_posts ADD COLUMN created_on BIGINT;
+ALTER TABLE user_saved_posts DROP COLUMN date;
+UPDATE user_saved_posts SET created_on = '1533915264000';

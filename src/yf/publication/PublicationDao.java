@@ -38,4 +38,16 @@ public class PublicationDao {
         }
     }
 
+    public Publication getPublicationByLink(final String link) {
+        TypedQuery<Publication> query = em.createNamedQuery(Publication.QUERY_GET_PUBLICATION_BY_LINK, Publication.class)
+                .setParameter("link", link);
+        try {
+            return query.getSingleResult();
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
+
+
 }

@@ -3,7 +3,6 @@ package yf.post.parser.workflow;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import org.elasticsearch.action.bulk.BulkRequestBuilder;
 import org.elasticsearch.action.bulk.BulkResponse;
-import org.elasticsearch.action.support.WriteRequest.RefreshPolicy;
 import yf.core.PropertiesReslover;
 import yf.elastic.core.ElasticWorkflow;
 import yf.elastic.core.NativeElasticSingleton;
@@ -18,6 +17,7 @@ import yf.publication.PublicationService;
 import yf.publication.entities.MdProfile;
 import yf.publication.entities.PhProfile;
 import yf.publication.entities.Publication;
+import yf.publication.entities.PublicationUser;
 import yf.user.UserProfileService;
 import yf.user.rest.VkRestClient;
 
@@ -25,7 +25,6 @@ import javax.ejb.Stateless;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import javax.persistence.TypedQuery;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
@@ -35,6 +34,9 @@ import java.util.stream.Collectors;
 
 @Stateless
 public class PostParserWorkflow {
+
+    private final static String PH_TAG = "photograph";
+    private final static String MD_TAG = "model";
 
     @Inject
     private NativeElasticSingleton nativeElasticClient;
@@ -60,31 +62,19 @@ public class PostParserWorkflow {
     private PublicationService publicationService;
     @Inject
     private PublicationDao publicationDao;
+    @Inject
+    private PostRegexTextCleaner regexTextCleaner;
 
     private static final Logger LOGGER = Logger.getLogger(PostBulkWorkflow.class.getName());
 
 
-    public Set<Post> saveNewPostData(List<PostDTO> listPostDTO) {
-//        BulkRequestBuilder bulkRequest = nativeElasticClient.getClient().prepareBulk();
-//        bulkRequest.setRefreshPolicy(RefreshPolicy.IMMEDIATE);
+    public List<Post> saveNewPostData(List<PostDTO> listPostDTO) {
 
-        final Set<Post> posts = persistPosts(listPostDTO);
-
+        final List<Post> posts = persistPosts(listPostDTO);
         em.flush();
         em.clear();
-
-
         return posts;
     }
-
-//
-//    public Set<Post> saveUpdateNewEntry(final List<PostDTO> postDTO) {
-////        BulkRequestBuilder bulkRequest = nativeElasticClient.getClient().prepareBulk();
-////        bulkRequest.setRefreshPolicy(RefreshPolicy.IMMEDIATE);
-//
-//        return persistPosts(postDTO);
-//
-//    }
 
     private void bulkPersistToElastic(final BulkRequestBuilder bulkRequest) {
         BulkResponse bulkResponse = bulkRequest.execute().actionGet();
@@ -93,30 +83,19 @@ public class PostParserWorkflow {
         }
     }
 
-    private Set<Post> persistPosts(final List<PostDTO> postDTO) {
-        Set<Post> posts = postDTO.stream()
+    private List<Post> persistPosts(final List<PostDTO> postDTO) {
+
+        List<Post> posts = postDTO.stream()
                 .filter(dto -> postBulkWorkflow.getIndex(dto.getText(), postBulkWorkflow.TAG_INDEX) != null)
-                .map(dto -> postConverter.toEntity(dto)).collect(Collectors.toSet());
-//                .forEach(post -> {
+                .map(dto -> postConverter.toEntity(dto))
+                .map(entity -> {
+                    em.merge(entity);
+                    return entity;
+                })
+                .collect(Collectors.toList());
 
-//                    em.merge(post);
-//                    em.flush();
+//        posts.forEach(entity -> em.merge(entity));
 
-        // TODO REMOVED SAVE TO ELASTIC
-//                    PostElasticDTO postElasticDTO = postConverter.toElasticPostDto(post);
-//
-//                    try {
-//                        postBulkWorkflow.addEntityToBulk(postElasticDTO, bulkRequest, BulkOptions.DELETE);
-//                        postBulkWorkflow.addEntityToBulk(postElasticDTO, bulkRequest, BulkOptions.INDEX);
-//                    } catch (JsonProcessingException e) {
-//                        LOGGER.severe("PARSE ERROR: " + e);
-//                    }
-
-
-//                });
-//        bulkPersistToElastic(bulkRequest);]
-        em.merge(posts);
-//        em.flush();
         return posts;
 
     }
@@ -159,55 +138,101 @@ public class PostParserWorkflow {
 
     }
 
-    public Publication addVkPostAndParticipantsToPublication(final Long postId) {
-
-        Publication existingPublication = publicationDao.getPublicationByVkPostId(postId);
-
-        if (existingPublication != null) {
-            return existingPublication;
-        }
-
-        TypedQuery<Post> query = em.createNamedQuery(Post.QUERY_POST_BY_ID, Post.class)
-                .setParameter("post_id", postId);
-
-        if (query == null) {
-            return null;
-        }
-        Post post = query.getSingleResult();
-
-        return parsePhMdFromPost(post);
+    public Publication getPublicationFromPost(final Long postId) {
+        return publicationDao.getPublicationByVkPostId(postId);
     }
 
-    public Publication addVkPostAndParticipantsToPublication(final Post post) {
+    public Publication processNewPostToPublication(final Post post) {
 
-        Publication existingPublication = publicationDao.getPublicationByVkPostId(post.getId());
+        Set<PhProfile> phProfiles = parsePhsFromPost(post.getText());
+        Set<MdProfile> mdProfiles = parseMdsFromPost(post.getText());
 
-        if (existingPublication != null) {
-            return existingPublication;
-        }
+        Publication publication = generatePublication(post, phProfiles, mdProfiles);
 
-        return parsePhMdFromPost(post);
+        // creating publication_user
+        phProfiles
+                .forEach(phProfile -> {
+                    PublicationUser publicationUser = userProfileService.generatePublicationUserFromPhProfile(publication, phProfile);
 
-
-    }
-
-    private Publication parsePhMdFromPost(final Post post) {
-        Set<PhProfile> phProfiles = handlePhIds(post.getText());
-        Set<MdProfile> mdProfiles = handleMdIds(post.getText());
-
-
-        Publication publication = publicationService.createPublicationFromVkPost(post);
-
-        phProfiles.forEach(phProfile -> userProfileService.addPublicationToPhProfile(publication, phProfile));
-        mdProfiles.forEach(mdProfile -> userProfileService.addPublicationToMdProfile(publication, mdProfile));
-
-        em.flush();
+                });
+        mdProfiles.forEach(mdProfile -> userProfileService.generatePublicationUserFromMdProfile(publication, mdProfile));
 
         return publication;
     }
 
+    public Publication generatePublication(final Post post, final Set<PhProfile> phProfiles, final Set<MdProfile> mdProfiles) {
+        Publication publication = new Publication();
+        em.persist(publication);
+        final String link = generateLinkFromMdsPhs(post, publication.getId(), phProfiles, mdProfiles);
+        publication.setLink(link);
+        publication.setLikes(0);
+        publication.setVkPost(em.merge(post));
+        em.merge(publication);
+        em.flush();
+        return publication;
+    }
 
-    private Set<PhProfile> handlePhIds(final String rowText) {
+
+    private String generateLinkFromMdsPhs(final Post post, final Long publicationId, Set<PhProfile> phProfiles, Set<MdProfile> mdProfiles) {
+
+
+        Set<String> link = new HashSet<>();
+
+        mdProfiles.forEach(mdProfile -> {
+            final String firstName = mdProfile.getUser().getFirstName();
+            final String lastName = mdProfile.getUser().getLastName();
+            parseNameByTag(firstName, lastName, link);
+        });
+
+
+        phProfiles.forEach(phProfile -> {
+            final String firstName = phProfile.getUser().getFirstName();
+            final String lastName = phProfile.getUser().getLastName();
+            parseNameByTag(firstName, lastName, link);
+        });
+
+        // try simple text
+        if (link.isEmpty()) {
+            parseSimpleText(post, link);
+        }
+
+        if (link.isEmpty()) {
+            return String.valueOf(publicationId);
+        }
+
+        final String generatedLink = regexTextCleaner.transliterate(String.join("-", link).toLowerCase());
+
+        Publication publication = publicationDao.getPublicationByLink(generatedLink);
+
+        if (publication == null) {
+            return generatedLink;
+        } else {
+            return String.join("-", generatedLink, String.valueOf(publicationId));
+        }
+
+    }
+
+    private void parseNameByTag(final String firstName, final String lastName, final Set<String> link) {
+        if (firstName != null && lastName != null) {
+            link.add(String.join("-", MD_TAG, firstName.replaceAll("[^A-Za-z0-9]", ""),
+                    lastName.replaceAll("[^A-Za-z0-9]", "")));
+        }
+    }
+
+    private void parseSimpleText(final Post post, final Set<String> link) {
+        PostElasticDTO dto = new PostElasticDTO();
+        regexTextCleaner.getCleanedText(post, dto);
+        if (dto.getMd_translit() != null) {
+            link.add(String.join("-", MD_TAG, dto.getMd_translit().replaceAll("[^A-Za-z0-9]", "")));
+        }
+        if (dto.getPh_translit() != null) {
+            link.add(String.join("-", PH_TAG, dto.getPh_translit().replaceAll("[^A-Za-z0-9]", "")));
+        }
+
+    }
+
+
+    public Set<PhProfile> parsePhsFromPost(final String rowText) {
         final Set<Long> phUserVkId = postRegexTextCleaner.getPhIds(rowText);
         return phUserVkId.stream()
                 .map(id -> vkRestClient.getVKUserDetails(id))
@@ -216,7 +241,7 @@ public class PostParserWorkflow {
 
     }
 
-    private Set<MdProfile> handleMdIds(final String rowText) {
+    public Set<MdProfile> parseMdsFromPost(final String rowText) {
         final Set<Long> mdVkIds = postRegexTextCleaner.getMdIds(rowText);
         return mdVkIds.stream()
                 .map(id -> vkRestClient.getVKUserDetails(id))

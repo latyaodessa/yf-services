@@ -60,8 +60,28 @@ public class UserService {
             em.persist(user);
             return userWorkflow.getUserSocialAccounts(user, vkUser);
         }
+    }
 
+    public void bindVkAccountToUser(final User user, final VKUser vkuser, final Long vkId) {
 
+        if (vkuser == null) {
+            final VKUserDTO vKUserDTO = userRestClient.getVKUserDetails(vkId);
+            final VKUser vkUserEntity = userWorkflow.createVKUser(vKUserDTO, user);
+            userWorkflow.handleEmptyUserFields(user, vkUserEntity);
+        } else {
+            userWorkflow.handleEmptyUserFields(user, vkuser);
+            vkuser.setUser(user);
+            em.merge(vkuser);
+        }
+
+    }
+
+    public void unbindVkAccountToUser(final VKUser vkuser) {
+
+        if (vkuser != null) {
+            vkuser.setUser(null);
+            em.merge(vkuser);
+        }
     }
 
     public UserAllDataDto registerUserFromFBUser(final FBUserDTO fbUserDTO, final LoginDTO loginDTO, final FBUser fbUser) {

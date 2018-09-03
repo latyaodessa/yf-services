@@ -11,8 +11,12 @@ import yf.publication.entities.Publication;
 import yf.publication.entities.PublicationUser;
 
 import javax.inject.Inject;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 public class PublicationConverter {
 
@@ -24,29 +28,20 @@ public class PublicationConverter {
     public Publication vkPostToPublication(final Post post) {
         Publication publication = new Publication();
         publication.setVkPost(post);
+        publication.setCreatedOn(getDateFromString(post.getDate()));
+
+
         return publication;
     }
-//TODO
-//    public PublicationElasticDTO publicationUserToDto(final PublicationUser publicationUser) {
-//        PublicationElasticDTO dto = new PublicationElasticDTO();
-//        dto.setId(publicationUser.getPublication().getId());
-//        dto.setUser_id(publicationUser.getUser().getId());
-//        dto.setDate(publicationUser.getPublication().getPhotoshootDate());
-//        if(publicationUser.getPublication().getVkPost() != null) {
-//
-//        }
-//    }
-//
-//    private void handleVkPostToPublication(final Post vkPost, PublicationElasticDTO dto){
-//        dto.setMd(vkPost.get);
-//    }
 
 
     public PublicationElasticDTO publicationToElasticDTO(final Publication publication) {
         PublicationElasticDTO dto = new PublicationElasticDTO();
         dto.setId(publication.getId());
         dto.setDate(publication.getCreatedOn());
-        dto.setPhotoshootDate(publication.getPhotoshootDate());
+        dto.setLink(publication.getLink());
+        dto.setPhotoshootDate(Optional.ofNullable(publication.getPhotoshootDate()).map(java.util.Date::getTime).orElse(null));
+        dto.setLikes(publication.getLikes());
 
         handlePublicationUsers(dto, publication.getPublicationUsers());
         // TODO NORMAL, NOT VK
@@ -67,7 +62,20 @@ public class PublicationConverter {
             dto.setMdSimple(postElasticDTO.getMd());
             dto.setPhSimple(postElasticDTO.getPh());
             dto.setText(postElasticDTO.getText());
-            dto.setDate(postElasticDTO.getDate());
+
+            Long dateFromVk = getDateFromString(vkPost.getDate());
+
+            if (dateFromVk != null) {
+                dto.setDate(dateFromVk);
+            }
+        }
+    }
+
+    private Long getDateFromString(final String dateString) {
+        try {
+            return new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(dateString).getTime();
+        } catch (ParseException e) {
+            return null;
         }
     }
 

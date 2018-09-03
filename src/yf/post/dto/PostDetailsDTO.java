@@ -6,11 +6,6 @@ public class PostDetailsDTO extends SharedBasicPostDTO{
 		
 	private List <String> largePics;
 
-	public PostDetailsDTO(Long id, String md, String ph, String text, String thumbnail, List<String> largePics) {
-		super(id, md, ph, text, thumbnail);
-		this.largePics = largePics;
-	}
-
 	public PostDetailsDTO() {
 		super();
 	}

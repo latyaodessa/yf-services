@@ -52,7 +52,7 @@ public class PostService {
 
         return null;
     }
-
+    @Deprecated
     public List<SharedBasicPostDTO> getNewPostsFromTo(final String index, final String type, final int from, final int size) {
 
         SearchResponse res = nativeElastiClient.getClient().prepareSearch(index)

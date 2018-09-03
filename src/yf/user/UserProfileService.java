@@ -3,6 +3,7 @@ package yf.user;
 import yf.publication.entities.MdProfile;
 import yf.publication.entities.PhProfile;
 import yf.publication.entities.Publication;
+import yf.publication.entities.PublicationUser;
 import yf.user.dto.external.VKUserDTO;
 import yf.user.entities.User;
 import yf.user.entities.VKUser;
@@ -64,11 +65,11 @@ public class UserProfileService {
         return mdProfile;
     }
 
-    public void addPublicationToPhProfile(final Publication publication, final PhProfile phProfile) {
-        userProfileWorkflow.addPublicationToPhProfile(publication, phProfile);
+    public PublicationUser generatePublicationUserFromPhProfile(final Publication publication, final PhProfile phProfile) {
+        return userProfileWorkflow.generatePublicationUserFromPhProfile(publication, phProfile);
     }
 
-    public void addPublicationToMdProfile(final Publication publication, final MdProfile mdProfile) {
-        userProfileWorkflow.addPublicationToMdProfile(publication, mdProfile);
+    public PublicationUser generatePublicationUserFromMdProfile(final Publication publication, final MdProfile mdProfile) {
+        return userProfileWorkflow.generatePublicationUserFromMdProfile(publication, mdProfile);
     }
 }

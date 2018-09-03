@@ -27,6 +27,7 @@ public class PublicationWorkflow {
         return publication;
     }
 
+
     public List<PublicationUser> getPublishedByUserId(final Long userId) {
         return publicationDao.getPublishedSetsByUserId(userId);
 

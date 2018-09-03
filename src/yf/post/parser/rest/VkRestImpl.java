@@ -45,18 +45,26 @@ public class VkRestImpl {
         return Response.ok().build();
     }
 
-
-    @GET
-    @Path("parse/published/{postId}")
-    public Response findPublished(@PathParam("postId") final Long postId) {
-        parserService.addVkPostAndParticipantsToPublication(postId);
-        return Response.ok().build();
-    }
+//
+//    @GET
+//    @Path("parse/published/{postId}")
+//    public Response findPublished(@PathParam("postId") final Long postId) {
+//        parserService.triggerOnePost(postId);
+//        return Response.ok().build();
+//    }
 
     @GET
     @Path("parse/all/published")
     public Response findPublished() {
         parserService.parseAllVkToPublished();
+        return Response.ok().build();
+    }
+
+
+    @GET
+    @Path("parse/last/published")
+    public Response parseLastPublished() {
+        parserService.parseLastVkToPublished();
         return Response.ok().build();
     }
 

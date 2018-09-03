@@ -7,11 +7,15 @@ import yf.post.parser.dto.PostDTO;
 import yf.post.parser.rest.client.ParserRestClient;
 import yf.post.parser.workflow.PostParserWorkflow;
 import yf.publication.bulkworkflow.PublicationBulkWorkflow;
+import yf.publication.entities.MdProfile;
+import yf.publication.entities.PhProfile;
 import yf.publication.entities.Publication;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 import java.util.logging.Logger;
@@ -40,12 +44,12 @@ public class ParserService {
         for (int i = firstpage; i + 100 <= lastpage; i += 100) {
             postDTOList.addAll(parserRestClient.parseAllPages(YF_GROUP_ID, i, i + 100));
         }
-        final Set<Post> posts = postWorkflow.saveNewPostData(postDTOList);
+        final List<Post> posts = postWorkflow.saveNewPostData(postDTOList);
 
         List<Publication> publications = posts
                 .stream()
                 .map(post ->
-                        postWorkflow.addVkPostAndParticipantsToPublication(post))
+                        postWorkflow.processNewPostToPublication(post))
                 .collect(Collectors.toList());
 
         publicationBulkWorkflow.execute(publications);
@@ -55,26 +59,26 @@ public class ParserService {
     }
 
     public void triggerPostParserForNewPosts() {
-        List<PostDTO> postDTOList = parserRestClient.parseAllPages(YF_GROUP_ID, 0, 100);
-        final Set<Post> posts = postWorkflow.saveNewPostData(postDTOList);
+        List<PostDTO> postDTOList = parserRestClient.parseAllPages(YF_GROUP_ID, 0, 50);
+        final List<Post> posts = postWorkflow.saveNewPostData(postDTOList);
 
-        List<Publication> publications = posts
-                .stream()
-                .map(post ->
-                        postWorkflow.addVkPostAndParticipantsToPublication(post))
+
+        final List<Publication> publications = posts.stream()
+                .map(post -> {
+                    final Publication publicationFromPost = postWorkflow.getPublicationFromPost(post.getId());
+                    if (publicationFromPost == null) {
+                        return postWorkflow.processNewPostToPublication(post);
+                    }
+                    return publicationFromPost;
+                })
                 .collect(Collectors.toList());
 
         publicationBulkWorkflow.execute(publications);
-
 
     }
 
     public void getAndSaveWeeklyTop() {
         postWorkflow.saveUpdateWeeklyTop();
-    }
-
-    public void addVkPostAndParticipantsToPublication(final Long postId) {
-        postWorkflow.addVkPostAndParticipantsToPublication(postId);
     }
 
 
@@ -90,7 +94,7 @@ public class ParserService {
             }
             final List<Publication> publications = entities.stream()
                     .filter(post -> isPostContainTagForPublication(post.getText()))
-                    .map(post -> postWorkflow.addVkPostAndParticipantsToPublication(post.getId()))
+                    .map(post -> postWorkflow.processNewPostToPublication(post))
                     .collect(Collectors.toList());
 
             publicationBulkWorkflow.execute(publications);
@@ -99,6 +103,22 @@ public class ParserService {
 
             LOG.info(String.format("Bulk Parsing: Already parsed %s posts", offset));
         } while (entities.isEmpty() || entities.size() >= ElasticBulkFetcher.getDefaultBulkSize());
+    }
+
+    public void parseLastVkToPublished() {
+
+        List<Post> entities = elasticBulkFetcher.fetchAllModels(0, Post.class);
+
+        if (entities == null || entities.isEmpty()) {
+            return;
+        }
+        final List<Publication> publications = entities.stream()
+                .filter(post -> isPostContainTagForPublication(post.getText()))
+                .map(post -> postWorkflow.processNewPostToPublication(post))
+                .collect(Collectors.toList());
+
+        publicationBulkWorkflow.execute(publications);
+
     }
 
 

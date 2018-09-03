@@ -30,4 +30,7 @@
     <changeSet author="andre" id="2018_07_26_ph_md_profiles">
         <sqlFile path="migration/2018_07_26_ph_md_profiles.sql" relativeToChangelogFile="true"/>
     </changeSet>
+    <changeSet author="andre" id="2018_08_28_like_buttons">
+        <sqlFile path="migration/2018_08_28_like_buttons.sql" relativeToChangelogFile="true"/>
+    </changeSet>
 </databaseChangeLog>

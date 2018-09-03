@@ -2,19 +2,20 @@ package yf.publication.dtos;
 
 import yf.post.dto.PostElasticDTO;
 
-import java.util.Date;
 import java.util.List;
 
 public class PublicationElasticDTO {
 
     private Long id;
-    private Date date;
-    private Date photoshootDate;
+    private Long date;
+    private Long photoshootDate;
     private PublicationTypeEnum type;
+    private String link;
     private String mdSimple;
     private String phSimple;
     private String text;
     private String thumbnail;
+    private Integer likes;
     private PostElasticDTO vkPost;
     private List<PublicationPicturesDTO> publicationPictures;
     private List<PublicationUserDTO> phUsers;
@@ -92,11 +93,11 @@ public class PublicationElasticDTO {
         this.vkPost = vkPost;
     }
 
-    public Date getDate() {
+    public Long getDate() {
         return date;
     }
 
-    public void setDate(Date date) {
+    public void setDate(Long date) {
         this.date = date;
     }
 
@@ -108,11 +109,27 @@ public class PublicationElasticDTO {
         this.type = type;
     }
 
-    public Date getPhotoshootDate() {
+    public Long getPhotoshootDate() {
         return photoshootDate;
     }
 
-    public void setPhotoshootDate(Date photoshootDate) {
+    public void setPhotoshootDate(Long photoshootDate) {
         this.photoshootDate = photoshootDate;
+    }
+
+    public String getLink() {
+        return link;
+    }
+
+    public void setLink(String link) {
+        this.link = link;
+    }
+
+    public Integer getLikes() {
+        return likes;
+    }
+
+    public void setLikes(Integer likes) {
+        this.likes = likes;
     }
 }

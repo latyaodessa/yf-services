@@ -105,6 +105,34 @@ public class UserRestImpl {
                 .build();
     }
 
+    @GET
+    @Path("vk/bind/{user_id}/{vk_id}")
+    public Response bindVkAccountToUser(@PathParam("user_id") final Long userId, final Long vkId) {
+
+        final VKUser vkUser = userDao.getVkUser(vkId);
+        final User user = userDao.getUserById(userId);
+
+
+        if (vkUser == null || (vkUser.getUser() != null && !vkUser.getUser().getId().equals(userId))) {
+            userService.bindVkAccountToUser(user, vkUser, vkId);
+            return Response.status(200)
+                    .build();
+        } else {
+            return Response.status(401)
+                    .entity(AuthResponseStatusesEnum.SOCIAL_LOGIN_BOUNDED_TO_OTHER_USER)
+                    .build();
+        }
+    }
+
+    @GET
+    @Path("vk/unbind/{user_id}/{vk_id}")
+    public Response unbindVkAccountFromUser(@PathParam("user_id") final Long userId, final Long vkId) {
+        final VKUser vkUser = userDao.getVkUser(vkId);
+        userService.unbindVkAccountToUser(vkUser);
+        return Response.status(200)
+                .build();
+    }
+
 
     @POST
     @Path("fb/create/{user}/{password}")
@@ -175,7 +203,7 @@ public class UserRestImpl {
 
         final User userByEmailNickName = userWorkflow.getUserByEmailNickName(lowerCaseNickname);
 
-        if(userByEmailNickName != null && !userByEmailNickName.getId().equals(userId)) {
+        if (userByEmailNickName != null && !userByEmailNickName.getId().equals(userId)) {
             return Response.status(403).entity(AuthResponseStatusesEnum.NICKNAME_ALREADY_EXIST).build();
         }
 
@@ -198,7 +226,7 @@ public class UserRestImpl {
 
 
         if (!isValid) {
-            Response.status(403).entity(AuthResponseStatusesEnum.TOKEN_NOT_VALID).build();
+            return Response.status(403).entity(AuthResponseStatusesEnum.TOKEN_NOT_VALID).build();
         }
 
         userService.updateUserProfilePic(userId, dto);

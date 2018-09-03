@@ -130,6 +130,7 @@ public class UserWorkflow {
     public VKUser createVKUser(final VKUserDTO vKUserDTO, final User user) {
         VKUser entity = userConverter.toVKUsetEntity(vKUserDTO, user);
         em.persist(entity);
+        em.flush();
         return entity;
 
     }
@@ -206,6 +207,7 @@ public class UserWorkflow {
         User user = generateBasicUser();
         user.setVerifications(verifications);
         em.persist(user);
+        em.flush();
         return user;
     }
 
@@ -220,6 +222,7 @@ public class UserWorkflow {
             user.setGender(vkUser.getSex());
         }
         em.merge(user);
+        em.flush();
     }
 
     public User registerExistingUser(final User user, final LoginDTO loginDTO) {

@@ -27,7 +27,7 @@ public class ElasticBulkFetcher implements Serializable {
         CriteriaQuery<T> query = cb.createQuery(cls);
         Root<T> root = query.from(cls);
 
-        query.select(root).orderBy(cb.asc(root.get("id")));
+        query.select(root).orderBy(cb.desc(root.get("id")));
         query.where(limitFetchModels(cb, root, offset, cls));
         query.distinct(true);
         return em.createQuery(query).getResultList();

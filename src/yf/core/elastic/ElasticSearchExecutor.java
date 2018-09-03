@@ -19,7 +19,7 @@ public class ElasticSearchExecutor {
     @Inject
     private PostConverter basicPostConverter;
 
-
+    @Deprecated
     public List<SharedBasicPostDTO> executeSearchBasicPostDTO(SearchResponse res) {
         List<SharedBasicPostDTO> sharedBasicPostDTO = new ArrayList<SharedBasicPostDTO>();
 
@@ -47,8 +47,8 @@ public class ElasticSearchExecutor {
             }
         }
         return sharedBasicPostDTO;
-
     }
+
 
     public SharedBasicPostDTO postElasticToBasicDto(final PostElasticDTO postElasticDTO) {
         return basicPostConverter.toSharedBasicPostDTO(postElasticDTO);

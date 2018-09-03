@@ -53,7 +53,7 @@ public class PostBulkWorkflow extends AbstractBulkReindexWorkflow<Post, PostElas
     }
 
 
-    public void deleteIndicies() {
+    public void recreateIndex() {
         elasticWorkflow.deleteIndicies(TAG_INDEX);
     }
 

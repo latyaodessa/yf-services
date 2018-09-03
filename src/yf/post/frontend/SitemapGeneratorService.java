@@ -3,7 +3,7 @@ package yf.post.frontend;
 import com.sun.jersey.api.client.Client;
 import com.sun.jersey.api.client.ClientResponse;
 import yf.core.JNDIPropertyHelper;
-import yf.post.entities.Post;
+import yf.publication.entities.Publication;
 
 import javax.ejb.Stateless;
 import javax.ejb.TransactionAttribute;
@@ -12,11 +12,9 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 import javax.ws.rs.core.MediaType;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
-import java.util.Objects;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
@@ -27,7 +25,7 @@ public class SitemapGeneratorService {
 
 
     private static final String FRONTEND_URI = new JNDIPropertyHelper().lookup("yf.frontend.uri");
-    private static final String LOC_HOST = "https://youngfolks.ru/post/";
+    private static final String LOC_HOST = "https://youngfolks.ru/pub/";
     private static final String CHANGE_FREQ = "weekly";
     private static final Double PRIORITY = 0.8;
 
@@ -41,21 +39,17 @@ public class SitemapGeneratorService {
         LOGGER.info("EXECUTING SITEMAP UPDATE");
 
         final SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
-        final SimpleDateFormat formatFromDb = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
-        List<SitemapUrlDto> dates = fetchPostsbyRange(from, end).stream()
+        List<SitemapUrlDto> dates = fetchPublicationsByTimeRange(from, end).stream()
                 .map(p -> {
-                    try {
-                        SitemapUrlDto dto = new SitemapUrlDto();
-                        dto.setChangefreq(CHANGE_FREQ);
-                        dto.setLastmod(format.format(formatFromDb.parse(p.getDate())) + "+00:00");
-                        dto.setLoc(LOC_HOST + p.getId());
-                        dto.setPriority(PRIORITY);
-                        return dto;
-                    } catch (ParseException e) {
-                        return null;
-                    }
-                }).filter(Objects::nonNull).collect(Collectors.toList());
+                    SitemapUrlDto dto = new SitemapUrlDto();
+                    dto.setChangefreq(CHANGE_FREQ);
+                    dto.setLastmod(format.format(new Date(p.getCreatedOn())) + "+00:00");
+                    dto.setLoc(LOC_HOST + p.getLink());
+                    dto.setPriority(PRIORITY);
+                    return dto;
+
+                }).collect(Collectors.toList());
 
 
         sendAddSitemapToFrontend(dates);
@@ -67,18 +61,12 @@ public class SitemapGeneratorService {
 
     }
 
-    private List<Post> fetchPostsbyRange(final Date from, final Date end) {
-        final SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+    private List<Publication> fetchPublicationsByTimeRange(final Date from, final Date end) {
 
-        final String frmDate = format.format(from);
-        final String enDate = format.format(end);
-
-
-        TypedQuery<Post> query = em.createNamedQuery(Post.QUERY_SETS_NATIVE_POSTS_RANGE, Post.class)
-                .setParameter("from", frmDate)
-                .setParameter("end", enDate);
-        final List<Post> resultList = query.getResultList();
-        return resultList;
+        TypedQuery<Publication> query = em.createNamedQuery(Publication.QUERY_SETS_NATIVE_POSTS_RANGE, Publication.class)
+                .setParameter("from", from.getTime())
+                .setParameter("end", end.getTime());
+        return query.getResultList();
     }
 
 

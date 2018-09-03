@@ -30,7 +30,7 @@ public abstract class AbstractBulkReindexWorkflow<T, V> {
     @PostConstruct
     protected abstract void initIndecies();
 
-    public abstract void deleteIndicies();
+    public abstract void recreateIndex();
 
     public abstract void execute(final List<T> entities);
 

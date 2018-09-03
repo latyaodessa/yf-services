@@ -33,7 +33,7 @@ public class ReindexWorkflow {
         List<Post> entities;
         int offset = 0;
 
-        postReindexWorkflow.deleteIndicies();
+        postReindexWorkflow.recreateIndex();
 
         do {
             entities = elasticBulkFetcher.fetchAllModels(offset, Post.class);
@@ -54,7 +54,7 @@ public class ReindexWorkflow {
         List<Publication> entities;
         int offset = 0;
 
-        publicationBulkWorkflow.deleteIndicies();
+        publicationBulkWorkflow.recreateIndex();
 
         do {
             entities = elasticBulkFetcher.fetchAllModels(offset, Publication.class);
@@ -74,7 +74,7 @@ public class ReindexWorkflow {
         List<UserSavedPosts> entities;
         int offset = 0;
 
-        postDashboardBulkWorkflow.deleteIndicies();
+        postDashboardBulkWorkflow.recreateIndex();
 
         do {
             entities = elasticBulkFetcher.fetchAllModels(offset, UserSavedPosts.class);
@@ -94,7 +94,7 @@ public class ReindexWorkflow {
         List<UserSavedPhotos> entities;
         int offset = 0;
 
-        photoDashboardBulkWorkflow.deleteIndicies();
+        photoDashboardBulkWorkflow.recreateIndex();
 
         do {
             entities = elasticBulkFetcher.fetchAllModels(offset, UserSavedPhotos.class);

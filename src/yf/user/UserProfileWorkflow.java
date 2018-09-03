@@ -5,6 +5,7 @@ import yf.publication.entities.MdProfile;
 import yf.publication.entities.PhProfile;
 import yf.publication.entities.Publication;
 import yf.publication.entities.PublicationUser;
+import yf.user.entities.User;
 import yf.user.entities.VKUser;
 
 import javax.persistence.EntityManager;
@@ -24,6 +25,7 @@ public class UserProfileWorkflow {
         phProfile.setCreatedOn(new Date());
         phProfile.setUser(vkUser.getUser());
         em.persist(phProfile);
+        em.flush();
         return phProfile;
     }
 
@@ -34,36 +36,45 @@ public class UserProfileWorkflow {
         mdProfile.setCreatedOn(new Date());
         mdProfile.setUser(vkUser.getUser());
         em.persist(mdProfile);
+        em.flush();
         return mdProfile;
     }
 
-    public void addPublicationToPhProfile(final Publication publication, final PhProfile phProfile) {
+    public PublicationUser generatePublicationUserFromPhProfile(final Publication publication, final PhProfile phProfile) {
         PublicationUser publicationUser = new PublicationUser();
-        publicationUser.setPublication(publication);
-        publicationUser.setUser(phProfile.getUser());
+        publicationUser.setPublication(em.merge(publication));
+        User user = phProfile.getUser();
+        publicationUser.setUser(em.merge(user));
         publicationUser.setType(ProfileUserTypeEnum.PH);
         em.persist(publicationUser);
 
-//        phProfile.getPublicationUsers().add(publicationUser);
-//        publication.getPublicationUsers().add(publicationUser);
-//
-//        em.merge(phProfile);
-//        em.merge(publication);
+//        em.flush();
+//        phProfile.getPublicationUsers().add(em.merge(publicationUser));
+//        publication.getPublicationUsers().add(em.merge(publicationUser));
+
+        em.flush();
+
+        return publicationUser;
 
     }
 
-    public void addPublicationToMdProfile(final Publication publication, final MdProfile mdProfile) {
+    public PublicationUser generatePublicationUserFromMdProfile(final Publication publication, final MdProfile mdProfile) {
         PublicationUser publicationUser = new PublicationUser();
-        publicationUser.setPublication(publication);
-        publicationUser.setUser(mdProfile.getUser());
+        publicationUser.setPublication(em.merge(publication));
+        User user = mdProfile.getUser();
+        publicationUser.setUser(em.merge(user));
         publicationUser.setType(ProfileUserTypeEnum.MD);
         em.persist(publicationUser);
-
+//        em.flush();
+//
 //        mdProfile.getPublicationUsers().add(publicationUser);
 //        publication.getPublicationUsers().add(publicationUser);
-//
+
 //        em.merge(mdProfile);
 //        em.merge(publication);
+        em.flush();
+
+        return publicationUser;
 
     }
 }
