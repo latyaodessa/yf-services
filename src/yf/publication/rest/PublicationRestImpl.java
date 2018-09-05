@@ -65,5 +65,13 @@ public class PublicationRestImpl {
         return publicationService.getPublicationByVkPostId(postId);
     }
 
+    @GET
+    @Path("user/{user_id}/{from}/{size}")
+    public List<SharedBasicPostDTO> getUserPublications(@PathParam("user_id") String user_id,
+                                                        @PathParam("from") int from,
+                                                        @PathParam("size") int size) {
+        return publicationService.getUserPublications(user_id, from, size);
+    }
+
 
 }

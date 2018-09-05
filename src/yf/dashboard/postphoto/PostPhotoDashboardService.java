@@ -2,6 +2,7 @@ package yf.dashboard.postphoto;
 
 import org.elasticsearch.action.delete.DeleteResponse;
 import org.elasticsearch.action.search.SearchResponse;
+import org.elasticsearch.index.query.BoolQueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.rest.RestStatus;
 import org.elasticsearch.search.sort.SortOrder;
@@ -12,6 +13,7 @@ import yf.dashboard.postphoto.dto.SavePhotoDTO;
 import yf.elastic.core.NativeElasticSingleton;
 import yf.post.dto.SharedBasicPostDTO;
 import yf.publication.PublicationService;
+import yf.publication.dtos.PublicationElasticDTO;
 
 import javax.inject.Inject;
 import java.util.List;
@@ -73,6 +75,7 @@ public class PostPhotoDashboardService {
         return savedDashboardPosts;
 
     }
+
 
     public List<PhotoDashboardElasticDTO> getSavedDashboardPhotos(final String user_id, final int from, final int size) {
 

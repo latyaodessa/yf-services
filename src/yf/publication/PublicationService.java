@@ -19,7 +19,6 @@ import yf.publication.entities.Publication;
 
 import javax.inject.Inject;
 import java.util.List;
-import java.util.Set;
 
 import static org.elasticsearch.index.query.QueryBuilders.idsQuery;
 
@@ -171,6 +170,36 @@ public class PublicationService {
                 .actionGet();
 
         return elasticSearchExecutor.executePublicationSearchBasicPostDTO(res);
+    }
+
+
+    public List<SharedBasicPostDTO> getUserPublications(final String user_id, final int from, final int size) {
+
+
+        BoolQueryBuilder boolQuery = QueryBuilders.boolQuery();
+        boolQuery.should(buildUserMatchPhMd(user_id));
+        boolQuery.minimumShouldMatch(1);
+
+        SearchResponse res = nativeElastiClient.getClient().prepareSearch(properties.get("elastic.index.publication"))
+                .setTypes(properties.get("elastic.type.photo"))
+                .addSort("date", SortOrder.DESC)
+                .setFrom(from).setSize(size).setExplain(true)
+                .setQuery(boolQuery)
+                .execute()
+                .actionGet();
+
+
+        return elasticSearchExecutor.executePublicationSearchBasicPostDTO(res);
+
+    }
+
+    private BoolQueryBuilder buildUserMatchPhMd(final String userId) {
+        BoolQueryBuilder boolQuery = QueryBuilders.boolQuery();
+
+        boolQuery.should(QueryBuilders.termQuery("phUsers.userId", userId));
+        boolQuery.should(QueryBuilders.termQuery("mdUsers.userId", userId));
+
+        return boolQuery;
     }
 
 

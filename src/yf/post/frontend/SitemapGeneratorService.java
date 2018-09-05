@@ -26,7 +26,7 @@ public class SitemapGeneratorService {
 
     private static final String FRONTEND_URI = new JNDIPropertyHelper().lookup("yf.frontend.uri");
     private static final String LOC_HOST = "https://youngfolks.ru/pub/";
-    private static final String CHANGE_FREQ = "weekly";
+    private static final String CHANGE_FREQ = "daily";
     private static final Double PRIORITY = 0.8;
 
     @PersistenceContext
