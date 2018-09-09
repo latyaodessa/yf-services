@@ -1,6 +1,6 @@
 package yf.publication;
 
-import yf.core.PropertiesReslover;
+import yf.core.PropertiesResolover;
 import yf.post.dto.PostElasticDTO;
 import yf.post.entities.Post;
 import yf.post.parser.workflow.ParserPostConverter;
@@ -14,14 +14,13 @@ import javax.inject.Inject;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
 public class PublicationConverter {
 
     @Inject
-    private PropertiesReslover properties;
+    private PropertiesResolover properties;
     @Inject
     private ParserPostConverter postConverter;
 

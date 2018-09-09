@@ -52,7 +52,6 @@ public class LoginRestImpl {
     @POST
     @Path("register")
     public Response register(final LoginDTO loginDTO) {
-        final User user = userService.getUserByEmailNickName(loginDTO);
 
         Response errorResponse = authRestHelper.isRegistrationValid(loginDTO);
 

@@ -113,7 +113,7 @@ public class UserRestImpl {
         final User user = userDao.getUserById(userId);
 
 
-        if (vkUser == null || (vkUser.getUser() != null && !vkUser.getUser().getId().equals(userId))) {
+        if (vkUser == null || !vkUser.getUser().getId().equals(userId)) {
             userService.bindVkAccountToUser(user, vkUser, vkId);
             return Response.status(200)
                     .build();

@@ -2,12 +2,13 @@ package yf.publication;
 
 import org.apache.commons.lang3.StringUtils;
 import org.elasticsearch.action.get.GetResponse;
+import org.elasticsearch.action.search.SearchRequestBuilder;
 import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.index.query.BoolQueryBuilder;
 import org.elasticsearch.index.query.QueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.search.sort.SortOrder;
-import yf.core.PropertiesReslover;
+import yf.core.PropertiesResolover;
 import yf.core.elastic.ElasticSearchExecutor;
 import yf.core.elastic.ElasticToObjectConvertor;
 import yf.elastic.core.NativeElasticSingleton;
@@ -31,7 +32,7 @@ public class PublicationService {
     @Inject
     private NativeElasticSingleton nativeElastiClient;
     @Inject
-    private PropertiesReslover properties;
+    private PropertiesResolover properties;
     @Inject
     private ElasticSearchExecutor elasticSearchExecutor;
 
@@ -86,19 +87,23 @@ public class PublicationService {
                                                                 final int from,
                                                                 final int size) {
 
-        BoolQueryBuilder boolQuery = QueryBuilders.boolQuery();
-        boolQuery.must(QueryBuilders.matchQuery("type", typeEnum.toString()));
 
-        boolQuery.minimumShouldMatch();
-
-        SearchResponse res = nativeElastiClient.getClient().prepareSearch(properties.get("elastic.index.publication"))
+        SearchRequestBuilder request = nativeElastiClient.getClient().prepareSearch(properties.get("elastic.index.publication"))
                 .setTypes(properties.get("elastic.type.photo"))
                 .addSort("date", SortOrder.DESC)
-                .setQuery(boolQuery)
-                .setFrom(from).setSize(size).setExplain(true)
-                .execute()
-                .actionGet();
+                .setFrom(from).setSize(size).setExplain(true);
 
+
+        if (typeEnum != null) {
+            BoolQueryBuilder boolQuery = QueryBuilders.boolQuery();
+            boolQuery.must(QueryBuilders.matchQuery("type", typeEnum.toString()));
+            boolQuery.minimumShouldMatch();
+
+            request.setQuery(boolQuery);
+        }
+
+        SearchResponse res = request.execute()
+                .actionGet();
 
         return elasticSearchExecutor.executePublicationSearchBasicPostDTO(res);
 
@@ -112,7 +117,7 @@ public class PublicationService {
         SearchResponse res = nativeElastiClient.getClient().prepareSearch(properties.get("elastic.index.publication"))
                 .setTypes(properties.get("elastic.type.photo"))
                 .setQuery(qb)
-                .setExplain(true)
+                .setSize(ids.size())
                 .execute()
                 .actionGet();
 
@@ -142,7 +147,12 @@ public class PublicationService {
                 .actionGet();
 
 
-        return elasticSearchExecutor.executePublicationSearchBasicPostDTO(res);
+        final List<SharedBasicPostDTO> relatedPubs = elasticSearchExecutor.executePublicationSearchBasicPostDTO(res);
+
+        if (relatedPubs.size() <= 3) {
+            relatedPubs.addAll(getPublicationsByTypeFromTo(null, 0, 5));
+        }
+        return relatedPubs;
     }
 
     public List<SharedBasicPostDTO> searchPublications(final String queries) {

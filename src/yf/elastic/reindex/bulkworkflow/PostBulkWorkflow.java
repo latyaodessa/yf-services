@@ -10,7 +10,7 @@ import org.elasticsearch.action.delete.DeleteRequestBuilder;
 import org.elasticsearch.action.index.IndexRequestBuilder;
 import org.elasticsearch.action.support.WriteRequest.RefreshPolicy;
 import org.elasticsearch.action.update.UpdateRequestBuilder;
-import yf.core.PropertiesReslover;
+import yf.core.PropertiesResolover;
 import yf.elastic.core.ElasticWorkflow;
 import yf.elastic.core.NativeElasticSingleton;
 import yf.elastic.reindex.BulkOptions;
@@ -30,7 +30,7 @@ public class PostBulkWorkflow extends AbstractBulkReindexWorkflow<Post, PostElas
     @Inject
     private ParserPostConverter postConverter;
     @Inject
-    private PropertiesReslover properties;
+    private PropertiesResolover properties;
     @Inject
     private ElasticWorkflow elasticWorkflow;
     @Inject

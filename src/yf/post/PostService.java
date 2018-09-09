@@ -8,7 +8,7 @@ import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.index.query.BoolQueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.search.sort.SortOrder;
-import yf.core.PropertiesReslover;
+import yf.core.PropertiesResolover;
 import yf.core.elastic.ElasticSearchExecutor;
 import yf.core.elastic.ElasticToObjectConvertor;
 import yf.elastic.core.NativeElasticSingleton;
@@ -30,7 +30,7 @@ public class PostService {
     private NativeElasticSingleton nativeElastiClient;
 
     @Inject
-    private PropertiesReslover properties;
+    private PropertiesResolover properties;
 
     private static final String REGEX_SPEC_CHARACTER_CLEANER = "[^a-zA-Z а-яА-Я]";
 

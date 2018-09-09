@@ -7,9 +7,8 @@ import org.elasticsearch.action.index.IndexRequestBuilder;
 import org.elasticsearch.action.support.WriteRequest;
 import org.elasticsearch.common.settings.Settings;
 import org.elasticsearch.common.xcontent.XContentBuilder;
-import org.elasticsearch.common.xcontent.XContentFactory;
 import org.elasticsearch.common.xcontent.XContentType;
-import yf.core.PropertiesReslover;
+import yf.core.PropertiesResolover;
 import yf.elastic.core.ElasticWorkflow;
 import yf.elastic.core.NativeElasticSingleton;
 import yf.elastic.reindex.BulkOptions;
@@ -30,7 +29,7 @@ public class PublicationBulkWorkflow extends AbstractBulkReindexWorkflow<Publica
 
     private static final String FULL_TEXT_ANALYZER = "full-text";
     @Inject
-    private PropertiesReslover properties;
+    private PropertiesResolover properties;
     @Inject
     private ElasticWorkflow elasticWorkflow;
     @Inject
@@ -67,7 +66,7 @@ public class PublicationBulkWorkflow extends AbstractBulkReindexWorkflow<Publica
     public XContentBuilder createTypeMapping() {
 
         try {
-            return XContentFactory.jsonBuilder()
+            return jsonBuilder()
                     .startObject()
                     .startObject(properties.get("elastic.type.photo"))
                     .startObject("properties")

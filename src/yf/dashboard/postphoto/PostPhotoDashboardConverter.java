@@ -6,19 +6,12 @@ import yf.dashboard.postphoto.dto.SavePhotoDTO;
 import yf.dashboard.postphoto.entities.UserSavedPhotos;
 import yf.dashboard.postphoto.entities.UserSavedPosts;
 import yf.post.dto.SharedBasicPostDTO;
-import yf.post.parser.workflow.ParserPostConverter;
-import yf.post.parser.workflow.PostRegexTextCleaner;
 import yf.publication.entities.Publication;
 
-import javax.inject.Inject;
 import java.util.Date;
 
 public class PostPhotoDashboardConverter {
 
-    @Inject
-    private ParserPostConverter parserPostConverter;
-    @Inject
-    private PostRegexTextCleaner postRegexTextCleaner;
 
     public UserSavedPosts savePostDTOtoEntity(final Long userId, final Publication publication) {
         UserSavedPosts entity = new UserSavedPosts();

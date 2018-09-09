@@ -5,7 +5,7 @@ import org.elasticsearch.action.bulk.BulkRequestBuilder;
 import org.elasticsearch.action.bulk.BulkResponse;
 import org.elasticsearch.action.index.IndexRequestBuilder;
 import org.elasticsearch.action.support.WriteRequest.RefreshPolicy;
-import yf.core.PropertiesReslover;
+import yf.core.PropertiesResolover;
 import yf.dashboard.postphoto.PostPhotoDashboardConverter;
 import yf.dashboard.postphoto.dto.PostDashboardElasticDTO;
 import yf.dashboard.postphoto.entities.UserSavedPosts;
@@ -20,7 +20,7 @@ import java.util.List;
 public class PostDashboardBulkWorkflow extends AbstractBulkReindexWorkflow<UserSavedPosts, PostDashboardElasticDTO> {
 
     @Inject
-    private PropertiesReslover properties;
+    private PropertiesResolover properties;
     @Inject
     private ElasticWorkflow elasticWorkflow;
     @Inject

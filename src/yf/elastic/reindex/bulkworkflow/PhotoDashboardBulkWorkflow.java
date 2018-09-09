@@ -12,7 +12,7 @@ import org.elasticsearch.action.support.WriteRequest.RefreshPolicy;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 
-import yf.core.PropertiesReslover;
+import yf.core.PropertiesResolover;
 import yf.dashboard.postphoto.PostPhotoDashboardConverter;
 import yf.dashboard.postphoto.dto.PhotoDashboardElasticDTO;
 import yf.dashboard.postphoto.entities.UserSavedPhotos;
@@ -22,7 +22,7 @@ import yf.elastic.reindex.BulkOptions;
 
 public class PhotoDashboardBulkWorkflow extends AbstractBulkReindexWorkflow<UserSavedPhotos, PhotoDashboardElasticDTO>{
 	@Inject
-	private PropertiesReslover properties;
+	private PropertiesResolover properties;
 	@Inject
 	private ElasticWorkflow elasticWorkflow;
 	@Inject

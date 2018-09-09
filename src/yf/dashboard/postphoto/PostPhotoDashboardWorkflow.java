@@ -5,17 +5,15 @@ import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.rest.RestStatus;
 import org.elasticsearch.search.SearchHit;
 import yf.core.ElasticException;
-import yf.core.PropertiesReslover;
+import yf.core.PropertiesResolover;
 import yf.core.elastic.ElasticToObjectConvertor;
 import yf.dashboard.postphoto.dto.PhotoDashboardElasticDTO;
 import yf.dashboard.postphoto.dto.PostDashboardElasticDTO;
 import yf.dashboard.postphoto.dto.SavePhotoDTO;
-import yf.dashboard.postphoto.dto.UserVerificationDto;
 import yf.dashboard.postphoto.entities.UserSavedPhotos;
 import yf.dashboard.postphoto.entities.UserSavedPosts;
 import yf.elastic.core.ElasticWorkflow;
 import yf.elastic.core.NativeElasticSingleton;
-import yf.post.entities.Post;
 import yf.publication.PublicationDao;
 import yf.publication.bulkworkflow.PublicationBulkWorkflow;
 import yf.publication.entities.Publication;
@@ -26,7 +24,6 @@ import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -39,7 +36,7 @@ public class PostPhotoDashboardWorkflow {
     @Inject
     private ElasticWorkflow elasticWorkflow;
     @Inject
-    private PropertiesReslover properties;
+    private PropertiesResolover properties;
     @Inject
     private PostPhotoDashboardConverter converter;
     @Inject
@@ -98,13 +95,6 @@ public class PostPhotoDashboardWorkflow {
         publicationBulkWorkflow.execute(Collections.singletonList(publication));
 
     }
-
-    private Post getPostToSave(final Long post_id) {
-        TypedQuery<Post> query = em.createNamedQuery(Post.QUERY_POST_BY_ID, Post.class)
-                .setParameter("post_id", post_id);
-        return query.getSingleResult();
-    }
-
 
     public PhotoDashboardElasticDTO saveNewPhotoForUser(final SavePhotoDTO photoDto) {
 

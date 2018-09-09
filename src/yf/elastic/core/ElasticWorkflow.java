@@ -15,14 +15,14 @@ import org.elasticsearch.action.admin.indices.delete.DeleteIndexRequest;
 import org.elasticsearch.action.admin.indices.delete.DeleteIndexResponse;
 import org.elasticsearch.client.IndicesAdminClient;
 
-import yf.core.PropertiesReslover;
+import yf.core.PropertiesResolover;
 
 public class ElasticWorkflow {
 	
     private static final Logger LOG = Logger.getLogger(ElasticWorkflow.class.getName());
 
 	@Inject
-	PropertiesReslover properties;
+	PropertiesResolover properties;
 	@Inject
 	NativeElasticSingleton nativeElasticClient;
 

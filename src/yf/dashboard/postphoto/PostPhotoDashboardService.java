@@ -2,18 +2,16 @@ package yf.dashboard.postphoto;
 
 import org.elasticsearch.action.delete.DeleteResponse;
 import org.elasticsearch.action.search.SearchResponse;
-import org.elasticsearch.index.query.BoolQueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.rest.RestStatus;
 import org.elasticsearch.search.sort.SortOrder;
-import yf.core.PropertiesReslover;
+import yf.core.PropertiesResolover;
 import yf.dashboard.postphoto.dto.PhotoDashboardElasticDTO;
 import yf.dashboard.postphoto.dto.PostDashboardElasticDTO;
 import yf.dashboard.postphoto.dto.SavePhotoDTO;
 import yf.elastic.core.NativeElasticSingleton;
 import yf.post.dto.SharedBasicPostDTO;
 import yf.publication.PublicationService;
-import yf.publication.dtos.PublicationElasticDTO;
 
 import javax.inject.Inject;
 import java.util.List;
@@ -26,7 +24,7 @@ public class PostPhotoDashboardService {
     @Inject
     private NativeElasticSingleton nativeElastic;
     @Inject
-    private PropertiesReslover properties;
+    private PropertiesResolover properties;
     @Inject
     private PublicationService publicationService;
 
@@ -55,7 +53,7 @@ public class PostPhotoDashboardService {
         SearchResponse res = nativeElastic.getClient().prepareSearch(properties.get("elastic.index.dashboard.saved.post"))
                 .setTypes(properties.get("elastic.type.dashboard"))
                 .addSort("date", SortOrder.DESC)
-                .setFrom(from).setSize(size).setExplain(true)
+                .setFrom(from).setSize(size)
                 .setQuery(QueryBuilders.boolQuery().must(QueryBuilders.termQuery("user_id", user_id)))
                 .execute()
                 .actionGet();

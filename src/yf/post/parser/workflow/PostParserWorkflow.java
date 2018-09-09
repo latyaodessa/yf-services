@@ -3,7 +3,7 @@ package yf.post.parser.workflow;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import org.elasticsearch.action.bulk.BulkRequestBuilder;
 import org.elasticsearch.action.bulk.BulkResponse;
-import yf.core.PropertiesReslover;
+import yf.core.PropertiesResolover;
 import yf.elastic.core.ElasticWorkflow;
 import yf.elastic.core.NativeElasticSingleton;
 import yf.elastic.reindex.BulkOptions;
@@ -13,11 +13,9 @@ import yf.post.dto.PostElasticDTO;
 import yf.post.entities.Post;
 import yf.post.parser.dto.PostDTO;
 import yf.publication.PublicationDao;
-import yf.publication.PublicationService;
 import yf.publication.entities.MdProfile;
 import yf.publication.entities.PhProfile;
 import yf.publication.entities.Publication;
-import yf.publication.entities.PublicationUser;
 import yf.user.UserProfileService;
 import yf.user.rest.VkRestClient;
 
@@ -28,6 +26,7 @@ import javax.persistence.PersistenceContext;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Locale;
 import java.util.Set;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
@@ -47,7 +46,7 @@ public class PostParserWorkflow {
     @Inject
     private PostService postService;
     @Inject
-    private PropertiesReslover properties;
+    private PropertiesResolover properties;
     @Inject
     private PostBulkWorkflow postBulkWorkflow;
     @Inject
@@ -58,8 +57,6 @@ public class PostParserWorkflow {
     private VkRestClient vkRestClient;
     @Inject
     private UserProfileService userProfileService;
-    @Inject
-    private PublicationService publicationService;
     @Inject
     private PublicationDao publicationDao;
     @Inject
@@ -74,13 +71,6 @@ public class PostParserWorkflow {
         em.flush();
         em.clear();
         return posts;
-    }
-
-    private void bulkPersistToElastic(final BulkRequestBuilder bulkRequest) {
-        BulkResponse bulkResponse = bulkRequest.execute().actionGet();
-        if (bulkResponse.hasFailures()) {
-            LOGGER.severe("BULK ERROR");
-        }
     }
 
     private List<Post> persistPosts(final List<PostDTO> postDTO) {
@@ -152,7 +142,7 @@ public class PostParserWorkflow {
         // creating publication_user
         phProfiles
                 .forEach(phProfile -> {
-                    PublicationUser publicationUser = userProfileService.generatePublicationUserFromPhProfile(publication, phProfile);
+                    userProfileService.generatePublicationUserFromPhProfile(publication, phProfile);
 
                 });
         mdProfiles.forEach(mdProfile -> userProfileService.generatePublicationUserFromMdProfile(publication, mdProfile));
@@ -200,7 +190,7 @@ public class PostParserWorkflow {
             return String.valueOf(publicationId);
         }
 
-        final String generatedLink = regexTextCleaner.transliterate(String.join("-", link).toLowerCase());
+        final String generatedLink = regexTextCleaner.transliterate(String.join("-", link).toLowerCase(Locale.ROOT));
 
         Publication publication = publicationDao.getPublicationByLink(generatedLink);
 

@@ -1,23 +1,18 @@
 package yf.post.parser;
 
-import yf.core.PropertiesReslover;
+import yf.core.PropertiesResolover;
 import yf.elastic.reindex.ElasticBulkFetcher;
 import yf.post.entities.Post;
 import yf.post.parser.dto.PostDTO;
 import yf.post.parser.rest.client.ParserRestClient;
 import yf.post.parser.workflow.PostParserWorkflow;
 import yf.publication.bulkworkflow.PublicationBulkWorkflow;
-import yf.publication.entities.MdProfile;
-import yf.publication.entities.PhProfile;
 import yf.publication.entities.Publication;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
-import java.util.Set;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
@@ -30,7 +25,7 @@ public class ParserService {
     @Inject
     private ElasticBulkFetcher elasticBulkFetcher;
     @Inject
-    private PropertiesReslover properties;
+    private PropertiesResolover properties;
     @Inject
     private PublicationBulkWorkflow publicationBulkWorkflow;
 
