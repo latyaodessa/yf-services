@@ -16,7 +16,7 @@
         <setting name="validation-enabled" value="true" />
         <setting name="provider-name" value="" />
         <datasource-mapping>
-          <factory-entry name="yf_db" />
+          <factory-entry name="yf_db" value="d7394f98-b36d-47ea-93cf-ffc506496e75" />
         </datasource-mapping>
         <deploymentDescriptor name="persistence.xml" url="file://$MODULE_DIR$/WebContent/WEB-INF/classes/META-INF/persistence.xml" />
       </configuration>
@@ -91,6 +91,7 @@
     <orderEntry type="library" name="Maven: com.github.spullara.mustache.java:compiler:0.9.3" level="project" />
     <orderEntry type="library" name="Maven: org.elasticsearch.plugin:percolator-client:5.3.1" level="project" />
     <orderEntry type="library" name="Maven: org.apache.commons:commons-lang3:3.5" level="project" />
+    <orderEntry type="library" name="Maven: commons-io:commons-io:2.6" level="project" />
     <orderEntry type="library" name="Maven: org.apache.logging.log4j:log4j-slf4j-impl:2.7" level="project" />
     <orderEntry type="library" name="Maven: org.slf4j:slf4j-api:1.7.21" level="project" />
     <orderEntry type="library" name="Maven: org.apache.logging.log4j:log4j-api:2.7" level="project" />

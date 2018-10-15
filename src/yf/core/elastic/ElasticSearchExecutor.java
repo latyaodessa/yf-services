@@ -34,7 +34,6 @@ public class ElasticSearchExecutor {
         return sharedBasicPostDTO;
 
     }
-
     public List<SharedBasicPostDTO> executePublicationSearchBasicPostDTO(final SearchResponse res) {
         List<SharedBasicPostDTO> sharedBasicPostDTO = new ArrayList<>();
 

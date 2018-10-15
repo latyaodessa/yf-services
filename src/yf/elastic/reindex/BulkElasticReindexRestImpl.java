@@ -13,7 +13,7 @@ import javax.ws.rs.core.MediaType;
 public class BulkElasticReindexRestImpl {
 
     @Inject
-    ReindexWorkflow reindexWorkflow;
+    private ReindexWorkflow reindexWorkflow;
 
     @GET
     @Path("all")
@@ -21,7 +21,9 @@ public class BulkElasticReindexRestImpl {
         return reindexWorkflow.reindexPosts()
                 && reindexWorkflow.reindexDashboardPosts()
                 && reindexWorkflow.reindexDashboardPhotos()
-                && reindexWorkflow.reindexPublications();
+                && reindexWorkflow.reindexPublications()
+                && reindexWorkflow.reindexCountries()
+                && reindexWorkflow.reindexCities();
     }
 
     @GET
@@ -36,10 +38,21 @@ public class BulkElasticReindexRestImpl {
         return reindexWorkflow.reindexPublications();
     }
 
-
     @GET
     @Path("dashboard")
     public boolean dashboardBulkReindex() {
         return reindexWorkflow.reindexDashboardPosts() && reindexWorkflow.reindexDashboardPhotos();
+    }
+
+    @GET
+    @Path("countries")
+    public boolean countriesBulkReindex() {
+        return reindexWorkflow.reindexCountries();
+    }
+
+    @GET
+    @Path("cities")
+    public boolean citiesBulkReindex() {
+        return reindexWorkflow.reindexCities();
     }
 }
