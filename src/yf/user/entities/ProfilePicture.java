@@ -1,12 +1,12 @@
 package yf.user.entities;
 
-import yf.core.entities.AbstractVersionEntity;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
+
+import yf.core.entities.AbstractVersionEntity;
 
 @Entity
 @Table(name = "profile_picture")
@@ -28,7 +28,7 @@ public class ProfilePicture extends AbstractVersionEntity {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(final Long id) {
         this.id = id;
     }
 
@@ -36,7 +36,7 @@ public class ProfilePicture extends AbstractVersionEntity {
         return fileId;
     }
 
-    public void setFileId(String fileId) {
+    public void setFileId(final String fileId) {
         this.fileId = fileId;
     }
 
@@ -44,7 +44,7 @@ public class ProfilePicture extends AbstractVersionEntity {
         return fileName;
     }
 
-    public void setFileName(String fileName) {
+    public void setFileName(final String fileName) {
         this.fileName = fileName;
     }
 
@@ -52,7 +52,7 @@ public class ProfilePicture extends AbstractVersionEntity {
         return friendlyLink;
     }
 
-    public void setFriendlyLink(String friendlyLink) {
+    public void setFriendlyLink(final String friendlyLink) {
         this.friendlyLink = friendlyLink;
     }
 
@@ -60,7 +60,7 @@ public class ProfilePicture extends AbstractVersionEntity {
         return nativeLink;
     }
 
-    public void setNativeLink(String nativeLink) {
+    public void setNativeLink(final String nativeLink) {
         this.nativeLink = nativeLink;
     }
 }

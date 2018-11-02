@@ -2,7 +2,6 @@ package yf.submission.dtos;
 
 import yf.meta.dtos.CityDTO;
 import yf.meta.dtos.CountryDTO;
-import yf.user.entities.User;
 
 public class SubmissionParticipantDTO {
 
@@ -27,7 +26,7 @@ public class SubmissionParticipantDTO {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(final Long id) {
         this.id = id;
     }
 
@@ -35,7 +34,7 @@ public class SubmissionParticipantDTO {
         return firstName;
     }
 
-    public void setFirstName(String firstName) {
+    public void setFirstName(final String firstName) {
         this.firstName = firstName;
     }
 
@@ -43,7 +42,7 @@ public class SubmissionParticipantDTO {
         return lastName;
     }
 
-    public void setLastName(String lastName) {
+    public void setLastName(final String lastName) {
         this.lastName = lastName;
     }
 
@@ -51,7 +50,7 @@ public class SubmissionParticipantDTO {
         return country;
     }
 
-    public void setCountry(CountryDTO country) {
+    public void setCountry(final CountryDTO country) {
         this.country = country;
     }
 
@@ -59,7 +58,7 @@ public class SubmissionParticipantDTO {
         return city;
     }
 
-    public void setCity(CityDTO city) {
+    public void setCity(final CityDTO city) {
         this.city = city;
     }
 
@@ -67,7 +66,7 @@ public class SubmissionParticipantDTO {
         return me;
     }
 
-    public void setMe(Boolean me) {
+    public void setMe(final Boolean me) {
         this.me = me;
     }
 
@@ -75,7 +74,7 @@ public class SubmissionParticipantDTO {
         return type;
     }
 
-    public void setType(PhotoshootingParticipantTypeEnum type) {
+    public void setType(final PhotoshootingParticipantTypeEnum type) {
         this.type = type;
     }
 
@@ -83,7 +82,7 @@ public class SubmissionParticipantDTO {
         return instagram;
     }
 
-    public void setInstagram(String instagram) {
+    public void setInstagram(final String instagram) {
         this.instagram = instagram;
     }
 
@@ -91,7 +90,7 @@ public class SubmissionParticipantDTO {
         return vk;
     }
 
-    public void setVk(String vk) {
+    public void setVk(final String vk) {
         this.vk = vk;
     }
 
@@ -99,7 +98,7 @@ public class SubmissionParticipantDTO {
         return facebook;
     }
 
-    public void setFacebook(String facebook) {
+    public void setFacebook(final String facebook) {
         this.facebook = facebook;
     }
 
@@ -107,7 +106,7 @@ public class SubmissionParticipantDTO {
         return website;
     }
 
-    public void setWebsite(String website) {
+    public void setWebsite(final String website) {
         this.website = website;
     }
 
@@ -115,7 +114,7 @@ public class SubmissionParticipantDTO {
         return agency;
     }
 
-    public void setAgency(String agency) {
+    public void setAgency(final String agency) {
         this.agency = agency;
     }
 
@@ -123,7 +122,7 @@ public class SubmissionParticipantDTO {
         return createdOn;
     }
 
-    public void setCreatedOn(Long createdOn) {
+    public void setCreatedOn(final Long createdOn) {
         this.createdOn = createdOn;
     }
 
@@ -131,7 +130,7 @@ public class SubmissionParticipantDTO {
         return userId;
     }
 
-    public void setUserId(Long userId) {
+    public void setUserId(final Long userId) {
         this.userId = userId;
     }
 }

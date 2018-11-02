@@ -1,7 +1,8 @@
 package yf.publication.entities;
 
-import yf.core.entities.AbstractVersionEntity;
-import yf.user.entities.User;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -16,15 +17,13 @@ import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+
+import yf.core.entities.AbstractVersionEntity;
+import yf.user.entities.User;
 
 @Entity
 @Table(name = "md_profile")
-@NamedQueries({
-        @NamedQuery(name = MdProfile.QUERY_GET_MD_PROFILE_BY_USER_ID, query = "SELECT t FROM MdProfile t WHERE t.user.id = :user_id")
-})
+@NamedQueries({@NamedQuery(name = MdProfile.QUERY_GET_MD_PROFILE_BY_USER_ID, query = "SELECT t FROM MdProfile t WHERE t.user.id = :user_id") })
 public class MdProfile extends AbstractVersionEntity {
 
     public static final String QUERY_GET_MD_PROFILE_BY_USER_ID = "EmailTemplate.getMdProfileByUserId";
@@ -43,10 +42,12 @@ public class MdProfile extends AbstractVersionEntity {
     private String about;
     private String website;
 
-    @OneToOne(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST})
+    @OneToOne(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST })
     @JoinColumn(name = "user_id", referencedColumnName = "id", nullable = false)
     private User user;
-    @OneToMany(fetch = FetchType.LAZY, cascade = {CascadeType.MERGE, CascadeType.PERSIST})
+    @OneToMany(fetch = FetchType.LAZY,
+               cascade = {CascadeType.MERGE,
+                          CascadeType.PERSIST })
     @JoinColumn(name = "user_id", referencedColumnName = "id")
     private List<PublicationUser> publicationUsers;
 
@@ -59,7 +60,7 @@ public class MdProfile extends AbstractVersionEntity {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(final Long id) {
         this.id = id;
     }
 
@@ -67,16 +68,15 @@ public class MdProfile extends AbstractVersionEntity {
         return instagram;
     }
 
-    public void setInstagram(String instagram) {
+    public void setInstagram(final String instagram) {
         this.instagram = instagram;
     }
-
 
     public String getFacebook() {
         return facebook;
     }
 
-    public void setFacebook(String facebook) {
+    public void setFacebook(final String facebook) {
         this.facebook = facebook;
     }
 
@@ -84,7 +84,7 @@ public class MdProfile extends AbstractVersionEntity {
         return location;
     }
 
-    public void setLocation(String location) {
+    public void setLocation(final String location) {
         this.location = location;
     }
 
@@ -92,7 +92,7 @@ public class MdProfile extends AbstractVersionEntity {
         return country;
     }
 
-    public void setCountry(String country) {
+    public void setCountry(final String country) {
         this.country = country;
     }
 
@@ -100,7 +100,7 @@ public class MdProfile extends AbstractVersionEntity {
         return twitter;
     }
 
-    public void setTwitter(String twitter) {
+    public void setTwitter(final String twitter) {
         this.twitter = twitter;
     }
 
@@ -108,7 +108,7 @@ public class MdProfile extends AbstractVersionEntity {
         return about;
     }
 
-    public void setAbout(String about) {
+    public void setAbout(final String about) {
         this.about = about;
     }
 
@@ -116,7 +116,7 @@ public class MdProfile extends AbstractVersionEntity {
         return website;
     }
 
-    public void setWebsite(String website) {
+    public void setWebsite(final String website) {
         this.website = website;
     }
 
@@ -124,7 +124,7 @@ public class MdProfile extends AbstractVersionEntity {
         return user;
     }
 
-    public void setUser(User user) {
+    public void setUser(final User user) {
         this.user = user;
     }
 
@@ -132,7 +132,7 @@ public class MdProfile extends AbstractVersionEntity {
         return publicationUsers;
     }
 
-    public void setPublicationUsers(List<PublicationUser> publicationUsers) {
+    public void setPublicationUsers(final List<PublicationUser> publicationUsers) {
         this.publicationUsers = publicationUsers;
     }
 
@@ -140,15 +140,15 @@ public class MdProfile extends AbstractVersionEntity {
         return vk;
     }
 
-    public void setVk(Long vk) {
+    public void setVk(final Long vk) {
         this.vk = vk;
     }
 
-//    public List<PublicationUser> getPublicationParticipants() {
-//        return publicationParticipants;
-//    }
-//
-//    public void setPublicationParticipants(List<PublicationUser> publicationParticipants) {
-//        this.publicationParticipants = publicationParticipants;
-//    }
+    // public List<PublicationUser> getPublicationParticipants() {
+    // return publicationParticipants;
+    // }
+    //
+    // public void setPublicationParticipants(List<PublicationUser> publicationParticipants) {
+    // this.publicationParticipants = publicationParticipants;
+    // }
 }

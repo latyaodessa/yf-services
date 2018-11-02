@@ -11,7 +11,7 @@ public class SubmissionPictureDTO {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(final Long id) {
         this.id = id;
     }
 
@@ -19,7 +19,7 @@ public class SubmissionPictureDTO {
         return url;
     }
 
-    public void setUrl(String url) {
+    public void setUrl(final String url) {
         this.url = url;
     }
 
@@ -27,7 +27,7 @@ public class SubmissionPictureDTO {
         return order;
     }
 
-    public void setOrder(Integer order) {
+    public void setOrder(final Integer order) {
         this.order = order;
     }
 
@@ -35,7 +35,7 @@ public class SubmissionPictureDTO {
         return createdOn;
     }
 
-    public void setCreatedOn(Long createdOn) {
+    public void setCreatedOn(final Long createdOn) {
         this.createdOn = createdOn;
     }
 }

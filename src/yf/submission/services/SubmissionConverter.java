@@ -1,11 +1,11 @@
 package yf.submission.services;
 
+import javax.inject.Inject;
+
 import yf.meta.services.MetaDataDao;
 import yf.submission.dtos.SubmissionParticipantDTO;
 import yf.submission.entities.SubmissionParticipant;
 import yf.user.UserDao;
-
-import javax.inject.Inject;
 
 public class SubmissionConverter {
 
@@ -18,8 +18,10 @@ public class SubmissionConverter {
         SubmissionParticipant entity = new SubmissionParticipant();
         entity.setId(dto.getId());
         entity.setAgency(dto.getAgency());
-        entity.setCity(metaDataDao.getCityById(dto.getCity().getId()));
-        entity.setCountry(metaDataDao.getCountryById(dto.getCountry().getId()));
+        entity.setCity(metaDataDao.getCityById(dto.getCity()
+                .getId()));
+        entity.setCountry(metaDataDao.getCountryById(dto.getCountry()
+                .getId()));
         entity.setFacebook(dto.getFacebook());
         entity.setInstagram(dto.getInstagram());
         entity.setVk(dto.getVk());

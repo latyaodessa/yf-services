@@ -1,14 +1,15 @@
 package yf.user;
 
+import java.util.Date;
+
+import javax.inject.Inject;
+
 import yf.user.dto.UserDto;
 import yf.user.dto.external.FBUserDTO;
 import yf.user.dto.external.VKUserDTO;
 import yf.user.entities.FBUser;
 import yf.user.entities.User;
 import yf.user.entities.VKUser;
-
-import javax.inject.Inject;
-import java.util.Date;
 
 public class UserConverter {
 
@@ -31,7 +32,6 @@ public class UserConverter {
         return dto;
     }
 
-
     public VKUserDTO toVkUserDto(final VKUser entity) {
 
         VKUserDTO vkUserDTO = new VKUserDTO();
@@ -50,7 +50,6 @@ public class UserConverter {
 
         return vkUserDTO;
     }
-
 
     public FBUserDTO toFbUserDto(final FBUser entity) {
         FBUserDTO dto = new FBUserDTO();
@@ -71,7 +70,8 @@ public class UserConverter {
         return dto;
     }
 
-    public VKUser toVKUsetEntity(final VKUserDTO dto, final User user) {
+    public VKUser toVKUsetEntity(final VKUserDTO dto,
+                                 final User user) {
         VKUser vkUserEntity = new VKUser();
 
         vkUserEntity.setId(dto.getId());
@@ -91,7 +91,8 @@ public class UserConverter {
 
     }
 
-    public FBUser toFBUserEntity(final FBUserDTO fbUserDTO, final User user) {
+    public FBUser toFBUserEntity(final FBUserDTO fbUserDTO,
+                                 final User user) {
         FBUser entity = new FBUser();
 
         entity.setId(fbUserDTO.getId());

@@ -1,6 +1,6 @@
 package yf.user.entities;
 
-import yf.core.entities.AbstractVersionEntity;
+import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -8,7 +8,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
-import java.util.Date;
+
+import yf.core.entities.AbstractVersionEntity;
 
 @Entity
 @Table(name = "user_verifications")
@@ -38,7 +39,7 @@ public class UserVerifications extends AbstractVersionEntity {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(final Long id) {
         this.id = id;
     }
 
@@ -46,7 +47,7 @@ public class UserVerifications extends AbstractVersionEntity {
         return email;
     }
 
-    public void setEmail(Boolean email) {
+    public void setEmail(final Boolean email) {
         this.email = email;
     }
 
@@ -54,7 +55,7 @@ public class UserVerifications extends AbstractVersionEntity {
         return phone;
     }
 
-    public void setPhone(Boolean phone) {
+    public void setPhone(final Boolean phone) {
         this.phone = phone;
     }
 
@@ -62,7 +63,7 @@ public class UserVerifications extends AbstractVersionEntity {
         return passport;
     }
 
-    public void setPassport(Boolean passport) {
+    public void setPassport(final Boolean passport) {
         this.passport = passport;
     }
 
@@ -70,9 +71,7 @@ public class UserVerifications extends AbstractVersionEntity {
         return company;
     }
 
-    public void setComplany(Boolean company) {
+    public void setComplany(final Boolean company) {
         this.company = company;
     }
 }
-
-

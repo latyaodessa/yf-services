@@ -1,7 +1,6 @@
 package yf.post.parser.rest;
 
-import yf.post.parser.ParserService;
-import yf.post.parser.dto.PostDTO;
+import java.util.List;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;
@@ -11,7 +10,9 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import java.util.List;
+
+import yf.post.parser.ParserService;
+import yf.post.parser.dto.PostDTO;
 
 @Path("/vk")
 @Produces(MediaType.APPLICATION_JSON)
@@ -29,8 +30,10 @@ public class VkRestImpl {
 
     @GET
     @Path("parseall/{firstpage}/{lastpage}")
-    public List<PostDTO> parseAll(@PathParam("firstpage") int firstpage, @PathParam("lastpage") int lastpage) {
-        return parserService.triggerPostParser(firstpage, lastpage);
+    public List<PostDTO> parseAll(@PathParam("firstpage") int firstpage,
+                                  @PathParam("lastpage") int lastpage) {
+        return parserService.triggerPostParser(firstpage,
+                lastpage);
     }
 
     @GET
@@ -42,30 +45,32 @@ public class VkRestImpl {
         if ("top".equals(command)) {
             parserService.getAndSaveWeeklyTop();
         }
-        return Response.ok().build();
+        return Response.ok()
+                .build();
     }
 
-//
-//    @GET
-//    @Path("parse/published/{postId}")
-//    public Response findPublished(@PathParam("postId") final Long postId) {
-//        parserService.triggerOnePost(postId);
-//        return Response.ok().build();
-//    }
+    //
+    // @GET
+    // @Path("parse/published/{postId}")
+    // public Response findPublished(@PathParam("postId") final Long postId) {
+    // parserService.triggerOnePost(postId);
+    // return Response.ok().build();
+    // }
 
     @GET
     @Path("parse/all/published")
     public Response findPublished() {
         parserService.parseAllVkToPublished();
-        return Response.ok().build();
+        return Response.ok()
+                .build();
     }
-
 
     @GET
     @Path("parse/last/published")
     public Response parseLastPublished() {
         parserService.parseLastVkToPublished();
-        return Response.ok().build();
+        return Response.ok()
+                .build();
     }
 
 }

@@ -1,11 +1,11 @@
 package yf.submission.dtos;
 
+import java.util.List;
+
 import yf.meta.dtos.CityDTO;
 import yf.meta.dtos.CountryDTO;
 import yf.submission.entities.SubmissionParticipant;
 import yf.user.entities.User;
-
-import java.util.List;
 
 public class SubmissionDTO {
 

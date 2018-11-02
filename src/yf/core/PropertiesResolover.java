@@ -1,12 +1,12 @@
 package yf.core;
 
-import javax.annotation.PostConstruct;
 import java.util.Enumeration;
 import java.util.Locale;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import javax.annotation.PostConstruct;
 
 public class PropertiesResolover {
     private static final Logger LOG = Logger.getLogger(PropertiesResolover.class.getName());
@@ -17,19 +17,21 @@ public class PropertiesResolover {
     @PostConstruct
     public void initData() {
         try {
-            setResourceBundle(ResourceBundle.getBundle("config", Locale.getDefault()));
+            setResourceBundle(ResourceBundle.getBundle("config",
+                    Locale.getDefault()));
             keys = resourceBundle.getKeys();
 
         } catch (Exception e) {
-            LOG.log(Level.SEVERE, "Could not find message bundle");
+            LOG.log(Level.SEVERE,
+                    "Could not find message bundle");
         }
     }
 
-
     public String get(String key) {
-        return ResourceBundle.getBundle("config", Locale.getDefault()).getString(key);
+        return ResourceBundle.getBundle("config",
+                Locale.getDefault())
+                .getString(key);
     }
-
 
     public ResourceBundle getResourceBundle() {
         return resourceBundle;
@@ -46,6 +48,5 @@ public class PropertiesResolover {
     public void setKeys(Enumeration<String> keys) {
         this.keys = keys;
     }
-
 
 }

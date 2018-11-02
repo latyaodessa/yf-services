@@ -33,7 +33,8 @@ public class PostConverter {
         sharedBasicPostDTO.setLink(dto.getLink());
 
         if (dto.getVkPost() != null) {
-            Integer likes = dto.getLikes() + dto.getVkPost().getLikes();
+            Integer likes = dto.getLikes() + dto.getVkPost()
+                    .getLikes();
             sharedBasicPostDTO.setLikes(likes);
         } else {
             sharedBasicPostDTO.setLikes(dto.getLikes());
@@ -54,6 +55,5 @@ public class PostConverter {
 
         return postDetailsDTO;
     }
-
 
 }

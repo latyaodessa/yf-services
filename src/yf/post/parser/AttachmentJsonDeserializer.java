@@ -12,13 +12,13 @@ import yf.post.parser.dto.PostAttachmentDTO;
 
 public class AttachmentJsonDeserializer extends JsonDeserializer<List<PostAttachmentDTO>> {
 
-	   @Override
-	    public List<PostAttachmentDTO> deserialize(JsonParser jp, DeserializationContext ctxt) throws IOException, JsonProcessingException {
-		   System.out.println(jp);
-		   
-	        return null;
-	    }
+    @Override
+    public List<PostAttachmentDTO> deserialize(JsonParser jp,
+                                               DeserializationContext ctxt)
+            throws IOException, JsonProcessingException {
+        System.out.println(jp);
 
-	    
+        return null;
+    }
 
 }

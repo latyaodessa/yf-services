@@ -1,7 +1,5 @@
 package yf.user.entities;
 
-import yf.core.entities.AbstractVersionEntity;
-
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -14,11 +12,11 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
+import yf.core.entities.AbstractVersionEntity;
+
 @Entity
 @Table(name = "user_fb")
-@NamedQueries({
-        @NamedQuery(name = FBUser.QUERY_GET_VK_USER_BY_USER_ID, query = "SELECT t FROM FBUser t WHERE t.user.id = :user_id")
-})
+@NamedQueries({@NamedQuery(name = FBUser.QUERY_GET_VK_USER_BY_USER_ID, query = "SELECT t FROM FBUser t WHERE t.user.id = :user_id") })
 public class FBUser extends AbstractVersionEntity {
 
     public static final String QUERY_GET_VK_USER_BY_USER_ID = "FBUser.getVkUserByUserId";
@@ -27,7 +25,7 @@ public class FBUser extends AbstractVersionEntity {
     @NotNull
     @Column(name = "id")
     private Long id;
-    @OneToOne(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST})
+    @OneToOne(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST })
     @JoinColumn(name = "user_id", referencedColumnName = "id", nullable = false)
     @NotNull
     private User user;
@@ -42,12 +40,11 @@ public class FBUser extends AbstractVersionEntity {
     private String website;
     private String small_pic;
 
-
     public String getLocation() {
         return location;
     }
 
-    public void setLocation(String location) {
+    public void setLocation(final String location) {
         this.location = location;
     }
 
@@ -55,7 +52,7 @@ public class FBUser extends AbstractVersionEntity {
         return birthday;
     }
 
-    public void setBirthday(String birthday) {
+    public void setBirthday(final String birthday) {
         this.birthday = birthday;
     }
 
@@ -63,7 +60,7 @@ public class FBUser extends AbstractVersionEntity {
         return hometown;
     }
 
-    public void setHometown(String hometown) {
+    public void setHometown(final String hometown) {
         this.hometown = hometown;
     }
 
@@ -71,7 +68,7 @@ public class FBUser extends AbstractVersionEntity {
         return languages;
     }
 
-    public void setLanguages(String languages) {
+    public void setLanguages(final String languages) {
         this.languages = languages;
     }
 
@@ -79,7 +76,7 @@ public class FBUser extends AbstractVersionEntity {
         return website;
     }
 
-    public void setWebsite(String website) {
+    public void setWebsite(final String website) {
         this.website = website;
     }
 
@@ -87,7 +84,7 @@ public class FBUser extends AbstractVersionEntity {
         return first_name;
     }
 
-    public void setFirst_name(String first_name) {
+    public void setFirst_name(final String first_name) {
         this.first_name = first_name;
     }
 
@@ -95,7 +92,7 @@ public class FBUser extends AbstractVersionEntity {
         return last_name;
     }
 
-    public void setLast_name(String last_name) {
+    public void setLast_name(final String last_name) {
         this.last_name = last_name;
     }
 
@@ -103,7 +100,7 @@ public class FBUser extends AbstractVersionEntity {
         return locale;
     }
 
-    public void setLocale(String locale) {
+    public void setLocale(final String locale) {
         this.locale = locale;
     }
 
@@ -111,7 +108,7 @@ public class FBUser extends AbstractVersionEntity {
         return gender;
     }
 
-    public void setGender(String gender) {
+    public void setGender(final String gender) {
         this.gender = gender;
     }
 
@@ -119,16 +116,15 @@ public class FBUser extends AbstractVersionEntity {
         return small_pic;
     }
 
-    public void setSmall_pic(String small_pic) {
+    public void setSmall_pic(final String small_pic) {
         this.small_pic = small_pic;
     }
-
 
     public Long getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(final Long id) {
         this.id = id;
     }
 
@@ -136,7 +132,7 @@ public class FBUser extends AbstractVersionEntity {
         return user;
     }
 
-    public void setUser(User user) {
+    public void setUser(final User user) {
         this.user = user;
     }
 }

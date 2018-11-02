@@ -19,35 +19,34 @@ import yf.core.JNDIPropertyHelper;
 @Singleton
 @Startup
 public class NativeElasticSingleton {
-	
-	
-	private TransportClient client;
-	private static final Logger LOG = Logger.getLogger(NativeElasticSingleton.class.getName());
-	
-	private static final String ELASTIC_HOST_JNDI = "yf.elastic.host";
-	private static final String ELASTIC_PORT_JNDI = "yf.elastic.port";
-	
+
+    private static final Logger LOG = Logger.getLogger(NativeElasticSingleton.class.getName());
+    private static final String ELASTIC_HOST_JNDI = "yf.elastic.host";
+    private static final String ELASTIC_PORT_JNDI = "yf.elastic.port";
+    private TransportClient client;
+
     @SuppressWarnings("resource")
-	@PostConstruct
+    @PostConstruct
     protected void init() {
-    	
-    	String host = new JNDIPropertyHelper().lookup(ELASTIC_HOST_JNDI);
-    	int port = new JNDIPropertyHelper().lookup(ELASTIC_PORT_JNDI);
-    	
-    	try {	
-			client = new PreBuiltTransportClient(Settings.EMPTY)
-			        .addTransportAddress(new InetSocketTransportAddress(InetAddress.getByName(host), port));
-		} catch (Exception e) {
-			LOG.log(Level.SEVERE, " ELASTICSEARCH EXCEPTION " + e);
-		}
+
+        String host = new JNDIPropertyHelper().lookup(ELASTIC_HOST_JNDI);
+        int port = new JNDIPropertyHelper().lookup(ELASTIC_PORT_JNDI);
+
+        try {
+            client = new PreBuiltTransportClient(Settings.EMPTY).addTransportAddress(new InetSocketTransportAddress(InetAddress.getByName(host),
+                    port));
+        } catch (Exception e) {
+            LOG.log(Level.SEVERE,
+                    " ELASTICSEARCH EXCEPTION " + e);
+        }
     }
-    
-    public TransportClient getClient(){
-    	return client;
+
+    public TransportClient getClient() {
+        return client;
     }
-    
+
     @PreDestroy
     protected void close() {
-    	client.close();
+        client.close();
     }
 }

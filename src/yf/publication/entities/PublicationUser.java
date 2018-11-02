@@ -1,8 +1,5 @@
 package yf.publication.entities;
 
-import yf.publication.ProfileUserTypeEnum;
-import yf.user.entities.User;
-
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -16,11 +13,12 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
+import yf.publication.ProfileUserTypeEnum;
+import yf.user.entities.User;
+
 @Entity
 @Table(name = "publication_user")
-@NamedQueries({
-        @NamedQuery(name = PublicationUser.QUERY_GET_PUBLICATIONS_BY_USER, query = "SELECT t FROM PublicationUser t WHERE user.id = :user_id")
-})
+@NamedQueries({@NamedQuery(name = PublicationUser.QUERY_GET_PUBLICATIONS_BY_USER, query = "SELECT t FROM PublicationUser t WHERE user.id = :user_id") })
 public class PublicationUser {
 
     public static final String QUERY_GET_PUBLICATIONS_BY_USER = "PublicationUser.getPublicationsByUser";

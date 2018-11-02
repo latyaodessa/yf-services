@@ -9,6 +9,8 @@
         <version.elasticsearch>5.3.1</version.elasticsearch>
         <version.jersey>1.19.3</version.jersey>
         <version.jackson>2.8.4</version.jackson>
+
+        <project.setup.dir>${session.executionRootDirectory}/setup/src/main/</project.setup.dir>
     </properties>
     <dependencies>
         <!-- native elastic -->
@@ -187,32 +189,54 @@
 
 
             <!--<plugin>-->
-                <!--<groupId>org.codehaus.mojo</groupId>-->
-                <!--<artifactId>findbugs-maven-plugin</artifactId>-->
-                <!--<version>3.0.5</version>-->
+            <!--<groupId>org.codehaus.mojo</groupId>-->
+            <!--<artifactId>findbugs-maven-plugin</artifactId>-->
+            <!--<version>3.0.5</version>-->
+            <!--<configuration>-->
+            <!--&lt;!&ndash;-->
+            <!--Enables analysis which takes more memory but finds more bugs.-->
+            <!--If you run out of memory, changes the value of the effort element-->
+            <!--to 'Low'.-->
+            <!--&ndash;&gt;-->
+            <!--<effort>Max</effort>-->
+            <!--&lt;!&ndash; Reports all bugs (other values are medium and max) &ndash;&gt;-->
+            <!--<threshold>Low</threshold>-->
+            <!--&lt;!&ndash; Produces XML report &ndash;&gt;-->
+            <!--<xmlOutput>true</xmlOutput>-->
+            <!--&lt;!&ndash; Configures the directory in which the XML report is created &ndash;&gt;-->
+            <!--<findbugsXmlOutputDirectory>${project.build.directory}/findbugs</findbugsXmlOutputDirectory>-->
+            <!--</configuration>-->
+            <!--<executions>-->
+            <!--&lt;!&ndash;-->
+            <!--Ensures that FindBugs inspects source code when project is compiled.-->
+            <!--&ndash;&gt;-->
+            <!--<execution>-->
+            <!--<id>analyze-compile</id>-->
+            <!--<phase>compile</phase>-->
+            <!--<goals>-->
+            <!--<goal>check</goal>-->
+            <!--</goals>-->
+            <!--</execution>-->
+            <!--</executions>-->
+            <!--</plugin>-->
+
+
+            <!--<plugin>-->
+                <!--<groupId>org.apache.maven.plugins</groupId>-->
+                <!--<artifactId>maven-pmd-plugin</artifactId>-->
+                <!--<version>3.10.0</version>-->
                 <!--<configuration>-->
-                    <!--&lt;!&ndash;-->
-                    <!--Enables analysis which takes more memory but finds more bugs.-->
-                    <!--If you run out of memory, changes the value of the effort element-->
-                    <!--to 'Low'.-->
-                    <!--&ndash;&gt;-->
-                    <!--<effort>Max</effort>-->
-                    <!--&lt;!&ndash; Reports all bugs (other values are medium and max) &ndash;&gt;-->
-                    <!--<threshold>Low</threshold>-->
-                    <!--&lt;!&ndash; Produces XML report &ndash;&gt;-->
-                    <!--<xmlOutput>true</xmlOutput>-->
-                    <!--&lt;!&ndash; Configures the directory in which the XML report is created &ndash;&gt;-->
-                    <!--<findbugsXmlOutputDirectory>${project.build.directory}/findbugs</findbugsXmlOutputDirectory>-->
+                    <!--<linkXRef>true</linkXRef>-->
+                    <!--<sourceEncoding>UTF-8</sourceEncoding>-->
+                    <!--<minimumTokens>100</minimumTokens>-->
+                    <!--<targetJdk>1.8</targetJdk>-->
                 <!--</configuration>-->
                 <!--<executions>-->
-                    <!--&lt;!&ndash;-->
-                    <!--Ensures that FindBugs inspects source code when project is compiled.-->
-                    <!--&ndash;&gt;-->
                     <!--<execution>-->
-                        <!--<id>analyze-compile</id>-->
-                        <!--<phase>compile</phase>-->
+                        <!--<phase>validate</phase>-->
                         <!--<goals>-->
                             <!--<goal>check</goal>-->
+                            <!--&lt;!&ndash;<goal>cpd-check</goal>&ndash;&gt;-->
                         <!--</goals>-->
                     <!--</execution>-->
                 <!--</executions>-->
@@ -221,13 +245,28 @@
 
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-pmd-plugin</artifactId>
-                <version>3.10.0</version>
+                <artifactId>maven-checkstyle-plugin</artifactId>
+                <version>2.15</version>
+                <dependencies>
+                    <dependency>
+                        <groupId>com.puppycrawl.tools</groupId>
+                        <artifactId>checkstyle</artifactId>
+                        <version>6.5</version>
+                    </dependency>
+                </dependencies>
                 <configuration>
-                    <linkXRef>true</linkXRef>
-                    <sourceEncoding>UTF-8</sourceEncoding>
-                    <minimumTokens>100</minimumTokens>
-                    <targetJdk>1.8</targetJdk>
+                    <configLocation>${project.setup.dir}checkstyle${file.separator}cp-check-style.xml
+                    </configLocation>
+                    <linkXRef>false</linkXRef>
+                    <skip>false</skip>
+                    <outputFile>
+                        ${project.build.directory}${file.separator}report${file.separator}checkstyle-result.xml
+                    </outputFile>
+                    <failsOnError>true</failsOnError>
+                    <failOnViolation>true</failOnViolation>
+                    <consoleOutput>true</consoleOutput>
+                    <violationSeverity>info</violationSeverity>
+                    <excludes>**/*_.java</excludes>
                 </configuration>
                 <executions>
                     <execution>
@@ -238,25 +277,18 @@
                         </goals>
                     </execution>
                 </executions>
+                <!--<executions>-->
+                <!--<execution>-->
+                <!--<phase>process-sources</phase>-->
+                <!--<goals>-->
+                <!--<goal>check</goal>-->
+                <!--</goals>-->
+                <!--</execution>-->
+                <!--</executions>-->
+                <!--<configuration>-->
+                <!--<failsOnError>true</failsOnError>-->
+                <!--</configuration>-->
             </plugin>
-
-
-            <!--<plugin>-->
-            <!--<groupId>org.apache.maven.plugins</groupId>-->
-            <!--<artifactId>maven-checkstyle-plugin</artifactId>-->
-            <!--<version>3.0.0</version>-->
-            <!--<executions>-->
-            <!--<execution>-->
-            <!--<phase>process-sources</phase>-->
-            <!--<goals>-->
-            <!--<goal>check</goal>-->
-            <!--</goals>-->
-            <!--</execution>-->
-            <!--</executions>-->
-            <!--<configuration>-->
-            <!--<failsOnError>true</failsOnError>-->
-            <!--</configuration>-->
-            <!--</plugin>-->
 
             <plugin>
                 <artifactId>maven-compiler-plugin</artifactId>

@@ -1,10 +1,6 @@
 package yf.submission.entities;
 
-import yf.core.entities.AbstractDateEntity;
-import yf.meta.entities.City;
-import yf.meta.entities.Country;
-import yf.submission.dtos.SubmissionStatusEnum;
-import yf.user.entities.User;
+import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -19,11 +15,16 @@ import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
-import java.util.List;
+
+import yf.core.entities.AbstractDateEntity;
+import yf.meta.entities.City;
+import yf.meta.entities.Country;
+import yf.submission.dtos.SubmissionStatusEnum;
+import yf.user.entities.User;
 
 @Entity
 @Table(name = "submission")
-    public class Submission extends AbstractDateEntity {
+public class Submission extends AbstractDateEntity {
     @Id
     @NotNull
     @GeneratedValue
@@ -44,10 +45,16 @@ import java.util.List;
     private SubmissionStatusEnum status;
     @Column(name = "comment")
     private String comment;
-    @OneToMany(orphanRemoval = true, cascade = {CascadeType.MERGE, CascadeType.PERSIST}, fetch = FetchType.LAZY)
+    @OneToMany(orphanRemoval = true,
+               cascade = {CascadeType.MERGE,
+                          CascadeType.PERSIST },
+               fetch = FetchType.LAZY)
     @JoinColumn(name = "submission_fk")
     private List<SubmissionPicture> submissionPictures;
-    @OneToMany(orphanRemoval = true, cascade = {CascadeType.MERGE, CascadeType.PERSIST}, fetch = FetchType.LAZY)
+    @OneToMany(orphanRemoval = true,
+               cascade = {CascadeType.MERGE,
+                          CascadeType.PERSIST },
+               fetch = FetchType.LAZY)
     @JoinColumn(name = "submission_fk")
     private List<SubmissionParticipant> submissionParticipants;
     @OneToOne(fetch = FetchType.LAZY)
@@ -58,7 +65,7 @@ import java.util.List;
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(final Long id) {
         this.id = id;
     }
 
@@ -66,7 +73,7 @@ import java.util.List;
         return uuid;
     }
 
-    public void setUuid(String uuid) {
+    public void setUuid(final String uuid) {
         this.uuid = uuid;
     }
 
@@ -74,7 +81,7 @@ import java.util.List;
         return text;
     }
 
-    public void setText(String text) {
+    public void setText(final String text) {
         this.text = text;
     }
 
@@ -82,7 +89,7 @@ import java.util.List;
         return country;
     }
 
-    public void setCountry(Country country) {
+    public void setCountry(final Country country) {
         this.country = country;
     }
 
@@ -90,7 +97,7 @@ import java.util.List;
         return city;
     }
 
-    public void setCity(City city) {
+    public void setCity(final City city) {
         this.city = city;
     }
 
@@ -98,7 +105,7 @@ import java.util.List;
         return eventDate;
     }
 
-    public void setEventDate(Long eventDate) {
+    public void setEventDate(final Long eventDate) {
         this.eventDate = eventDate;
     }
 
@@ -106,7 +113,7 @@ import java.util.List;
         return status;
     }
 
-    public void setStatus(SubmissionStatusEnum status) {
+    public void setStatus(final SubmissionStatusEnum status) {
         this.status = status;
     }
 
@@ -114,7 +121,7 @@ import java.util.List;
         return comment;
     }
 
-    public void setComment(String comment) {
+    public void setComment(final String comment) {
         this.comment = comment;
     }
 
@@ -122,7 +129,7 @@ import java.util.List;
         return submissionPictures;
     }
 
-    public void setSubmissionPictures(List<SubmissionPicture> submissionPictures) {
+    public void setSubmissionPictures(final List<SubmissionPicture> submissionPictures) {
         this.submissionPictures = submissionPictures;
     }
 
@@ -130,7 +137,7 @@ import java.util.List;
         return submissionParticipants;
     }
 
-    public void setSubmissionParticipants(List<SubmissionParticipant> submissionParticipants) {
+    public void setSubmissionParticipants(final List<SubmissionParticipant> submissionParticipants) {
         this.submissionParticipants = submissionParticipants;
     }
 
@@ -138,7 +145,7 @@ import java.util.List;
         return submitter;
     }
 
-    public void setSubmitter(User submitter) {
+    public void setSubmitter(final User submitter) {
         this.submitter = submitter;
     }
 }

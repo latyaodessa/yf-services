@@ -1,9 +1,6 @@
 package yf.publication.rest;
 
-import yf.post.dto.SharedBasicPostDTO;
-import yf.publication.PublicationService;
-import yf.publication.dtos.PublicationElasticDTO;
-import yf.publication.dtos.PublicationTypeEnum;
+import java.util.List;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;
@@ -14,13 +11,16 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
-import java.util.List;
+
+import yf.post.dto.SharedBasicPostDTO;
+import yf.publication.PublicationService;
+import yf.publication.dtos.PublicationElasticDTO;
+import yf.publication.dtos.PublicationTypeEnum;
 
 @Path("publication")
 @Produces(MediaType.APPLICATION_JSON)
 @Stateless
 public class PublicationRestImpl {
-
 
     @Inject
     private PublicationService publicationService;
@@ -37,13 +37,14 @@ public class PublicationRestImpl {
         return publicationService.getPublicationByLink(link);
     }
 
-
     @GET
     @Path("get/{type}/{from}/{size}")
     public List<SharedBasicPostDTO> getPublicationsByTypeFromTo(@PathParam("type") final PublicationTypeEnum typeEnum,
                                                                 @PathParam("from") final int from,
                                                                 @PathParam("size") final int size) {
-        return publicationService.getPublicationsByTypeFromTo(typeEnum, from, size);
+        return publicationService.getPublicationsByTypeFromTo(typeEnum,
+                from,
+                size);
     }
 
     @POST
@@ -51,7 +52,6 @@ public class PublicationRestImpl {
     public List<SharedBasicPostDTO> searchRelated(final PublicationElasticDTO publicationElasticDTO) {
         return publicationService.searchRelated(publicationElasticDTO);
     }
-
 
     @GET
     @Path("search")
@@ -67,11 +67,12 @@ public class PublicationRestImpl {
 
     @GET
     @Path("user/{user_id}/{from}/{size}")
-    public List<SharedBasicPostDTO> getUserPublications(@PathParam("user_id") String user_id,
-                                                        @PathParam("from") int from,
-                                                        @PathParam("size") int size) {
-        return publicationService.getUserPublications(user_id, from, size);
+    public List<SharedBasicPostDTO> getUserPublications(@PathParam("user_id") final String user_id,
+                                                        @PathParam("from") final int from,
+                                                        @PathParam("size") final int size) {
+        return publicationService.getUserPublications(user_id,
+                from,
+                size);
     }
-
 
 }

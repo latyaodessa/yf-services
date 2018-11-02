@@ -1,11 +1,5 @@
 package yf.submission.entities;
 
-import yf.core.entities.AbstractDateEntity;
-import yf.meta.entities.City;
-import yf.meta.entities.Country;
-import yf.submission.dtos.PhotoshootingParticipantTypeEnum;
-import yf.user.entities.User;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -17,6 +11,12 @@ import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
+
+import yf.core.entities.AbstractDateEntity;
+import yf.meta.entities.City;
+import yf.meta.entities.Country;
+import yf.submission.dtos.PhotoshootingParticipantTypeEnum;
+import yf.user.entities.User;
 
 @Entity
 @Table(name = "submission_participant")
@@ -56,7 +56,7 @@ public class SubmissionParticipant extends AbstractDateEntity {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(final Long id) {
         this.id = id;
     }
 
@@ -64,7 +64,7 @@ public class SubmissionParticipant extends AbstractDateEntity {
         return firstName;
     }
 
-    public void setFirstName(String firstName) {
+    public void setFirstName(final String firstName) {
         this.firstName = firstName;
     }
 
@@ -72,7 +72,7 @@ public class SubmissionParticipant extends AbstractDateEntity {
         return lastName;
     }
 
-    public void setLastName(String lastName) {
+    public void setLastName(final String lastName) {
         this.lastName = lastName;
     }
 
@@ -80,7 +80,7 @@ public class SubmissionParticipant extends AbstractDateEntity {
         return country;
     }
 
-    public void setCountry(Country country) {
+    public void setCountry(final Country country) {
         this.country = country;
     }
 
@@ -88,7 +88,7 @@ public class SubmissionParticipant extends AbstractDateEntity {
         return city;
     }
 
-    public void setCity(City city) {
+    public void setCity(final City city) {
         this.city = city;
     }
 
@@ -96,7 +96,7 @@ public class SubmissionParticipant extends AbstractDateEntity {
         return me;
     }
 
-    public void setMe(Boolean me) {
+    public void setMe(final Boolean me) {
         this.me = me;
     }
 
@@ -104,7 +104,7 @@ public class SubmissionParticipant extends AbstractDateEntity {
         return user;
     }
 
-    public void setUser(User user) {
+    public void setUser(final User user) {
         this.user = user;
     }
 
@@ -112,7 +112,7 @@ public class SubmissionParticipant extends AbstractDateEntity {
         return type;
     }
 
-    public void setType(PhotoshootingParticipantTypeEnum type) {
+    public void setType(final PhotoshootingParticipantTypeEnum type) {
         this.type = type;
     }
 
@@ -120,7 +120,7 @@ public class SubmissionParticipant extends AbstractDateEntity {
         return instagram;
     }
 
-    public void setInstagram(String instagram) {
+    public void setInstagram(final String instagram) {
         this.instagram = instagram;
     }
 
@@ -128,7 +128,7 @@ public class SubmissionParticipant extends AbstractDateEntity {
         return vk;
     }
 
-    public void setVk(String vk) {
+    public void setVk(final String vk) {
         this.vk = vk;
     }
 
@@ -136,7 +136,7 @@ public class SubmissionParticipant extends AbstractDateEntity {
         return facebook;
     }
 
-    public void setFacebook(String facebook) {
+    public void setFacebook(final String facebook) {
         this.facebook = facebook;
     }
 
@@ -144,7 +144,7 @@ public class SubmissionParticipant extends AbstractDateEntity {
         return website;
     }
 
-    public void setWebsite(String website) {
+    public void setWebsite(final String website) {
         this.website = website;
     }
 
@@ -152,7 +152,7 @@ public class SubmissionParticipant extends AbstractDateEntity {
         return agency;
     }
 
-    public void setAgency(String agency) {
+    public void setAgency(final String agency) {
         this.agency = agency;
     }
 }

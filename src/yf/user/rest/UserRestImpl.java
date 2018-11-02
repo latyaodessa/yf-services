@@ -1,5 +1,18 @@
 package yf.user.rest;
 
+import java.util.Map;
+
+import javax.ejb.Stateless;
+import javax.inject.Inject;
+import javax.ws.rs.GET;
+import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
+import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
+import javax.ws.rs.Produces;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
+
 import yf.user.UserDao;
 import yf.user.UserWorkflow;
 import yf.user.dto.AuthResponseStatusesEnum;
@@ -12,18 +25,6 @@ import yf.user.entities.FBUser;
 import yf.user.entities.User;
 import yf.user.entities.VKUser;
 import yf.user.services.UserService;
-
-import javax.ejb.Stateless;
-import javax.inject.Inject;
-import javax.ws.rs.GET;
-import javax.ws.rs.POST;
-import javax.ws.rs.PUT;
-import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
-import javax.ws.rs.Produces;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
-import java.util.Map;
 
 @Path("user")
 @Produces(MediaType.APPLICATION_JSON)
@@ -83,10 +84,10 @@ public class UserRestImpl {
                 .build();
     }
 
-
     @POST
     @Path("vk/create/{id}")
-    public Response createVKUser(@PathParam("id") final long socialId, final LoginDTO loginDTO) {
+    public Response createVKUser(@PathParam("id") final long socialId,
+                                 final LoginDTO loginDTO) {
 
         final VKUser vkUser = userDao.getVkUser(socialId);
 
@@ -96,8 +97,9 @@ public class UserRestImpl {
             return errorResponse;
         }
 
-
-        final UserAllDataDto dto = userService.registerUserFromVKUser(socialId, loginDTO, vkUser);
+        final UserAllDataDto dto = userService.registerUserFromVKUser(socialId,
+                loginDTO,
+                vkUser);
         Map<String, Object> resp = authRestHelper.userAuthResponseEntityMap(dto);
 
         return Response.status(200)
@@ -107,14 +109,18 @@ public class UserRestImpl {
 
     @GET
     @Path("vk/bind/{user_id}/{vk_id}")
-    public Response bindVkAccountToUser(@PathParam("user_id") final Long userId, final Long vkId) {
+    public Response bindVkAccountToUser(@PathParam("user_id") final Long userId,
+                                        final Long vkId) {
 
         final VKUser vkUser = userDao.getVkUser(vkId);
         final User user = userDao.getUserById(userId);
 
-
-        if (vkUser == null || !vkUser.getUser().getId().equals(userId)) {
-            userService.bindVkAccountToUser(user, vkUser, vkId);
+        if (vkUser == null || !vkUser.getUser()
+                .getId()
+                .equals(userId)) {
+            userService.bindVkAccountToUser(user,
+                    vkUser,
+                    vkId);
             return Response.status(200)
                     .build();
         } else {
@@ -126,17 +132,18 @@ public class UserRestImpl {
 
     @GET
     @Path("vk/unbind/{user_id}/{vk_id}")
-    public Response unbindVkAccountFromUser(@PathParam("user_id") final Long userId, final Long vkId) {
+    public Response unbindVkAccountFromUser(@PathParam("user_id") final Long userId,
+                                            final Long vkId) {
         final VKUser vkUser = userDao.getVkUser(vkId);
         userService.unbindVkAccountToUser(vkUser);
         return Response.status(200)
                 .build();
     }
 
-
     @POST
     @Path("fb/create/{user}/{password}")
-    public Response createFBUser(final FBUserDTO fbUserDTO, @PathParam("user") final String user,
+    public Response createFBUser(final FBUserDTO fbUserDTO,
+                                 @PathParam("user") final String user,
                                  @PathParam("password") final String password) {
 
         LoginDTO loginDTO = new LoginDTO();
@@ -151,7 +158,9 @@ public class UserRestImpl {
             return errorResponse;
         }
 
-        final UserAllDataDto dto = userService.registerUserFromFBUser(fbUserDTO, loginDTO, fbUser);
+        final UserAllDataDto dto = userService.registerUserFromFBUser(fbUserDTO,
+                loginDTO,
+                fbUser);
         Map<String, Object> resp = authRestHelper.userAuthResponseEntityMap(dto);
 
         return Response.status(200)
@@ -168,10 +177,14 @@ public class UserRestImpl {
         final Boolean isValid = userService.validateToken(userId,
                 token);
         if (!isValid) {
-            Response.status(403).entity(AuthResponseStatusesEnum.TOKEN_NOT_VALID).build();
+            Response.status(403)
+                    .entity(AuthResponseStatusesEnum.TOKEN_NOT_VALID)
+                    .build();
         }
 
-        final User user = userService.updateUserFirstLastName(userId, firstName, lastName);
+        final User user = userService.updateUserFirstLastName(userId,
+                firstName,
+                lastName);
         final UserAllDataDto userSocialAccounts = userWorkflow.getUserSocialAccounts(user);
         Map<String, Object> resp = authRestHelper.userAuthResponseEntityMap(userSocialAccounts);
 
@@ -179,7 +192,6 @@ public class UserRestImpl {
                 .entity(resp)
                 .build();
     }
-
 
     @POST
     @Path("update/nickname/{userId}/{token}/{nickname}")
@@ -190,24 +202,31 @@ public class UserRestImpl {
         final Boolean isValid = userService.validateToken(userId,
                 token);
 
-
         if (!isValid) {
-            Response.status(403).entity(AuthResponseStatusesEnum.TOKEN_NOT_VALID).build();
+            Response.status(403)
+                    .entity(AuthResponseStatusesEnum.TOKEN_NOT_VALID)
+                    .build();
         }
 
         final String lowerCaseNickname = nickname.toLowerCase();
 
         if (!lowerCaseNickname.matches("[a-zA-Z0-9]+") || lowerCaseNickname.length() < 4 || lowerCaseNickname.contains(" ")) {
-            return Response.status(403).entity(AuthResponseStatusesEnum.NICKNAME_WRONG).build();
+            return Response.status(403)
+                    .entity(AuthResponseStatusesEnum.NICKNAME_WRONG)
+                    .build();
         }
 
         final User userByEmailNickName = userWorkflow.getUserByEmailNickName(lowerCaseNickname);
 
-        if (userByEmailNickName != null && !userByEmailNickName.getId().equals(userId)) {
-            return Response.status(403).entity(AuthResponseStatusesEnum.NICKNAME_ALREADY_EXIST).build();
+        if (userByEmailNickName != null && !userByEmailNickName.getId()
+                .equals(userId)) {
+            return Response.status(403)
+                    .entity(AuthResponseStatusesEnum.NICKNAME_ALREADY_EXIST)
+                    .build();
         }
 
-        final User user = userService.updateUserNickname(userId, lowerCaseNickname);
+        final User user = userService.updateUserNickname(userId,
+                lowerCaseNickname);
         final UserAllDataDto userSocialAccounts = userWorkflow.getUserSocialAccounts(user);
         Map<String, Object> resp = authRestHelper.userAuthResponseEntityMap(userSocialAccounts);
 
@@ -224,14 +243,17 @@ public class UserRestImpl {
         final Boolean isValid = userService.validateToken(userId,
                 token);
 
-
         if (!isValid) {
-            return Response.status(403).entity(AuthResponseStatusesEnum.TOKEN_NOT_VALID).build();
+            return Response.status(403)
+                    .entity(AuthResponseStatusesEnum.TOKEN_NOT_VALID)
+                    .build();
         }
 
-        userService.updateUserProfilePic(userId, dto);
+        userService.updateUserProfilePic(userId,
+                dto);
 
-        return Response.ok().build();
+        return Response.ok()
+                .build();
     }
 
 }

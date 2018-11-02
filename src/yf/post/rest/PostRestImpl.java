@@ -1,11 +1,7 @@
 package yf.post.rest;
 
-import org.joda.time.DateTime;
-import yf.post.PostService;
-import yf.post.dto.PostDetailsDTO;
-import yf.post.dto.SharedBasicPostDTO;
-import yf.post.frontend.SitemapGeneratorService;
-import yf.post.frontend.SitemapUrlDto;
+import java.util.Date;
+import java.util.List;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;
@@ -15,9 +11,14 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
-import java.util.Date;
-import java.util.List;
 
+import org.joda.time.DateTime;
+
+import yf.post.PostService;
+import yf.post.dto.PostDetailsDTO;
+import yf.post.dto.SharedBasicPostDTO;
+import yf.post.frontend.SitemapGeneratorService;
+import yf.post.frontend.SitemapUrlDto;
 
 @Path("/post")
 @Produces(MediaType.APPLICATION_JSON)
@@ -42,7 +43,10 @@ public class PostRestImpl {
                                                       @PathParam("type") String type,
                                                       @PathParam("from") int from,
                                                       @PathParam("size") int size) {
-        return postService.getNewPostsFromTo(index, type, from, size);
+        return postService.getNewPostsFromTo(index,
+                type,
+                from,
+                size);
     }
 
     @GET
@@ -51,7 +55,10 @@ public class PostRestImpl {
                                                       @PathParam("type") String type,
                                                       @PathParam("from") int from,
                                                       @PathParam("size") int size) {
-        return postService.getTopPostsFromTo(index, type, from, size);
+        return postService.getTopPostsFromTo(index,
+                type,
+                from,
+                size);
     }
 
     @GET
@@ -62,8 +69,10 @@ public class PostRestImpl {
 
     @GET
     @Path("search/related")
-    public List<SharedBasicPostDTO> searchRelated(@QueryParam("query") final String queries, @QueryParam("excludeId") final String excludeId) {
-        return postService.searchRelated(queries, excludeId);
+    public List<SharedBasicPostDTO> searchRelated(@QueryParam("query") final String queries,
+                                                  @QueryParam("excludeId") final String excludeId) {
+        return postService.searchRelated(queries,
+                excludeId);
     }
 
     @GET
@@ -72,11 +81,15 @@ public class PostRestImpl {
         final Date date = new Date();
 
         if (full != null && full) {
-            final Date lastYears = new DateTime(date).minusYears(5).toDate();
-            return sitemapGeneratorService.execute(lastYears, date);
+            final Date lastYears = new DateTime(date).minusYears(5)
+                    .toDate();
+            return sitemapGeneratorService.execute(lastYears,
+                    date);
         }
-        final Date yersterday = new DateTime(date).minusDays(1).toDate();
-        return sitemapGeneratorService.execute(yersterday, date);
+        final Date yersterday = new DateTime(date).minusDays(1)
+                .toDate();
+        return sitemapGeneratorService.execute(yersterday,
+                date);
     }
 
 }

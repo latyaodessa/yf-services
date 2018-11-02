@@ -1,9 +1,5 @@
 package yf.dashboard.postphoto.entities;
 
-import yf.core.entities.AbstractDateEntity;
-import yf.post.entities.Post;
-import yf.publication.entities.Publication;
-
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -16,12 +12,16 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
+import yf.core.entities.AbstractDateEntity;
+import yf.post.entities.Post;
+import yf.publication.entities.Publication;
 
 @Entity
 @Table(name = "user_saved_posts")
-@NamedQueries({
-        @NamedQuery(name = UserSavedPosts.QUERY_FIND_SAVED_POST_AND_BY_USER_ID, query = "SELECT t FROM UserSavedPosts t JOIN t.post p where t.user_id = :user_id and p.id = :post_id"),
-        @NamedQuery(name = UserSavedPosts.QUERY_FIND_SAVED_PULICATION_ID, query = "SELECT t FROM UserSavedPosts t JOIN t.publication pub where t.user_id = :user_id and pub.id = :publication_id")
+@NamedQueries({@NamedQuery(name = UserSavedPosts.QUERY_FIND_SAVED_POST_AND_BY_USER_ID,
+                           query = "SELECT t FROM UserSavedPosts t JOIN t.post p where t.user_id = :user_id and p.id = :post_id"),
+               @NamedQuery(name = UserSavedPosts.QUERY_FIND_SAVED_PULICATION_ID,
+                           query = "SELECT t FROM UserSavedPosts t JOIN t.publication pub where t.user_id = :user_id and pub.id = :publication_id")
 
 })
 public class UserSavedPosts extends AbstractDateEntity {
@@ -31,11 +31,11 @@ public class UserSavedPosts extends AbstractDateEntity {
     @Id
     @GeneratedValue
     private Long id;
-    @OneToOne(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST})
+    @OneToOne(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST })
     @JoinColumn(name = "post_id", referencedColumnName = "id", nullable = false)
     @NotNull
     private Post post;
-    @OneToOne(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST})
+    @OneToOne(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST })
     @JoinColumn(name = "publication_id", referencedColumnName = "id", nullable = false)
     @NotNull
     private Publication publication;

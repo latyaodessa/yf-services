@@ -11,7 +11,7 @@ public class PublicationUserDTO {
         return profileId;
     }
 
-    public void setProfileId(Long profileId) {
+    public void setProfileId(final Long profileId) {
         this.profileId = profileId;
     }
 
@@ -19,7 +19,7 @@ public class PublicationUserDTO {
         return userId;
     }
 
-    public void setUserId(Long userId) {
+    public void setUserId(final Long userId) {
         this.userId = userId;
     }
 
@@ -27,7 +27,7 @@ public class PublicationUserDTO {
         return lastName;
     }
 
-    public void setLastName(String lastName) {
+    public void setLastName(final String lastName) {
         this.lastName = lastName;
     }
 
@@ -35,7 +35,7 @@ public class PublicationUserDTO {
         return firstName;
     }
 
-    public void setFirstName(String firstName) {
+    public void setFirstName(final String firstName) {
         this.firstName = firstName;
     }
 }

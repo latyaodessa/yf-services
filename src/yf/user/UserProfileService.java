@@ -1,5 +1,7 @@
 package yf.user;
 
+import javax.inject.Inject;
+
 import yf.publication.entities.MdProfile;
 import yf.publication.entities.PhProfile;
 import yf.publication.entities.Publication;
@@ -7,8 +9,6 @@ import yf.publication.entities.PublicationUser;
 import yf.user.dto.external.VKUserDTO;
 import yf.user.entities.User;
 import yf.user.entities.VKUser;
-
-import javax.inject.Inject;
 
 public class UserProfileService {
 
@@ -27,11 +27,9 @@ public class UserProfileService {
 
     }
 
-
     public MdProfile getOrRegisterMdProfileUser(final VKUserDTO vkUserDTO) {
         final VKUser vkUser = getOrRegisterVkUser(vkUserDTO);
         return getMdProfile(vkUser);
-
 
     }
 
@@ -40,8 +38,10 @@ public class UserProfileService {
 
         if (existingVkUser == null) {
             User user = userWorkflow.registerAnonymousUser();
-            final VKUser vkUserEntity = userWorkflow.createVKUser(vkUserDTO, user);
-            userWorkflow.handleEmptyUserFields(user, vkUserEntity);
+            final VKUser vkUserEntity = userWorkflow.createVKUser(vkUserDTO,
+                    user);
+            userWorkflow.handleEmptyUserFields(user,
+                    vkUserEntity);
             return vkUserEntity;
         }
 
@@ -50,7 +50,8 @@ public class UserProfileService {
     }
 
     private PhProfile getPhProfile(final VKUser vkUser) {
-        final PhProfile phProfile = profilesDao.getPhProfileByUserId(vkUser.getUser().getId());
+        final PhProfile phProfile = profilesDao.getPhProfileByUserId(vkUser.getUser()
+                .getId());
         if (phProfile == null) {
             return userProfileWorkflow.registerNewPhProfile(vkUser);
         }
@@ -58,18 +59,23 @@ public class UserProfileService {
     }
 
     private MdProfile getMdProfile(final VKUser vkUser) {
-        final MdProfile mdProfile = profilesDao.getMdProfileByUserId(vkUser.getUser().getId());
+        final MdProfile mdProfile = profilesDao.getMdProfileByUserId(vkUser.getUser()
+                .getId());
         if (mdProfile == null) {
             return userProfileWorkflow.registerNewMdProfile(vkUser);
         }
         return mdProfile;
     }
 
-    public PublicationUser generatePublicationUserFromPhProfile(final Publication publication, final PhProfile phProfile) {
-        return userProfileWorkflow.generatePublicationUserFromPhProfile(publication, phProfile);
+    public PublicationUser generatePublicationUserFromPhProfile(final Publication publication,
+                                                                final PhProfile phProfile) {
+        return userProfileWorkflow.generatePublicationUserFromPhProfile(publication,
+                phProfile);
     }
 
-    public PublicationUser generatePublicationUserFromMdProfile(final Publication publication, final MdProfile mdProfile) {
-        return userProfileWorkflow.generatePublicationUserFromMdProfile(publication, mdProfile);
+    public PublicationUser generatePublicationUserFromMdProfile(final Publication publication,
+                                                                final MdProfile mdProfile) {
+        return userProfileWorkflow.generatePublicationUserFromMdProfile(publication,
+                mdProfile);
     }
 }

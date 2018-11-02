@@ -2,22 +2,20 @@ package yf.post.dto;
 
 import java.util.List;
 
-public class PostDetailsDTO extends SharedBasicPostDTO{
-		
-	private List <String> largePics;
+public class PostDetailsDTO extends SharedBasicPostDTO {
 
-	public PostDetailsDTO() {
-		super();
-	}
+    private List<String> largePics;
 
-	public List<String> getLargePics() {
-		return largePics;
-	}
+    public PostDetailsDTO() {
+        super();
+    }
 
-	public void setLargePics(List<String> largePics) {
-		this.largePics = largePics;
-	}
-	
-	
+    public List<String> getLargePics() {
+        return largePics;
+    }
+
+    public void setLargePics(List<String> largePics) {
+        this.largePics = largePics;
+    }
 
 }

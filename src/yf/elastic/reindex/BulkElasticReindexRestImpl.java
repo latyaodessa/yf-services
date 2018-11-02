@@ -18,12 +18,8 @@ public class BulkElasticReindexRestImpl {
     @GET
     @Path("all")
     public boolean allReindex() {
-        return reindexWorkflow.reindexPosts()
-                && reindexWorkflow.reindexDashboardPosts()
-                && reindexWorkflow.reindexDashboardPhotos()
-                && reindexWorkflow.reindexPublications()
-                && reindexWorkflow.reindexCountries()
-                && reindexWorkflow.reindexCities();
+        return reindexWorkflow.reindexPosts() && reindexWorkflow.reindexDashboardPosts() && reindexWorkflow.reindexDashboardPhotos()
+                && reindexWorkflow.reindexPublications() && reindexWorkflow.reindexCountries() && reindexWorkflow.reindexCities();
     }
 
     @GET

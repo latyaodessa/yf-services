@@ -1,9 +1,10 @@
 package yf.post.parser.rest.scheduler;
 
-import yf.post.parser.ParserService;
+import java.util.logging.Logger;
 
 import javax.inject.Inject;
-import java.util.logging.Logger;
+
+import yf.post.parser.ParserService;
 
 public class SchedulerProcessor {
 
@@ -28,6 +29,5 @@ public class SchedulerProcessor {
             logger.severe("WEEKLY TOP Rest Call EXCEPTION! resexp" + e);
         }
     }
-
 
 }

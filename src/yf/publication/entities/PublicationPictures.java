@@ -28,7 +28,7 @@ public class PublicationPictures {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(final Long id) {
         this.id = id;
     }
 
@@ -36,7 +36,7 @@ public class PublicationPictures {
         return fileId;
     }
 
-    public void setFileId(String fileId) {
+    public void setFileId(final String fileId) {
         this.fileId = fileId;
     }
 
@@ -44,7 +44,7 @@ public class PublicationPictures {
         return fileName;
     }
 
-    public void setFileName(String fileName) {
+    public void setFileName(final String fileName) {
         this.fileName = fileName;
     }
 
@@ -52,7 +52,7 @@ public class PublicationPictures {
         return friendlyLink;
     }
 
-    public void setFriendlyLink(String friendlyLink) {
+    public void setFriendlyLink(final String friendlyLink) {
         this.friendlyLink = friendlyLink;
     }
 
@@ -60,7 +60,7 @@ public class PublicationPictures {
         return nativeLink;
     }
 
-    public void setNativeLink(String nativeLink) {
+    public void setNativeLink(final String nativeLink) {
         this.nativeLink = nativeLink;
     }
 
@@ -68,7 +68,7 @@ public class PublicationPictures {
         return publicationId;
     }
 
-    public void setPublicationId(Long publicationId) {
+    public void setPublicationId(final Long publicationId) {
         this.publicationId = publicationId;
     }
 }

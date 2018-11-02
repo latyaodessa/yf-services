@@ -1,13 +1,13 @@
 package yf.submission.entities;
 
-import yf.core.entities.AbstractDateEntity;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
+
+import yf.core.entities.AbstractDateEntity;
 
 @Entity
 @Table(name = "submission_picture")
