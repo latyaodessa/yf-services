@@ -1,7 +1,6 @@
 package yf.submission.entities;
 
 import yf.core.entities.AbstractDateEntity;
-import yf.meta.entities.City;
 import yf.meta.entities.Country;
 import yf.submission.dtos.SubmissionStatusEnum;
 import yf.user.entities.User;
@@ -15,15 +14,22 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
-import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name = "submission")
-    public class Submission extends AbstractDateEntity {
+@NamedQueries({
+        @NamedQuery(name = Submission.QUERY_GET_SUBMISSION_BY_UUID_USERID, query = "SELECT t FROM Submission t WHERE t.submitter.id = :userId AND uuid = :uuid")
+})
+public class Submission extends AbstractDateEntity {
+
+    public static final String QUERY_GET_SUBMISSION_BY_UUID_USERID = "Submission.getSubmissionByUUidUserId";
     @Id
     @NotNull
     @GeneratedValue
@@ -34,9 +40,7 @@ import java.util.List;
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "country_id")
     private Country country;
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "city_id")
-    private City city;
+    private String city;
     @Column(name = "event_date")
     private Long eventDate;
     @Enumerated(EnumType.STRING)
@@ -44,12 +48,15 @@ import java.util.List;
     private SubmissionStatusEnum status;
     @Column(name = "comment")
     private String comment;
-    @OneToMany(orphanRemoval = true, cascade = {CascadeType.MERGE, CascadeType.PERSIST}, fetch = FetchType.LAZY)
+    private String equipment;
+//    @OneToMany(orphanRemoval = true, cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+//    @JoinColumn(name = "submission_fk")
+//    private Set<SubmissionPicture> submissionPictures;
+
+    @OneToMany(orphanRemoval = true, cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name = "submission_fk")
-    private List<SubmissionPicture> submissionPictures;
-    @OneToMany(orphanRemoval = true, cascade = {CascadeType.MERGE, CascadeType.PERSIST}, fetch = FetchType.LAZY)
-    @JoinColumn(name = "submission_fk")
-    private List<SubmissionParticipant> submissionParticipants;
+    private Set<SubmissionParticipant> submissionParticipants;
+
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "submitter_id")
     private User submitter;
@@ -86,11 +93,11 @@ import java.util.List;
         this.country = country;
     }
 
-    public City getCity() {
+    public String getCity() {
         return city;
     }
 
-    public void setCity(City city) {
+    public void setCity(String city) {
         this.city = city;
     }
 
@@ -118,19 +125,19 @@ import java.util.List;
         this.comment = comment;
     }
 
-    public List<SubmissionPicture> getSubmissionPictures() {
-        return submissionPictures;
-    }
+//    public Set<SubmissionPicture> getSubmissionPictures() {
+//        return submissionPictures;
+//    }
+//
+//    public void setSubmissionPictures(Set<SubmissionPicture> submissionPictures) {
+//        this.submissionPictures = submissionPictures;
+//    }
 
-    public void setSubmissionPictures(List<SubmissionPicture> submissionPictures) {
-        this.submissionPictures = submissionPictures;
-    }
-
-    public List<SubmissionParticipant> getSubmissionParticipants() {
+    public Set<SubmissionParticipant> getSubmissionParticipants() {
         return submissionParticipants;
     }
 
-    public void setSubmissionParticipants(List<SubmissionParticipant> submissionParticipants) {
+    public void setSubmissionParticipants(Set<SubmissionParticipant> submissionParticipants) {
         this.submissionParticipants = submissionParticipants;
     }
 
@@ -141,4 +148,13 @@ import java.util.List;
     public void setSubmitter(User submitter) {
         this.submitter = submitter;
     }
+
+    public String getEquipment() {
+        return equipment;
+    }
+
+    public void setEquipment(String equipment) {
+        this.equipment = equipment;
+    }
 }
+

@@ -15,6 +15,7 @@ import yf.user.entities.VKUser;
 import yf.user.entities.Verifications;
 import yf.user.rest.VkRestClient;
 
+import javax.ejb.Stateless;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;

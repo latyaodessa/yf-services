@@ -1,10 +1,10 @@
 package yf.submission.entities;
 
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 import yf.core.entities.AbstractDateEntity;
-import yf.meta.entities.City;
 import yf.meta.entities.Country;
 import yf.submission.dtos.PhotoshootingParticipantTypeEnum;
-import yf.user.entities.User;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -27,6 +27,7 @@ public class SubmissionParticipant extends AbstractDateEntity {
     @GeneratedValue
     @Column(name = "id")
     private Long id;
+    private int number;
     @Column(name = "first_name")
     private String firstName;
     @Column(name = "last_name")
@@ -34,14 +35,11 @@ public class SubmissionParticipant extends AbstractDateEntity {
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "country_id")
     private Country country;
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "city_id")
-    private City city;
+    //    @OneToOne(fetch = FetchType.LAZY)
+//    @JoinColumn(name = "city_id")
+//    private City city;
+    private String city;
     private Boolean me;
-
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id")
-    private User user;
 
     @Enumerated(EnumType.STRING)
     private PhotoshootingParticipantTypeEnum type;
@@ -84,11 +82,11 @@ public class SubmissionParticipant extends AbstractDateEntity {
         this.country = country;
     }
 
-    public City getCity() {
+    public String getCity() {
         return city;
     }
 
-    public void setCity(City city) {
+    public void setCity(String city) {
         this.city = city;
     }
 
@@ -98,14 +96,6 @@ public class SubmissionParticipant extends AbstractDateEntity {
 
     public void setMe(Boolean me) {
         this.me = me;
-    }
-
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
     }
 
     public PhotoshootingParticipantTypeEnum getType() {
@@ -154,5 +144,13 @@ public class SubmissionParticipant extends AbstractDateEntity {
 
     public void setAgency(String agency) {
         this.agency = agency;
+    }
+
+    public int getNumber() {
+        return number;
+    }
+
+    public void setNumber(int number) {
+        this.number = number;
     }
 }

@@ -9,17 +9,17 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
-@Entity
-@Table(name = "submission_picture")
+//@Entity
+//@Table(name = "submission_picture")
 public class SubmissionPicture extends AbstractDateEntity {
 
-    @Id
-    @NotNull
-    @GeneratedValue
-    @Column(name = "id")
+//    @Id
+//    @NotNull
+//    @GeneratedValue
+//    @Column(name = "id")
     private Long id;
     private String url;
-    @Column(name = "pic_order")
+//    @Column(name = "pic_order")
     private Integer order;
 
     public Long getId() {

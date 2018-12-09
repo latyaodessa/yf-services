@@ -1,26 +1,30 @@
 package yf.submission.dtos;
 
-import yf.meta.dtos.CityDTO;
-import yf.meta.dtos.CountryDTO;
-import yf.submission.entities.SubmissionParticipant;
-import yf.user.entities.User;
+import yf.user.dto.UserDto;
 
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 public class SubmissionDTO {
 
     private Long id;
     private String uuid;
     private String text;
-    private CountryDTO country;
-    private CityDTO city;
+    private CountryFrontendDto country;
+    private String city;
     private Long eventDate;
     private SubmissionStatusEnum status;
     private String comment;
-    private List<SubmissionPictureDTO> submissionPictures;
-    private List<SubmissionParticipant> submissionParticipants;
-    private User submitter;
+    private Set<SubmissionPictureDTO> submissionPictures;
+    private AllParticipantsDTO allParticipants;
     private Long createdOn;
+    private UserDto user;
+    private String equipment;
+
+    public SubmissionDTO() {
+        submissionPictures = new HashSet<>();
+        allParticipants = new AllParticipantsDTO();
+    }
 
     public Long getId() {
         return id;
@@ -46,19 +50,19 @@ public class SubmissionDTO {
         this.text = text;
     }
 
-    public CountryDTO getCountry() {
+    public CountryFrontendDto getCountry() {
         return country;
     }
 
-    public void setCountry(CountryDTO country) {
+    public void setCountry(CountryFrontendDto country) {
         this.country = country;
     }
 
-    public CityDTO getCity() {
+    public String getCity() {
         return city;
     }
 
-    public void setCity(CityDTO city) {
+    public void setCity(String city) {
         this.city = city;
     }
 
@@ -86,28 +90,21 @@ public class SubmissionDTO {
         this.comment = comment;
     }
 
-    public List<SubmissionPictureDTO> getSubmissionPictures() {
+
+    public Set<SubmissionPictureDTO> getSubmissionPictures() {
         return submissionPictures;
     }
 
-    public void setSubmissionPictures(List<SubmissionPictureDTO> submissionPictures) {
+    public void setSubmissionPictures(Set<SubmissionPictureDTO> submissionPictures) {
         this.submissionPictures = submissionPictures;
     }
 
-    public List<SubmissionParticipant> getSubmissionParticipants() {
-        return submissionParticipants;
+    public AllParticipantsDTO getAllParticipants() {
+        return allParticipants;
     }
 
-    public void setSubmissionParticipants(List<SubmissionParticipant> submissionParticipants) {
-        this.submissionParticipants = submissionParticipants;
-    }
-
-    public User getSubmitter() {
-        return submitter;
-    }
-
-    public void setSubmitter(User submitter) {
-        this.submitter = submitter;
+    public void setAllParticipants(AllParticipantsDTO allParticipants) {
+        this.allParticipants = allParticipants;
     }
 
     public Long getCreatedOn() {
@@ -116,5 +113,21 @@ public class SubmissionDTO {
 
     public void setCreatedOn(Long createdOn) {
         this.createdOn = createdOn;
+    }
+
+    public UserDto getUser() {
+        return user;
+    }
+
+    public void setUser(UserDto user) {
+        this.user = user;
+    }
+
+    public String getEquipment() {
+        return equipment;
+    }
+
+    public void setEquipment(String equipment) {
+        this.equipment = equipment;
     }
 }

@@ -1,35 +1,14 @@
 package yf.submission.dtos;
 
-import yf.meta.dtos.CityDTO;
-import yf.meta.dtos.CountryDTO;
-import yf.user.entities.User;
-
 public class SubmissionParticipantDTO {
 
-    private Long id;
+    private int number;
     private String firstName;
     private String lastName;
-    private CountryDTO country;
-    private CityDTO city;
+    private CountryFrontendDto country;
+    private String city;
     private Boolean me;
-    private Long userId;
-    private PhotoshootingParticipantTypeEnum type;
-
     private String instagram;
-    private String vk;
-    private String facebook;
-    private String website;
-    private String agency;
-
-    private Long createdOn;
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
 
     public String getFirstName() {
         return firstName;
@@ -47,19 +26,19 @@ public class SubmissionParticipantDTO {
         this.lastName = lastName;
     }
 
-    public CountryDTO getCountry() {
+    public CountryFrontendDto getCountry() {
         return country;
     }
 
-    public void setCountry(CountryDTO country) {
+    public void setCountry(CountryFrontendDto country) {
         this.country = country;
     }
 
-    public CityDTO getCity() {
+    public String getCity() {
         return city;
     }
 
-    public void setCity(CityDTO city) {
+    public void setCity(String city) {
         this.city = city;
     }
 
@@ -71,14 +50,6 @@ public class SubmissionParticipantDTO {
         this.me = me;
     }
 
-    public PhotoshootingParticipantTypeEnum getType() {
-        return type;
-    }
-
-    public void setType(PhotoshootingParticipantTypeEnum type) {
-        this.type = type;
-    }
-
     public String getInstagram() {
         return instagram;
     }
@@ -87,51 +58,11 @@ public class SubmissionParticipantDTO {
         this.instagram = instagram;
     }
 
-    public String getVk() {
-        return vk;
+    public int getNumber() {
+        return number;
     }
 
-    public void setVk(String vk) {
-        this.vk = vk;
-    }
-
-    public String getFacebook() {
-        return facebook;
-    }
-
-    public void setFacebook(String facebook) {
-        this.facebook = facebook;
-    }
-
-    public String getWebsite() {
-        return website;
-    }
-
-    public void setWebsite(String website) {
-        this.website = website;
-    }
-
-    public String getAgency() {
-        return agency;
-    }
-
-    public void setAgency(String agency) {
-        this.agency = agency;
-    }
-
-    public Long getCreatedOn() {
-        return createdOn;
-    }
-
-    public void setCreatedOn(Long createdOn) {
-        this.createdOn = createdOn;
-    }
-
-    public Long getUserId() {
-        return userId;
-    }
-
-    public void setUserId(Long userId) {
-        this.userId = userId;
+    public void setNumber(int number) {
+        this.number = number;
     }
 }

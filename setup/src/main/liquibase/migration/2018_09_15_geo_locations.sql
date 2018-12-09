@@ -73,13 +73,12 @@ CREATE TABLE submission (
   uuid         VARCHAR(255)       NOT NULL,
   text         TEXT,
   country_id   BIGINT REFERENCES _countries (country_id),
-  city_id      BIGINT REFERENCES _cities (city_id),
+  city         VARCHAR(100),
   submitter_id BIGINT REFERENCES user_yf (id),
-  event_date   BIGINT             NOT NULL,
+  event_date   BIGINT,
   status       VARCHAR(255),
-  comment      VARCHAR(255)
-
-
+  comment      VARCHAR(255),
+  equipment    VARCHAR (255)
 );
 
 CREATE TABLE submission_picture (
@@ -93,6 +92,7 @@ CREATE TABLE submission_picture (
 
 CREATE TABLE submission_participant (
   id            BIGINT PRIMARY KEY NOT NULL,
+  number            INT,
   created_on    BIGINT             NOT NULL,
   first_name    VARCHAR(255),
   last_name     VARCHAR(255),
@@ -103,9 +103,8 @@ CREATE TABLE submission_participant (
   facebook      VARCHAR(255),
   website       VARCHAR(255),
   agency        VARCHAR(255),
+  city          VARCHAR(100),
   country_id    BIGINT REFERENCES _countries (country_id),
-  city_id       BIGINT REFERENCES _cities (city_id),
-  user_id       BIGINT REFERENCES user_yf (id),
   submission_fk BIGINT REFERENCES submission (id)
 
 );

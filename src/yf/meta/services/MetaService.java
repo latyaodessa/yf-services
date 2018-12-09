@@ -43,7 +43,7 @@ public class MetaService {
                 .setQuery(boolQuery);
 
         if (countrySearchText.isEmpty()) {
-            builder.addSort("titleRu.raw", SortOrder.ASC);
+            builder.addSort("titleRu.raw", SortOrder.ASC).setSize(500);
         }
         SearchResponse res = builder.execute()
                 .actionGet();
