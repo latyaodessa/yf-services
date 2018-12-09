@@ -1,15 +1,16 @@
 package yf.user.services;
 
-import yf.user.VerificationDao;
-import yf.user.dto.VerificationTypesEnum;
-import yf.user.entities.User;
-import yf.user.entities.Verifications;
+import java.util.Date;
+import java.util.UUID;
 
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import java.util.Date;
-import java.util.UUID;
+
+import yf.user.VerificationDao;
+import yf.user.dto.VerificationTypesEnum;
+import yf.user.entities.User;
+import yf.user.entities.Verifications;
 
 public class VerificationService {
 
@@ -19,12 +20,13 @@ public class VerificationService {
     @Inject
     private VerificationDao verificationDao;
 
-
-    public Verifications createEmailVerification(final User userToRegister, final VerificationTypesEnum typesEnum) {
+    public Verifications createEmailVerification(final User userToRegister,
+                                                 final VerificationTypesEnum typesEnum) {
         Verifications verifications = new Verifications();
         verifications.setType(typesEnum);
         verifications.setUserId(userToRegister.getId());
-        verifications.setVerification(UUID.randomUUID().toString());
+        verifications.setVerification(UUID.randomUUID()
+                .toString());
         verifications.setVerified(false);
         verifications.setCreatedOn(new Date());
         em.persist(verifications);

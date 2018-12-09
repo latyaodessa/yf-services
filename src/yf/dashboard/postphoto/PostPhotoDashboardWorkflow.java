@@ -1,9 +1,20 @@
 package yf.dashboard.postphoto;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
+import javax.inject.Inject;
+import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
+import javax.persistence.PersistenceContext;
+import javax.persistence.TypedQuery;
+
 import org.elasticsearch.action.index.IndexResponse;
 import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.rest.RestStatus;
 import org.elasticsearch.search.SearchHit;
+
 import yf.core.ElasticException;
 import yf.core.PropertiesResolover;
 import yf.core.elastic.ElasticToObjectConvertor;
@@ -17,15 +28,6 @@ import yf.elastic.core.NativeElasticSingleton;
 import yf.publication.PublicationDao;
 import yf.publication.bulkworkflow.PublicationBulkWorkflow;
 import yf.publication.entities.Publication;
-
-import javax.inject.Inject;
-import javax.persistence.EntityManager;
-import javax.persistence.NoResultException;
-import javax.persistence.PersistenceContext;
-import javax.persistence.TypedQuery;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
 
 public class PostPhotoDashboardWorkflow {
 
@@ -46,22 +48,24 @@ public class PostPhotoDashboardWorkflow {
     @Inject
     private PublicationBulkWorkflow publicationBulkWorkflow;
 
-    public PostDashboardElasticDTO saveNewPublicationForUser(final Long publicationId, final Long userId) {
+    public PostDashboardElasticDTO saveNewPublicationForUser(final Long publicationId,
+                                                             final Long userId) {
         final Publication publication = publicationDao.getPublicationById(publicationId);
 
-        UserSavedPosts entity = converter.savePostDTOtoEntity(userId, publication);
+        UserSavedPosts entity = converter.savePostDTOtoEntity(userId,
+                publication);
         entity.setPost(publication.getVkPost());
         entity.setPublication(publication);
         em.persist(entity);
         em.flush();
-
 
         PostDashboardElasticDTO elasticDto = converter.toPostDashboardElasticDTO(entity);
 
         IndexResponse response = nativeElastic.getClient()
                 .prepareIndex(properties.get("elastic.index.dashboard.saved.post"),
                         properties.get("elastic.type.dashboard"),
-                        entity.getId().toString())
+                        entity.getId()
+                                .toString())
                 .setSource(elasticWorkflow.objectToSource(elasticDto))
                 .get();
 
@@ -69,20 +73,22 @@ public class PostPhotoDashboardWorkflow {
             throw new ElasticException("Post Wasn't CREATED IN ELASTIC " + response.status());
         }
 
-        updateLikes(publication, true);
+        updateLikes(publication,
+                true);
 
         return elasticDto;
     }
 
-
-    private void updateLikes(final Publication publication, final boolean increase) {
+    private void updateLikes(final Publication publication,
+                             final boolean increase) {
         Integer likes = publication.getLikes();
         if (likes == null) {
             likes = 0;
         }
 
         if (!increase) {
-            likes = likes != 0 ? likes - 1 : 0;
+            likes = likes != 0 ? likes - 1
+                               : 0;
         }
 
         if (increase) {
@@ -107,7 +113,8 @@ public class PostPhotoDashboardWorkflow {
         IndexResponse response = nativeElastic.getClient()
                 .prepareIndex(properties.get("elastic.index.dashboard.saved.photo"),
                         properties.get("elastic.type.dashboard"),
-                        entity.getId().toString())
+                        entity.getId()
+                                .toString())
                 .setSource(elasticWorkflow.objectToSource(elasticDto))
                 .get();
 
@@ -122,9 +129,11 @@ public class PostPhotoDashboardWorkflow {
     public List<PostDashboardElasticDTO> getSavedDashboardPosts(final SearchResponse res) {
         List<PostDashboardElasticDTO> listDto = new ArrayList<PostDashboardElasticDTO>();
 
-        SearchHit[] hits = res.getHits().getHits();
+        SearchHit[] hits = res.getHits()
+                .getHits();
         for (SearchHit hit : hits) {
-            PostDashboardElasticDTO dto = elasticToObjectConvertor.convertSingleResultToObject(hit.getSourceAsString(), PostDashboardElasticDTO.class);
+            PostDashboardElasticDTO dto = elasticToObjectConvertor.convertSingleResultToObject(hit.getSourceAsString(),
+                    PostDashboardElasticDTO.class);
             listDto.add(dto);
         }
         return listDto;
@@ -133,9 +142,11 @@ public class PostPhotoDashboardWorkflow {
     public List<PhotoDashboardElasticDTO> getSavedDashboardPhotos(final SearchResponse res) {
         List<PhotoDashboardElasticDTO> listDto = new ArrayList<PhotoDashboardElasticDTO>();
 
-        SearchHit[] hits = res.getHits().getHits();
+        SearchHit[] hits = res.getHits()
+                .getHits();
         for (SearchHit hit : hits) {
-            PhotoDashboardElasticDTO dto = elasticToObjectConvertor.convertSingleResultToObject(hit.getSourceAsString(), PhotoDashboardElasticDTO.class);
+            PhotoDashboardElasticDTO dto = elasticToObjectConvertor.convertSingleResultToObject(hit.getSourceAsString(),
+                    PhotoDashboardElasticDTO.class);
             listDto.add(dto);
         }
         return listDto;
@@ -149,16 +160,19 @@ public class PostPhotoDashboardWorkflow {
             return false;
         }
 
-        updateLikes(savedPubication.getPublication(), false);
+        updateLikes(savedPubication.getPublication(),
+                false);
 
         em.remove(savedPubication);
         em.flush();
         return true;
     }
 
-    public boolean deletePhotoFromUser(final Long user_id, final String photo_url) {
+    public boolean deletePhotoFromUser(final Long user_id,
+                                       final String photo_url) {
 
-        List<UserSavedPhotos> userSavedPhotos = findUserSavedPhotosByUserIdAndPhotoUrl(user_id, photo_url);
+        List<UserSavedPhotos> userSavedPhotos = findUserSavedPhotosByUserIdAndPhotoUrl(user_id,
+                photo_url);
 
         if (userSavedPhotos == null || userSavedPhotos.isEmpty() || userSavedPhotos.size() > 1) {
             return false;
@@ -172,19 +186,30 @@ public class PostPhotoDashboardWorkflow {
     }
 
     public UserSavedPosts findSavedPublicationById(final Long savedPublicationId) {
-        return em.find(UserSavedPosts.class, savedPublicationId);
+        return em.find(UserSavedPosts.class,
+                savedPublicationId);
     }
 
-    public List<UserSavedPosts> findUserSavedPostByUserIdAndPostId(Long user_id, Long post_id) {
-        TypedQuery<UserSavedPosts> query = em.createNamedQuery(UserSavedPosts.QUERY_FIND_SAVED_POST_AND_BY_USER_ID, UserSavedPosts.class)
-                .setParameter("user_id", user_id).setParameter("post_id", post_id);
+    public List<UserSavedPosts> findUserSavedPostByUserIdAndPostId(Long user_id,
+                                                                   Long post_id) {
+        TypedQuery<UserSavedPosts> query = em.createNamedQuery(UserSavedPosts.QUERY_FIND_SAVED_POST_AND_BY_USER_ID,
+                UserSavedPosts.class)
+                .setParameter("user_id",
+                        user_id)
+                .setParameter("post_id",
+                        post_id);
 
         return query.getResultList();
     }
 
-    public PostDashboardElasticDTO findUserSavedPostByUserIdAndPublicationId(Long user_id, Long publicationId) {
-        TypedQuery<UserSavedPosts> query = em.createNamedQuery(UserSavedPosts.QUERY_FIND_SAVED_PULICATION_ID, UserSavedPosts.class)
-                .setParameter("user_id", user_id).setParameter("publication_id", publicationId);
+    public PostDashboardElasticDTO findUserSavedPostByUserIdAndPublicationId(Long user_id,
+                                                                             Long publicationId) {
+        TypedQuery<UserSavedPosts> query = em.createNamedQuery(UserSavedPosts.QUERY_FIND_SAVED_PULICATION_ID,
+                UserSavedPosts.class)
+                .setParameter("user_id",
+                        user_id)
+                .setParameter("publication_id",
+                        publicationId);
 
         try {
             final UserSavedPosts singleResult = query.getSingleResult();
@@ -195,9 +220,14 @@ public class PostPhotoDashboardWorkflow {
         }
     }
 
-    public List<UserSavedPhotos> findUserSavedPhotosByUserIdAndPhotoUrl(Long user_id, String photo_url) {
-        TypedQuery<UserSavedPhotos> query = em.createNamedQuery(UserSavedPhotos.QUERY_FIND_SAVED_PHOTO_AND_BY_USER_ID, UserSavedPhotos.class)
-                .setParameter("user_id", user_id).setParameter("photo_url", photo_url);
+    public List<UserSavedPhotos> findUserSavedPhotosByUserIdAndPhotoUrl(Long user_id,
+                                                                        String photo_url) {
+        TypedQuery<UserSavedPhotos> query = em.createNamedQuery(UserSavedPhotos.QUERY_FIND_SAVED_PHOTO_AND_BY_USER_ID,
+                UserSavedPhotos.class)
+                .setParameter("user_id",
+                        user_id)
+                .setParameter("photo_url",
+                        photo_url);
 
         return query.getResultList();
     }

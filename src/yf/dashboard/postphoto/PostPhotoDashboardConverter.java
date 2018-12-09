@@ -1,5 +1,7 @@
 package yf.dashboard.postphoto;
 
+import java.util.Date;
+
 import yf.dashboard.postphoto.dto.PhotoDashboardElasticDTO;
 import yf.dashboard.postphoto.dto.PostDashboardElasticDTO;
 import yf.dashboard.postphoto.dto.SavePhotoDTO;
@@ -8,12 +10,10 @@ import yf.dashboard.postphoto.entities.UserSavedPosts;
 import yf.post.dto.SharedBasicPostDTO;
 import yf.publication.entities.Publication;
 
-import java.util.Date;
-
 public class PostPhotoDashboardConverter {
 
-
-    public UserSavedPosts savePostDTOtoEntity(final Long userId, final Publication publication) {
+    public UserSavedPosts savePostDTOtoEntity(final Long userId,
+                                              final Publication publication) {
         UserSavedPosts entity = new UserSavedPosts();
 
         entity.setCreatedOn(new Date().getTime());
@@ -48,7 +48,8 @@ public class PostPhotoDashboardConverter {
         dto.setUser_id(entity.getUser_id());
 
         Publication publication = entity.getPublication();
-        Long publicationId = publication != null ? publication.getId() : null;
+        Long publicationId = publication != null ? publication.getId()
+                                                 : null;
         SharedBasicPostDTO sharedBasicPostDTO = new SharedBasicPostDTO();
         sharedBasicPostDTO.setId(publicationId);
         dto.setDto(sharedBasicPostDTO);

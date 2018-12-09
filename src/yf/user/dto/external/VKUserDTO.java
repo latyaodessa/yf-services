@@ -1,8 +1,8 @@
 package yf.user.dto.external;
 
-import yf.user.dto.UserDto;
-
 import java.util.Date;
+
+import yf.user.dto.UserDto;
 
 public class VKUserDTO {
     private Long id;
@@ -22,7 +22,7 @@ public class VKUserDTO {
         return firstName;
     }
 
-    public void setFirstName(String firstName) {
+    public void setFirstName(final String firstName) {
         this.firstName = firstName;
     }
 
@@ -30,7 +30,7 @@ public class VKUserDTO {
         return lastName;
     }
 
-    public void setLastName(String lastName) {
+    public void setLastName(final String lastName) {
         this.lastName = lastName;
     }
 
@@ -38,7 +38,7 @@ public class VKUserDTO {
         return sex;
     }
 
-    public void setSex(String sex) {
+    public void setSex(final String sex) {
         this.sex = sex;
     }
 
@@ -46,7 +46,7 @@ public class VKUserDTO {
         return bdate;
     }
 
-    public void setBdate(String bdate) {
+    public void setBdate(final String bdate) {
         this.bdate = bdate;
     }
 
@@ -54,7 +54,7 @@ public class VKUserDTO {
         return mobilePhone;
     }
 
-    public void setMobilePhone(String mobilePhone) {
+    public void setMobilePhone(final String mobilePhone) {
         this.mobilePhone = mobilePhone;
     }
 
@@ -62,16 +62,15 @@ public class VKUserDTO {
         return homePhone;
     }
 
-    public void setHomePhone(String homePhone) {
+    public void setHomePhone(final String homePhone) {
         this.homePhone = homePhone;
     }
-
 
     public Boolean getVerified() {
         return verified;
     }
 
-    public void setVerified(Boolean verified) {
+    public void setVerified(final Boolean verified) {
         this.verified = verified;
     }
 
@@ -79,7 +78,7 @@ public class VKUserDTO {
         return city;
     }
 
-    public void setCity(String city) {
+    public void setCity(final String city) {
         this.city = city;
     }
 
@@ -87,7 +86,7 @@ public class VKUserDTO {
         return country;
     }
 
-    public void setCountry(String country) {
+    public void setCountry(final String country) {
         this.country = country;
     }
 
@@ -95,7 +94,7 @@ public class VKUserDTO {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(final Long id) {
         this.id = id;
     }
 
@@ -103,7 +102,7 @@ public class VKUserDTO {
         return userDto;
     }
 
-    public void setUserDto(UserDto userDto) {
+    public void setUserDto(final UserDto userDto) {
         this.userDto = userDto;
     }
 
@@ -111,7 +110,7 @@ public class VKUserDTO {
         return createdOn;
     }
 
-    public void setCreatedOn(Date createdOn) {
+    public void setCreatedOn(final Date createdOn) {
         this.createdOn = createdOn;
     }
 }

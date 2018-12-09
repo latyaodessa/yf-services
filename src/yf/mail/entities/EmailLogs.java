@@ -1,7 +1,8 @@
 package yf.mail.entities;
 
-import org.codehaus.jackson.map.ObjectMapper;
-import yf.core.entities.AbstractVersionEntity;
+import java.io.IOException;
+import java.util.Date;
+import java.util.logging.Logger;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -9,9 +10,10 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
-import java.io.IOException;
-import java.util.Date;
-import java.util.logging.Logger;
+
+import org.codehaus.jackson.map.ObjectMapper;
+
+import yf.core.entities.AbstractVersionEntity;
 
 @Entity
 @Table(name = "email_logs")
@@ -30,7 +32,8 @@ public class EmailLogs extends AbstractVersionEntity {
         setCreatedOn(new Date());
 
         try {
-            String jsonInString = new ObjectMapper().writerWithDefaultPrettyPrinter().writeValueAsString(dto);
+            String jsonInString = new ObjectMapper().writerWithDefaultPrettyPrinter()
+                    .writeValueAsString(dto);
             setContent(jsonInString);
         } catch (IOException e) {
             LOG.severe("Could not parse content dto");

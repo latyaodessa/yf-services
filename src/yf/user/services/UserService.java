@@ -21,6 +21,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.ws.rs.core.Response;
 
+@Stateless
 public class UserService {
     @Inject
     private UserWorkflow userWorkflow;
@@ -43,7 +44,9 @@ public class UserService {
         return userWorkflow.getBasicUserById(userId);
     }
 
-    public UserAllDataDto registerUserFromVKUser(final long userId, final LoginDTO loginDTO, final VKUser vkUser) {
+    public UserAllDataDto registerUserFromVKUser(final long userId,
+                                                 final LoginDTO loginDTO,
+                                                 final VKUser vkUser) {
         User user;
         final VKUserDTO vKUserDTO = userRestClient.getVKUserDetails(userId);
 
@@ -52,25 +55,34 @@ public class UserService {
             user.setFirstName(vKUserDTO.getFirstName());
             user.setLastName(vKUserDTO.getLastName());
             em.persist(user);
-            final VKUser vkUserEntity = userWorkflow.createVKUser(vKUserDTO, user);
-            return userWorkflow.getUserSocialAccounts(user, vkUserEntity);
+            final VKUser vkUserEntity = userWorkflow.createVKUser(vKUserDTO,
+                    user);
+            return userWorkflow.getUserSocialAccounts(user,
+                    vkUserEntity);
         } else {
-            user = userWorkflow.registerExistingUser(vkUser.getUser(), loginDTO);
+            user = userWorkflow.registerExistingUser(vkUser.getUser(),
+                    loginDTO);
             user.setFirstName(vKUserDTO.getFirstName());
             user.setLastName(vKUserDTO.getLastName());
             em.persist(user);
-            return userWorkflow.getUserSocialAccounts(user, vkUser);
+            return userWorkflow.getUserSocialAccounts(user,
+                    vkUser);
         }
     }
 
-    public void bindVkAccountToUser(final User user, final VKUser vkuser, final Long vkId) {
+    public void bindVkAccountToUser(final User user,
+                                    final VKUser vkuser,
+                                    final Long vkId) {
 
         if (vkuser == null) {
             final VKUserDTO vKUserDTO = userRestClient.getVKUserDetails(vkId);
-            final VKUser vkUserEntity = userWorkflow.createVKUser(vKUserDTO, user);
-            userWorkflow.handleEmptyUserFields(user, vkUserEntity);
+            final VKUser vkUserEntity = userWorkflow.createVKUser(vKUserDTO,
+                    user);
+            userWorkflow.handleEmptyUserFields(user,
+                    vkUserEntity);
         } else {
-            userWorkflow.handleEmptyUserFields(user, vkuser);
+            userWorkflow.handleEmptyUserFields(user,
+                    vkuser);
             vkuser.setUser(user);
             em.merge(vkuser);
         }
@@ -85,7 +97,9 @@ public class UserService {
         }
     }
 
-    public UserAllDataDto registerUserFromFBUser(final FBUserDTO fbUserDTO, final LoginDTO loginDTO, final FBUser fbUser) {
+    public UserAllDataDto registerUserFromFBUser(final FBUserDTO fbUserDTO,
+                                                 final LoginDTO loginDTO,
+                                                 final FBUser fbUser) {
 
         User user;
 
@@ -95,15 +109,19 @@ public class UserService {
             user.setFirstName(fbUserDTO.getFirst_name());
             user.setLastName(fbUserDTO.getLast_name());
             em.persist(user);
-            final FBUser fbUserEntity = userWorkflow.createFBUser(fbUserDTO, user);
-            return userWorkflow.getUserSocialAccounts(user, fbUserEntity);
+            final FBUser fbUserEntity = userWorkflow.createFBUser(fbUserDTO,
+                    user);
+            return userWorkflow.getUserSocialAccounts(user,
+                    fbUserEntity);
         } else {
-            user = userWorkflow.registerExistingUser(fbUser.getUser(), loginDTO);
+            user = userWorkflow.registerExistingUser(fbUser.getUser(),
+                    loginDTO);
             user.setFirstName(fbUserDTO.getFirst_name());
             user.setLastName(fbUserDTO.getLast_name());
             user.setGender(fbUserDTO.getGender());
             em.persist(user);
-            return userWorkflow.getUserSocialAccounts(user, fbUser);
+            return userWorkflow.getUserSocialAccounts(user,
+                    fbUser);
         }
 
     }
@@ -201,15 +219,20 @@ public class UserService {
     public User updateUserFirstLastName(final Long userId,
                                         final String firstName,
                                         final String lastName) {
-        return userWorkflow.updateUserFirstLastName(userId, firstName, lastName);
+        return userWorkflow.updateUserFirstLastName(userId,
+                firstName,
+                lastName);
     }
 
     public User updateUserNickname(final Long userId,
                                    final String nickname) {
-        return userWorkflow.updateNickName(userId, nickname);
+        return userWorkflow.updateNickName(userId,
+                nickname);
     }
 
-    public void updateUserProfilePic(final Long userId, final ProfilePictureDTO dto) {
-        userWorkflow.updateUserProfilePic(userId, dto);
+    public void updateUserProfilePic(final Long userId,
+                                     final ProfilePictureDTO dto) {
+        userWorkflow.updateUserProfilePic(userId,
+                dto);
     }
 }

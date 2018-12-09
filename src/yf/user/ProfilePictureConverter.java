@@ -1,14 +1,14 @@
 package yf.user;
 
+import java.util.Date;
+
 import yf.user.dto.ProfilePictureDTO;
 import yf.user.entities.ProfilePicture;
-
-import java.util.Date;
 
 public class ProfilePictureConverter {
 
     public ProfilePictureDTO toDto(final ProfilePicture entity) {
-        if(entity == null) {
+        if (entity == null) {
             return null;
         }
         ProfilePictureDTO dto = new ProfilePictureDTO();

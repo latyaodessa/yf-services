@@ -1,7 +1,8 @@
 package yf.publication.entities;
 
-import yf.core.entities.AbstractDateEntity;
-import yf.post.entities.Post;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -16,17 +17,15 @@ import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+
+import yf.core.entities.AbstractDateEntity;
+import yf.post.entities.Post;
 
 @Entity
 @Table(name = "publication")
-@NamedQueries({
-        @NamedQuery(name = Publication.QUERY_GET_PUBLICATION_BY_VK_POST, query = "SELECT t FROM Publication t WHERE t.vkPost.id = :vk_post_id "),
-        @NamedQuery(name = Publication.QUERY_GET_PUBLICATION_BY_LINK, query = "SELECT t FROM Publication t WHERE t.link = :link "),
-        @NamedQuery(name = Publication.QUERY_SETS_NATIVE_POSTS_RANGE, query = "SELECT t FROM Publication t WHERE t.createdOn between :from and :end")
-})
+@NamedQueries({@NamedQuery(name = Publication.QUERY_GET_PUBLICATION_BY_VK_POST, query = "SELECT t FROM Publication t WHERE t.vkPost.id = :vk_post_id "),
+               @NamedQuery(name = Publication.QUERY_GET_PUBLICATION_BY_LINK, query = "SELECT t FROM Publication t WHERE t.link = :link "),
+               @NamedQuery(name = Publication.QUERY_SETS_NATIVE_POSTS_RANGE, query = "SELECT t FROM Publication t WHERE t.createdOn between :from and :end") })
 public class Publication extends AbstractDateEntity {
 
     public static final String QUERY_GET_PUBLICATION_BY_VK_POST = "Publication.getPublicationsByVkPost";
@@ -54,15 +53,19 @@ public class Publication extends AbstractDateEntity {
     private String phTechnical;
     private Integer likes;
 
-    @OneToMany(fetch = FetchType.LAZY, cascade = {CascadeType.MERGE, CascadeType.PERSIST})
+    @OneToMany(fetch = FetchType.LAZY,
+               cascade = {CascadeType.MERGE,
+                          CascadeType.PERSIST })
     @JoinColumn(name = "publication_id", referencedColumnName = "id")
     private List<PublicationPictures> publicationPictures;
 
-    @OneToMany(fetch = FetchType.LAZY, cascade = {CascadeType.MERGE, CascadeType.PERSIST})
+    @OneToMany(fetch = FetchType.LAZY,
+               cascade = {CascadeType.MERGE,
+                          CascadeType.PERSIST })
     @JoinColumn(name = "publication_id", referencedColumnName = "id")
     private List<PublicationUser> publicationUsers;
 
-    @OneToOne(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST})
+    @OneToOne(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST })
     @JoinColumn(name = "vk_post_id", referencedColumnName = "id")
     private Post vkPost;
 
@@ -76,7 +79,7 @@ public class Publication extends AbstractDateEntity {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(final Long id) {
         this.id = id;
     }
 
@@ -84,7 +87,7 @@ public class Publication extends AbstractDateEntity {
         return link;
     }
 
-    public void setLink(String link) {
+    public void setLink(final String link) {
         this.link = link;
     }
 
@@ -92,7 +95,7 @@ public class Publication extends AbstractDateEntity {
         return photoshootDate;
     }
 
-    public void setPhotoshootDate(Date photoshootDate) {
+    public void setPhotoshootDate(final Date photoshootDate) {
         this.photoshootDate = photoshootDate;
     }
 
@@ -100,7 +103,7 @@ public class Publication extends AbstractDateEntity {
         return location;
     }
 
-    public void setLocation(String location) {
+    public void setLocation(final String location) {
         this.location = location;
     }
 
@@ -108,7 +111,7 @@ public class Publication extends AbstractDateEntity {
         return country;
     }
 
-    public void setCountry(String country) {
+    public void setCountry(final String country) {
         this.country = country;
     }
 
@@ -116,7 +119,7 @@ public class Publication extends AbstractDateEntity {
         return title;
     }
 
-    public void setTitle(String title) {
+    public void setTitle(final String title) {
         this.title = title;
     }
 
@@ -124,7 +127,7 @@ public class Publication extends AbstractDateEntity {
         return about;
     }
 
-    public void setAbout(String about) {
+    public void setAbout(final String about) {
         this.about = about;
     }
 
@@ -132,7 +135,7 @@ public class Publication extends AbstractDateEntity {
         return hashtags;
     }
 
-    public void setHashtags(String hashtags) {
+    public void setHashtags(final String hashtags) {
         this.hashtags = hashtags;
     }
 
@@ -148,7 +151,7 @@ public class Publication extends AbstractDateEntity {
         return additionalMds;
     }
 
-    public void setAdditionalMds(String additionalMds) {
+    public void setAdditionalMds(final String additionalMds) {
         this.additionalMds = additionalMds;
     }
 
@@ -156,7 +159,7 @@ public class Publication extends AbstractDateEntity {
         return phTechnical;
     }
 
-    public void setPhTechnical(String phTechnical) {
+    public void setPhTechnical(final String phTechnical) {
         this.phTechnical = phTechnical;
     }
 
@@ -164,16 +167,15 @@ public class Publication extends AbstractDateEntity {
         return publicationPictures;
     }
 
-    public void setPublicationPictures(List<PublicationPictures> publicationPictures) {
+    public void setPublicationPictures(final List<PublicationPictures> publicationPictures) {
         this.publicationPictures = publicationPictures;
     }
-
 
     public Post getVkPost() {
         return vkPost;
     }
 
-    public void setVkPost(Post vkPost) {
+    public void setVkPost(final Post vkPost) {
         this.vkPost = vkPost;
     }
 
@@ -181,7 +183,7 @@ public class Publication extends AbstractDateEntity {
         return publicationUsers;
     }
 
-    public void setPublicationUsers(List<PublicationUser> publicationUsers) {
+    public void setPublicationUsers(final List<PublicationUser> publicationUsers) {
         this.publicationUsers = publicationUsers;
     }
 
@@ -189,7 +191,7 @@ public class Publication extends AbstractDateEntity {
         return likes;
     }
 
-    public void setLikes(Integer likes) {
+    public void setLikes(final Integer likes) {
         this.likes = likes;
     }
 

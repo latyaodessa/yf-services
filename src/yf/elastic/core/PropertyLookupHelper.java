@@ -1,8 +1,10 @@
 package yf.elastic.core;
 
+import static javax.naming.InitialContext.doLookup;
+
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import static javax.naming.InitialContext.doLookup;
+
 import javax.naming.NamingException;
 
 public final class PropertyLookupHelper {
@@ -16,7 +18,9 @@ public final class PropertyLookupHelper {
         try {
             return doLookup(jndiName);
         } catch (NamingException e) {
-            LOG.log(Level.SEVERE, "{0} JNDI resource is not configured", jndiName);
+            LOG.log(Level.SEVERE,
+                    "{0} JNDI resource is not configured",
+                    jndiName);
             throw new RuntimeException(e);
         }
     }

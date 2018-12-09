@@ -1,7 +1,5 @@
 package yf.settings;
 
-import yf.core.entities.AbstractDateEntity;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -11,11 +9,11 @@ import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
+import yf.core.entities.AbstractDateEntity;
+
 @Entity
 @Table(name = "system_settings")
-@NamedQueries({
-        @NamedQuery(name = SystemSettings.QUERY_GET_SS_BY_KEY, query = "SELECT t FROM SystemSettings t WHERE t.key = :key ")
-})
+@NamedQueries({@NamedQuery(name = SystemSettings.QUERY_GET_SS_BY_KEY, query = "SELECT t FROM SystemSettings t WHERE t.key = :key ") })
 public class SystemSettings extends AbstractDateEntity {
 
     public static final String QUERY_GET_SS_BY_KEY = "SystemSettings.getSSByKey";
@@ -34,7 +32,7 @@ public class SystemSettings extends AbstractDateEntity {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(final Long id) {
         this.id = id;
     }
 
@@ -42,7 +40,7 @@ public class SystemSettings extends AbstractDateEntity {
         return key;
     }
 
-    public void setKey(String key) {
+    public void setKey(final String key) {
         this.key = key;
     }
 
@@ -50,7 +48,7 @@ public class SystemSettings extends AbstractDateEntity {
         return value;
     }
 
-    public void setValue(String value) {
+    public void setValue(final String value) {
         this.value = value;
     }
 }

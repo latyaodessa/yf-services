@@ -1,6 +1,6 @@
 package yf.post.entities;
 
-import yf.core.entities.AbstractVersionEntity;
+import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -12,15 +12,14 @@ import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
-import java.util.List;
+
+import yf.core.entities.AbstractVersionEntity;
 
 @Entity
 @Table(name = "vk_post")
-@NamedQueries({
-        @NamedQuery(name = Post.QUERY_POST_BY_ID, query = "SELECT t FROM Post t WHERE t.id = :post_id"),
-        @NamedQuery(name = Post.QUERY_SETS_NATIVE_POSTS_RANGE, query = "SELECT t FROM Post t WHERE t.date between :from and :end AND" +
-                " (t.text LIKE '#native%' OR t.text LIKE '#sets%') ")
-})
+@NamedQueries({@NamedQuery(name = Post.QUERY_POST_BY_ID, query = "SELECT t FROM Post t WHERE t.id = :post_id"),
+               @NamedQuery(name = Post.QUERY_SETS_NATIVE_POSTS_RANGE,
+                           query = "SELECT t FROM Post t WHERE t.date between :from and :end AND" + " (t.text LIKE '#native%' OR t.text LIKE '#sets%') ") })
 public class Post extends AbstractVersionEntity {
 
     public static final String QUERY_POST_BY_ID = "Post.getPostById";
@@ -38,7 +37,9 @@ public class Post extends AbstractVersionEntity {
     private int likes;
     private int reposts;
 
-    @OneToMany(orphanRemoval = true, cascade = {CascadeType.MERGE, CascadeType.PERSIST})
+    @OneToMany(orphanRemoval = true,
+               cascade = {CascadeType.MERGE,
+                          CascadeType.PERSIST })
     @JoinColumn(name = "post_fk")
     private List<PostPhoto> postPhoto;
 

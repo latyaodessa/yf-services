@@ -9,7 +9,7 @@ public class UserAuthDataDto {
         return userId;
     }
 
-    public void setUserId(Long userId) {
+    public void setUserId(final Long userId) {
         this.userId = userId;
     }
 
@@ -17,7 +17,7 @@ public class UserAuthDataDto {
         return token;
     }
 
-    public void setToken(String token) {
+    public void setToken(final String token) {
         this.token = token;
     }
 }

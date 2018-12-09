@@ -3,7 +3,6 @@ package yf.submission.services;
 import yf.submission.dtos.AllParticipantsDTO;
 import yf.submission.dtos.PhotoshootingParticipantTypeEnum;
 import yf.submission.dtos.SubmissionDTO;
-import yf.submission.dtos.SubmissionParticipantDTO;
 import yf.submission.entities.Submission;
 import yf.submission.entities.SubmissionParticipant;
 
@@ -31,7 +30,6 @@ public class SubmissionService {
     }
 
     public SubmissionDTO initSubmission(final AllParticipantsDTO allParticipantsDTO, final Long userId) {
-
         final Set<SubmissionParticipant> participants = convertParticipants(allParticipantsDTO);
         final Submission submission = submissionWorkflow.initEmptySubmission(userId);
         submission.setSubmissionParticipants(participants);

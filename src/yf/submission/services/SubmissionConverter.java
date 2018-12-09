@@ -5,16 +5,15 @@ import yf.meta.services.MetaDataDao;
 import yf.submission.dtos.PhotoshootingParticipantTypeEnum;
 import yf.submission.dtos.SubmissionDTO;
 import yf.submission.dtos.SubmissionParticipantDTO;
-import yf.submission.dtos.SubmissionPictureDTO;
 import yf.submission.dtos.SubmissionStatusEnum;
 import yf.submission.entities.Submission;
 import yf.submission.entities.SubmissionParticipant;
-import yf.submission.entities.SubmissionPicture;
 import yf.user.UserConverter;
 
 import javax.inject.Inject;
 import java.util.Date;
 import java.util.Optional;
+
 
 public class SubmissionConverter {
     @Inject
@@ -29,6 +28,8 @@ public class SubmissionConverter {
         entity.setCity(dto.getCity());
         entity.setNumber(dto.getNumber());
         entity.setCountry(metaDataDao.getCountryById(dto.getCountry().getKey()));
+        entity.setAgency(dto.getAgency());
+        entity.setFacebook(dto.getFacebook());
         entity.setInstagram(dto.getInstagram());
         entity.setMe(dto.getMe());
         entity.setType(typeEnum);

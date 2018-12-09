@@ -1,8 +1,8 @@
 package yf.publication.dtos;
 
-import yf.post.dto.PostElasticDTO;
-
 import java.util.List;
+
+import yf.post.dto.PostElasticDTO;
 
 public class PublicationElasticDTO {
 

@@ -20,6 +20,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -49,11 +50,17 @@ public class Submission extends AbstractDateEntity {
     @Column(name = "comment")
     private String comment;
     private String equipment;
-//    @OneToMany(orphanRemoval = true, cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-//    @JoinColumn(name = "submission_fk")
-//    private Set<SubmissionPicture> submissionPictures;
 
-    @OneToMany(orphanRemoval = true, cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(orphanRemoval = true,
+            cascade = {CascadeType.MERGE,
+                    CascadeType.PERSIST},
+            fetch = FetchType.LAZY)
+    @JoinColumn(name = "submission_fk")
+    private List<SubmissionPicture> submissionPictures;
+    @OneToMany(orphanRemoval = true,
+            cascade = {CascadeType.MERGE,
+                    CascadeType.PERSIST},
+            fetch = FetchType.LAZY)
     @JoinColumn(name = "submission_fk")
     private Set<SubmissionParticipant> submissionParticipants;
 
@@ -125,13 +132,21 @@ public class Submission extends AbstractDateEntity {
         this.comment = comment;
     }
 
-//    public Set<SubmissionPicture> getSubmissionPictures() {
-//        return submissionPictures;
-//    }
-//
-//    public void setSubmissionPictures(Set<SubmissionPicture> submissionPictures) {
-//        this.submissionPictures = submissionPictures;
-//    }
+    public String getEquipment() {
+        return equipment;
+    }
+
+    public void setEquipment(String equipment) {
+        this.equipment = equipment;
+    }
+
+    public List<SubmissionPicture> getSubmissionPictures() {
+        return submissionPictures;
+    }
+
+    public void setSubmissionPictures(List<SubmissionPicture> submissionPictures) {
+        this.submissionPictures = submissionPictures;
+    }
 
     public Set<SubmissionParticipant> getSubmissionParticipants() {
         return submissionParticipants;
@@ -147,14 +162,6 @@ public class Submission extends AbstractDateEntity {
 
     public void setSubmitter(User submitter) {
         this.submitter = submitter;
-    }
-
-    public String getEquipment() {
-        return equipment;
-    }
-
-    public void setEquipment(String equipment) {
-        this.equipment = equipment;
     }
 }
 

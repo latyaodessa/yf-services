@@ -1,0 +1,133 @@
+<?xml version="1.0"?>
+<ruleset name="CP-PMD-Rules">
+
+	<description>SPOT2 PMD Rules</description>
+
+	<rule ref="rulesets/java/android.xml" />
+	<rule ref="rulesets/java/basic.xml">
+		<exclude name="SimplifiedTernary" />		
+		<properties>
+			<property name="allowCommentedBlocks" value="true" />
+		</properties>
+	</rule>
+
+	<rule ref="rulesets/java/braces.xml" />
+	<rule ref="rulesets/java/clone.xml" />
+	<rule ref="rulesets/java/codesize.xml">
+		<exclude name="TooManyFields" />
+		<exclude name="TooManyMethods" />
+	</rule>
+
+	<rule ref="rulesets/java/codesize.xml/TooManyFields">
+		<properties>
+			<property name="maxfields" value="25" />
+		</properties>
+	</rule>
+
+	<rule ref="rulesets/java/codesize.xml/TooManyMethods">
+		<properties>
+			<property name="maxmethods" value="25" />
+		</properties>
+	</rule>
+
+	<rule ref="rulesets/java/comments.xml/CommentContent" />
+	<rule ref="rulesets/java/comments.xml/CommentSize">
+		<properties>
+			<property name="maxLineLength" value="300" />
+			<property name="maxLines" value="100" />
+		</properties>
+	</rule>
+	<rule ref="rulesets/java/controversial.xml">
+		<exclude name="UnnecessaryConstructor" />
+		<exclude name="DefaultPackage" />
+		<exclude name="OnlyOneReturn" />
+		<exclude name="AvoidFinalLocalVariable" />
+		<exclude name="DataflowAnomalyAnalysis" />
+		<exclude name="UseConcurrentHashMap" />
+		<exclude name="AvoidLiteralsInIfCondition" />
+		<exclude name="AtLeastOneConstructor" />
+		<exclude name="UseObjectForClearerAPI" />
+		<exclude name="NullAssignment" />
+	</rule>
+	<rule ref="rulesets/java/coupling.xml">
+		<exclude name="LawOfDemeter" />
+		<exclude name="LoosePackageCoupling" />
+		<exclude name="ExcessiveImports" />
+	</rule>
+	<rule ref="rulesets/java/design.xml">
+		<exclude name="UncommentedEmptyConstructor" />
+		<exclude name="ConfusingTernary" />
+		<exclude name="AvoidDeeplyNestedIfStmts" />
+		<exclude name="UnnecessaryLocalBeforeReturn" />
+		<exclude name="ConstructorCallsOverridableMethod" />
+		<exclude name="AccessorClassGeneration" />
+        <exclude name="SimplifyBooleanReturns" />
+        <exclude name="AccessorMethodGeneration" />
+		<properties>
+			<property name="minimumNumberCaseForASwitch" value="2" />
+		</properties>
+	</rule>
+	<rule ref="rulesets/java/design.xml/AvoidDeeplyNestedIfStmts">
+		<properties>
+			<property name="problemDepth" value="5" />
+		</properties>
+	</rule>
+	<rule ref="rulesets/java/empty.xml" />
+	<rule ref="rulesets/java/finalizers.xml" />
+	<rule ref="rulesets/java/imports.xml" />
+	<rule ref="rulesets/java/j2ee.xml">
+		<exclude name="DoNotUseThreads" />
+	</rule>
+	<rule ref="rulesets/java/javabeans.xml">
+		<exclude name="BeanMembersShouldSerialize" />
+	</rule>
+	<rule ref="rulesets/java/junit.xml">
+		<exclude name="JUnitAssertionsShouldIncludeMessage" />
+	</rule>
+	<rule ref="rulesets/java/logging-jakarta-commons.xml">
+		<exclude name="GuardDebugLogging" />
+		<exclude name="GuardLogStatement" />
+	</rule>
+	<rule ref="rulesets/java/logging-java.xml">
+		<exclude name="GuardLogStatementJavaUtil" />
+	</rule>
+
+	<rule ref="rulesets/java/migrating.xml" />
+	<rule ref="rulesets/java/naming.xml">
+		<exclude name="ShortVariable" />
+		<exclude name="LongVariable" />
+		<exclude name="ShortClassName" />
+		<exclude name="AbstractNaming" />
+	</rule>
+	<rule ref="rulesets/java/optimizations.xml">
+		<exclude name="AvoidInstantiatingObjectsInLoops" />
+		<exclude name="LocalVariableCouldBeFinal" />
+	</rule>
+	<rule ref="rulesets/java/strictexception.xml">
+		<exclude name="AvoidCatchingGenericException" />
+		<exclude name="AvoidThrowingRawExceptionTypes" />
+	</rule>
+	<rule ref="rulesets/java/strings.xml/AvoidDuplicateLiterals">
+		<properties>
+			<property name="skipAnnotations" value="true" />
+		</properties>
+	</rule>
+	<rule ref="rulesets/java/strings.xml">
+		<exclude name="AvoidDuplicateLiterals" />
+	</rule>
+	<rule ref="rulesets/java/sunsecure.xml">
+		<exclude name="ArrayIsStoredDirectly" />
+	</rule>
+	<rule ref="rulesets/java/typeresolution.xml" />
+        <rule ref="rulesets/java/unnecessary.xml">
+            <exclude name="UselessParentheses" />
+        </rule>
+	<rule ref="rulesets/java/unusedcode.xml/UnusedFormalParameter" />
+	<rule ref="rulesets/java/unusedcode.xml">
+		<!--TODO: remove; gives false positive; bug fixed in pmd 5.1.3; need to
+			upgrade when new mvn plugin is released -->
+		<exclude name="UnusedPrivateMethod" />
+	</rule>
+	<rule ref="rulesets/xml/basic.xml" />
+	<rule ref="rulesets/xsl/xpath.xml" />
+</ruleset>

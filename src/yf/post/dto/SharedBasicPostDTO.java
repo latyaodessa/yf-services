@@ -49,7 +49,6 @@ public class SharedBasicPostDTO {
         this.thumbnail = thumbnail;
     }
 
-
     public String getLink() {
         return link;
     }

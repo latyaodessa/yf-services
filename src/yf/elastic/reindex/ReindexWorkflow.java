@@ -1,5 +1,10 @@
 package yf.elastic.reindex;
 
+import java.util.List;
+import java.util.logging.Logger;
+
+import javax.inject.Inject;
+
 import yf.dashboard.postphoto.entities.UserSavedPhotos;
 import yf.dashboard.postphoto.entities.UserSavedPosts;
 import yf.elastic.reindex.bulkworkflow.PhotoDashboardBulkWorkflow;
@@ -13,12 +18,9 @@ import yf.post.entities.Post;
 import yf.publication.bulkworkflow.PublicationBulkWorkflow;
 import yf.publication.entities.Publication;
 
-import javax.inject.Inject;
-import java.util.List;
-import java.util.logging.Logger;
-
 public class ReindexWorkflow {
 
+    public static final Logger LOG = Logger.getLogger(ReindexWorkflow.class.getName());
     @Inject
     private PostBulkWorkflow postReindexWorkflow;
     @Inject
@@ -34,8 +36,6 @@ public class ReindexWorkflow {
     @Inject
     private CountryBulkWorkflow countryBulkWorkflow;
 
-    public static final Logger LOG = Logger.getLogger(ReindexWorkflow.class.getName());
-
     public boolean reindexPosts() {
 
         List<Post> entities;
@@ -44,7 +44,8 @@ public class ReindexWorkflow {
         postReindexWorkflow.recreateIndex();
 
         do {
-            entities = elasticBulkFetcher.fetchAllModels(offset, Post.class);
+            entities = elasticBulkFetcher.fetchAllModels(offset,
+                    Post.class);
 
             if (entities == null || entities.isEmpty()) {
                 break;
@@ -52,7 +53,8 @@ public class ReindexWorkflow {
             postReindexWorkflow.execute(entities);
             offset += entities.size();
 
-            LOG.info(String.format("Bulk Updating: Already updated %s posts", offset));
+            LOG.info(String.format("Bulk Updating: Already updated %s posts",
+                    offset));
         } while (entities.isEmpty() || entities.size() >= ElasticBulkFetcher.getDefaultBulkSize());
         return true;
     }
@@ -65,7 +67,8 @@ public class ReindexWorkflow {
         publicationBulkWorkflow.recreateIndex();
 
         do {
-            entities = elasticBulkFetcher.fetchAllModels(offset, Publication.class);
+            entities = elasticBulkFetcher.fetchAllModels(offset,
+                    Publication.class);
 
             if (entities == null || entities.isEmpty()) {
                 break;
@@ -73,7 +76,8 @@ public class ReindexWorkflow {
             publicationBulkWorkflow.execute(entities);
             offset += entities.size();
 
-            LOG.info(String.format("Bulk Updating: Already updated %s publications", offset));
+            LOG.info(String.format("Bulk Updating: Already updated %s publications",
+                    offset));
         } while (entities.isEmpty() || entities.size() >= ElasticBulkFetcher.getDefaultBulkSize());
         return true;
     }
@@ -85,7 +89,8 @@ public class ReindexWorkflow {
         postDashboardBulkWorkflow.recreateIndex();
 
         do {
-            entities = elasticBulkFetcher.fetchAllModels(offset, UserSavedPosts.class);
+            entities = elasticBulkFetcher.fetchAllModels(offset,
+                    UserSavedPosts.class);
 
             if (entities == null || entities.isEmpty()) {
                 break;
@@ -93,7 +98,8 @@ public class ReindexWorkflow {
             postDashboardBulkWorkflow.execute(entities);
             offset += entities.size();
 
-            LOG.info(String.format("Bulk Updating: Already updated %s dashboard posts", offset));
+            LOG.info(String.format("Bulk Updating: Already updated %s dashboard posts",
+                    offset));
         } while (entities.isEmpty() || entities.size() >= ElasticBulkFetcher.getDefaultBulkSize());
         return true;
     }
@@ -105,7 +111,8 @@ public class ReindexWorkflow {
         photoDashboardBulkWorkflow.recreateIndex();
 
         do {
-            entities = elasticBulkFetcher.fetchAllModels(offset, UserSavedPhotos.class);
+            entities = elasticBulkFetcher.fetchAllModels(offset,
+                    UserSavedPhotos.class);
 
             if (entities == null || entities.isEmpty()) {
                 break;
@@ -113,7 +120,8 @@ public class ReindexWorkflow {
             photoDashboardBulkWorkflow.execute(entities);
             offset += entities.size();
 
-            LOG.info(String.format("Bulk Updating: Already updated %s dashboard photos", offset));
+            LOG.info(String.format("Bulk Updating: Already updated %s dashboard photos",
+                    offset));
         } while (entities.isEmpty() || entities.size() >= ElasticBulkFetcher.getDefaultBulkSize());
         return true;
     }
@@ -125,7 +133,8 @@ public class ReindexWorkflow {
         countryBulkWorkflow.recreateIndex();
 
         do {
-            entities = elasticBulkFetcher.fetchAllModels(offset, Country.class);
+            entities = elasticBulkFetcher.fetchAllModels(offset,
+                    Country.class);
 
             if (entities == null || entities.isEmpty()) {
                 break;
@@ -133,7 +142,8 @@ public class ReindexWorkflow {
             countryBulkWorkflow.execute(entities);
             offset += entities.size();
 
-            LOG.info(String.format("Bulk Updating: Already updated %s countries", offset));
+            LOG.info(String.format("Bulk Updating: Already updated %s countries",
+                    offset));
         } while (entities.isEmpty() || entities.size() >= ElasticBulkFetcher.getDefaultBulkSize());
         return true;
     }
@@ -145,7 +155,8 @@ public class ReindexWorkflow {
         cityBulkWorkflow.recreateIndex();
 
         do {
-            entities = elasticBulkFetcher.fetchAllModels(offset, City.class);
+            entities = elasticBulkFetcher.fetchAllModels(offset,
+                    City.class);
 
             if (entities == null || entities.isEmpty()) {
                 break;
@@ -153,7 +164,8 @@ public class ReindexWorkflow {
             cityBulkWorkflow.execute(entities);
             offset += entities.size();
 
-            LOG.info(String.format("Bulk Updating: Already updated %s cities", offset));
+            LOG.info(String.format("Bulk Updating: Already updated %s cities",
+                    offset));
         } while (entities.isEmpty() || entities.size() >= ElasticBulkFetcher.getDefaultBulkSize());
         return true;
     }

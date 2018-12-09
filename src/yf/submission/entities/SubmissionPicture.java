@@ -1,7 +1,5 @@
 package yf.submission.entities;
 
-import yf.core.entities.AbstractDateEntity;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -9,17 +7,19 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
+import yf.core.entities.AbstractDateEntity;
+
 //@Entity
 //@Table(name = "submission_picture")
 public class SubmissionPicture extends AbstractDateEntity {
 
-//    @Id
+    //    @Id
 //    @NotNull
 //    @GeneratedValue
 //    @Column(name = "id")
     private Long id;
     private String url;
-//    @Column(name = "pic_order")
+    //    @Column(name = "pic_order")
     private Integer order;
 
     public Long getId() {

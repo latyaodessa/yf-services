@@ -4,7 +4,6 @@ import yf.post.dto.SharedBasicPostDTO;
 
 public class PostDashboardElasticDTO {
 
-
     private Long id;
     private Long date;
     private long user_id;

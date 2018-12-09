@@ -1,5 +1,6 @@
 package yf.submission.dtos;
 
+
 public class SubmissionParticipantDTO {
 
     private int number;
@@ -9,6 +10,20 @@ public class SubmissionParticipantDTO {
     private String city;
     private Boolean me;
     private String instagram;
+    private String vk;
+    private String facebook;
+    private String website;
+    private String agency;
+
+    private Long createdOn;
+
+    public int getNumber() {
+        return number;
+    }
+
+    public void setNumber(int number) {
+        this.number = number;
+    }
 
     public String getFirstName() {
         return firstName;
@@ -58,11 +73,43 @@ public class SubmissionParticipantDTO {
         this.instagram = instagram;
     }
 
-    public int getNumber() {
-        return number;
+    public String getVk() {
+        return vk;
     }
 
-    public void setNumber(int number) {
-        this.number = number;
+    public void setVk(String vk) {
+        this.vk = vk;
+    }
+
+    public String getFacebook() {
+        return facebook;
+    }
+
+    public void setFacebook(String facebook) {
+        this.facebook = facebook;
+    }
+
+    public String getWebsite() {
+        return website;
+    }
+
+    public void setWebsite(String website) {
+        this.website = website;
+    }
+
+    public String getAgency() {
+        return agency;
+    }
+
+    public void setAgency(String agency) {
+        this.agency = agency;
+    }
+
+    public Long getCreatedOn() {
+        return createdOn;
+    }
+
+    public void setCreatedOn(Long createdOn) {
+        this.createdOn = createdOn;
     }
 }

@@ -1,7 +1,5 @@
 package yf.user.entities;
 
-import yf.core.entities.AbstractVersionEntity;
-
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -14,11 +12,11 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
+import yf.core.entities.AbstractVersionEntity;
+
 @Entity
 @Table(name = "user_vk")
-@NamedQueries({
-        @NamedQuery(name = VKUser.QUERY_GET_VK_USER_BY_USER_ID, query = "SELECT t FROM VKUser t WHERE t.user.id = :user_id")
-})
+@NamedQueries({@NamedQuery(name = VKUser.QUERY_GET_VK_USER_BY_USER_ID, query = "SELECT t FROM VKUser t WHERE t.user.id = :user_id") })
 public class VKUser extends AbstractVersionEntity {
 
     public static final String QUERY_GET_VK_USER_BY_USER_ID = "VKUser.getVkUserByUserId";
@@ -27,7 +25,7 @@ public class VKUser extends AbstractVersionEntity {
     @NotNull
     @Column(name = "id")
     private Long id;
-    @OneToOne(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST})
+    @OneToOne(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST })
     @JoinColumn(name = "user_id", referencedColumnName = "id", nullable = false)
     @NotNull
     private User user;
@@ -49,7 +47,7 @@ public class VKUser extends AbstractVersionEntity {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(final Long id) {
         this.id = id;
     }
 
@@ -57,7 +55,7 @@ public class VKUser extends AbstractVersionEntity {
         return user;
     }
 
-    public void setUser(User user) {
+    public void setUser(final User user) {
         this.user = user;
     }
 
@@ -65,7 +63,7 @@ public class VKUser extends AbstractVersionEntity {
         return firstName;
     }
 
-    public void setFirstName(String firstName) {
+    public void setFirstName(final String firstName) {
         this.firstName = firstName;
     }
 
@@ -73,7 +71,7 @@ public class VKUser extends AbstractVersionEntity {
         return lastName;
     }
 
-    public void setLastName(String lastName) {
+    public void setLastName(final String lastName) {
         this.lastName = lastName;
     }
 
@@ -81,7 +79,7 @@ public class VKUser extends AbstractVersionEntity {
         return sex;
     }
 
-    public void setSex(String sex) {
+    public void setSex(final String sex) {
         this.sex = sex;
     }
 
@@ -89,7 +87,7 @@ public class VKUser extends AbstractVersionEntity {
         return bdate;
     }
 
-    public void setBdate(String bdate) {
+    public void setBdate(final String bdate) {
         this.bdate = bdate;
     }
 
@@ -97,7 +95,7 @@ public class VKUser extends AbstractVersionEntity {
         return mobilePhone;
     }
 
-    public void setMobilePhone(String mobilePhone) {
+    public void setMobilePhone(final String mobilePhone) {
         this.mobilePhone = mobilePhone;
     }
 
@@ -105,7 +103,7 @@ public class VKUser extends AbstractVersionEntity {
         return homePhone;
     }
 
-    public void setHomePhone(String homePhone) {
+    public void setHomePhone(final String homePhone) {
         this.homePhone = homePhone;
     }
 
@@ -113,7 +111,7 @@ public class VKUser extends AbstractVersionEntity {
         return verified;
     }
 
-    public void setVerified(Boolean verified) {
+    public void setVerified(final Boolean verified) {
         this.verified = verified;
     }
 
@@ -121,7 +119,7 @@ public class VKUser extends AbstractVersionEntity {
         return country;
     }
 
-    public void setCountry(String country) {
+    public void setCountry(final String country) {
         this.country = country;
     }
 
@@ -129,7 +127,7 @@ public class VKUser extends AbstractVersionEntity {
         return city;
     }
 
-    public void setCity(String city) {
+    public void setCity(final String city) {
         this.city = city;
     }
 }

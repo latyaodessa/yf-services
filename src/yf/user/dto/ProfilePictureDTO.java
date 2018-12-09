@@ -12,7 +12,7 @@ public class ProfilePictureDTO {
         return fileId;
     }
 
-    public void setFileId(String fileId) {
+    public void setFileId(final String fileId) {
         this.fileId = fileId;
     }
 
@@ -20,7 +20,7 @@ public class ProfilePictureDTO {
         return fileName;
     }
 
-    public void setFileName(String fileName) {
+    public void setFileName(final String fileName) {
         this.fileName = fileName;
     }
 
@@ -28,7 +28,7 @@ public class ProfilePictureDTO {
         return friendlyLink;
     }
 
-    public void setFriendlyLink(String friendlyLink) {
+    public void setFriendlyLink(final String friendlyLink) {
         this.friendlyLink = friendlyLink;
     }
 
@@ -36,7 +36,7 @@ public class ProfilePictureDTO {
         return nativeLink;
     }
 
-    public void setNativeLink(String nativeLink) {
+    public void setNativeLink(final String nativeLink) {
         this.nativeLink = nativeLink;
     }
 
@@ -44,7 +44,7 @@ public class ProfilePictureDTO {
         return sha1;
     }
 
-    public void setSha1(String sha1) {
+    public void setSha1(final String sha1) {
         this.sha1 = sha1;
     }
 }

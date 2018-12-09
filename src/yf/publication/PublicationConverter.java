@@ -1,5 +1,13 @@
 package yf.publication;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+
+import javax.inject.Inject;
+
 import yf.core.PropertiesResolover;
 import yf.post.dto.PostElasticDTO;
 import yf.post.entities.Post;
@@ -9,13 +17,6 @@ import yf.publication.dtos.PublicationTypeEnum;
 import yf.publication.dtos.PublicationUserDTO;
 import yf.publication.entities.Publication;
 import yf.publication.entities.PublicationUser;
-
-import javax.inject.Inject;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
 
 public class PublicationConverter {
 
@@ -29,29 +30,31 @@ public class PublicationConverter {
         publication.setVkPost(post);
         publication.setCreatedOn(getDateFromString(post.getDate()));
 
-
         return publication;
     }
-
 
     public PublicationElasticDTO publicationToElasticDTO(final Publication publication) {
         PublicationElasticDTO dto = new PublicationElasticDTO();
         dto.setId(publication.getId());
         dto.setDate(publication.getCreatedOn());
         dto.setLink(publication.getLink());
-        dto.setPhotoshootDate(Optional.ofNullable(publication.getPhotoshootDate()).map(java.util.Date::getTime).orElse(null));
+        dto.setPhotoshootDate(Optional.ofNullable(publication.getPhotoshootDate())
+                .map(java.util.Date::getTime)
+                .orElse(null));
         dto.setLikes(publication.getLikes());
 
-        handlePublicationUsers(dto, publication.getPublicationUsers());
+        handlePublicationUsers(dto,
+                publication.getPublicationUsers());
         // TODO NORMAL, NOT VK
 
-        handleConvertionFromVKPost(dto, publication);
-
+        handleConvertionFromVKPost(dto,
+                publication);
 
         return dto;
     }
 
-    private void handleConvertionFromVKPost(final PublicationElasticDTO dto, final Publication publication) {
+    private void handleConvertionFromVKPost(final PublicationElasticDTO dto,
+                                            final Publication publication) {
         final Post vkPost = publication.getVkPost();
         if (vkPost != null) {
             dto.setType(getPublicationType(vkPost.getText()));
@@ -72,7 +75,8 @@ public class PublicationConverter {
 
     private Long getDateFromString(final String dateString) {
         try {
-            return new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(dateString).getTime();
+            return new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(dateString)
+                    .getTime();
         } catch (ParseException e) {
             return null;
         }
@@ -89,7 +93,8 @@ public class PublicationConverter {
         return null;
     }
 
-    private void handlePublicationUsers(final PublicationElasticDTO dto, final List<PublicationUser> publicationUsers) {
+    private void handlePublicationUsers(final PublicationElasticDTO dto,
+                                        final List<PublicationUser> publicationUsers) {
 
         List<PublicationUserDTO> phUsers = new ArrayList<>();
         List<PublicationUserDTO> mdUsers = new ArrayList<>();
@@ -109,10 +114,13 @@ public class PublicationConverter {
 
     private PublicationUserDTO publicationUserToDTO(final PublicationUser publicationUser) {
         PublicationUserDTO dto = new PublicationUserDTO();
-        dto.setFirstName(publicationUser.getUser().getFirstName());
-        dto.setLastName(publicationUser.getUser().getLastName());
+        dto.setFirstName(publicationUser.getUser()
+                .getFirstName());
+        dto.setLastName(publicationUser.getUser()
+                .getLastName());
         dto.setProfileId(publicationUser.getId());
-        dto.setUserId(publicationUser.getUser().getId());
+        dto.setUserId(publicationUser.getUser()
+                .getId());
         return dto;
     }
 }

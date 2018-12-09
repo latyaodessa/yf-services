@@ -1,12 +1,13 @@
 package yf.submission.services;
 
+import java.util.Date;
+import java.util.UUID;
+
+import javax.inject.Inject;
+
 import yf.submission.dtos.SubmissionStatusEnum;
 import yf.submission.entities.Submission;
 import yf.user.UserDao;
-
-import javax.inject.Inject;
-import java.util.Date;
-import java.util.UUID;
 
 public class SubmissionWorkflow {
 
@@ -16,7 +17,8 @@ public class SubmissionWorkflow {
     public Submission initEmptySubmission(final Long userId) {
         Submission submission = new Submission();
         submission.setCreatedOn(new Date().getTime());
-        submission.setUuid(UUID.randomUUID().toString());
+        submission.setUuid(UUID.randomUUID()
+                .toString());
         submission.setSubmitter(userDao.getUserById(userId));
         submission.setStatus(SubmissionStatusEnum.INCOMPLETED);
         return submission;

@@ -1,10 +1,6 @@
 package yf.user.rest;
 
-import yf.user.UserWorkflow;
-import yf.user.dto.LoginDTO;
-import yf.user.dto.UserAllDataDto;
-import yf.user.entities.User;
-import yf.user.services.UserService;
+import java.util.Map;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;
@@ -15,7 +11,12 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import java.util.Map;
+
+import yf.user.UserWorkflow;
+import yf.user.dto.LoginDTO;
+import yf.user.dto.UserAllDataDto;
+import yf.user.entities.User;
+import yf.user.services.UserService;
 
 @Path("auth")
 @Produces(MediaType.APPLICATION_JSON)
@@ -34,7 +35,8 @@ public class LoginRestImpl {
     public Response login(final LoginDTO loginDTO) {
         final User user = userService.getUserByEmailNickName(loginDTO);
 
-        Response errorResponse = authRestHelper.isAuthValid(loginDTO, user);
+        Response errorResponse = authRestHelper.isAuthValid(loginDTO,
+                user);
 
         if (errorResponse != null) {
             return errorResponse;
@@ -71,15 +73,15 @@ public class LoginRestImpl {
 
     @GET
     @Path("/reset/email/request/{email}")
-    public Response requestResetPassword(@PathParam("email") String email) {
+    public Response requestResetPassword(@PathParam("email") final String email) {
         return userService.requestResetPassword(email);
     }
 
     @GET
     @Path("reset/{verification}/{newPassword}/{repeatPassword}")
-    public Response resetPassword(@PathParam("verification") String verification,
-                                  @PathParam("newPassword") String newPassword,
-                                  @PathParam("repeatPassword") String repeatPassword) {
+    public Response resetPassword(@PathParam("verification") final String verification,
+                                  @PathParam("newPassword") final String newPassword,
+                                  @PathParam("repeatPassword") final String repeatPassword) {
         return userService.resetPassword(verification,
                 newPassword,
                 repeatPassword);
@@ -88,14 +90,14 @@ public class LoginRestImpl {
     // verification of email, phone etc ...
     @GET
     @Path("verify/{verification}")
-    public Response verifyUser(@PathParam("verification") String verification) {
+    public Response verifyUser(@PathParam("verification") final String verification) {
         return userService.verifyUserVerification(verification);
     }
 
     @GET
     @Path("validate/token/{userId}/{token}")
-    public Response validateToken(@PathParam("userId") Long userId,
-                                  @PathParam("token") String token) {
+    public Response validateToken(@PathParam("userId") final Long userId,
+                                  @PathParam("token") final String token) {
         final Boolean isValid = userService.validateToken(userId,
                 token);
         return Response.ok()
@@ -105,7 +107,7 @@ public class LoginRestImpl {
 
     @GET
     @Path("validate/{uuid}")
-    public Response validateUIID(@PathParam("uuid") String uuid) {
+    public Response validateUIID(@PathParam("uuid") final String uuid) {
         return userService.validateUiidVerification(uuid);
     }
 

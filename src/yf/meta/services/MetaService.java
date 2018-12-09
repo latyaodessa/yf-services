@@ -18,7 +18,7 @@ import java.util.List;
 @Stateless
 public class MetaService {
 
-    private static final String REGEX_SPEC_CHARACTER_CLEANER = "[^a-zA-Z а-яА-Я]";
+    private static final String REGEX_SPEC_CHARACTER_CLEANER = "[^a-zA-Z а-�?�?-Я]";
 
     @Inject
     private NativeElasticSingleton nativeElastiClient;
@@ -29,17 +29,20 @@ public class MetaService {
 
     public List<CountryDTO> searchCountry(final String countrySearchText) {
 
-        String cleanedQuery = countrySearchText.replaceAll(REGEX_SPEC_CHARACTER_CLEANER, "");
+        String cleanedQuery = countrySearchText.replaceAll(REGEX_SPEC_CHARACTER_CLEANER,
+                "");
 
         BoolQueryBuilder boolQuery = QueryBuilders.boolQuery();
         if (!countrySearchText.isEmpty()) {
-            boolQuery.should(QueryBuilders.matchQuery("titleRu", cleanedQuery));
-            boolQuery.should(QueryBuilders.matchQuery("titleEn", cleanedQuery));
+            boolQuery.should(QueryBuilders.matchQuery("titleRu",
+                    cleanedQuery));
+            boolQuery.should(QueryBuilders.matchQuery("titleEn",
+                    cleanedQuery));
             boolQuery.minimumShouldMatch(1);
         }
 
-
-        SearchRequestBuilder builder = nativeElastiClient.getClient().prepareSearch(properties.get("elastic.index.country"))
+        SearchRequestBuilder builder = nativeElastiClient.getClient()
+                .prepareSearch(properties.get("elastic.index.country"))
                 .setQuery(boolQuery);
 
         if (countrySearchText.isEmpty()) {
@@ -48,30 +51,38 @@ public class MetaService {
         SearchResponse res = builder.execute()
                 .actionGet();
 
-        return elasticExecutor.execute(res, CountryDTO.class);
+        return elasticExecutor.execute(res,
+                CountryDTO.class);
     }
 
-    public List<CityDTO> searchCitiesOfCountry(final String countryId, final String countrySearchText) {
+    public List<CityDTO> searchCitiesOfCountry(final String countryId,
+                                               final String countrySearchText) {
 
-        String cleanedQuery = countrySearchText.replaceAll(REGEX_SPEC_CHARACTER_CLEANER, "");
+        String cleanedQuery = countrySearchText.replaceAll(REGEX_SPEC_CHARACTER_CLEANER,
+                "");
 
         BoolQueryBuilder boolQuery = QueryBuilders.boolQuery();
-        boolQuery.must(QueryBuilders.termQuery("countryId", countryId));
+        boolQuery.must(QueryBuilders.termQuery("countryId",
+                countryId));
         if (!countrySearchText.isEmpty()) {
-            boolQuery.should(QueryBuilders.matchQuery("titleRu", cleanedQuery));
-            boolQuery.should(QueryBuilders.matchQuery("titleEn", cleanedQuery));
+            boolQuery.should(QueryBuilders.matchQuery("titleRu",
+                    cleanedQuery));
+            boolQuery.should(QueryBuilders.matchQuery("titleEn",
+                    cleanedQuery));
             boolQuery.minimumShouldMatch(1);
         }
 
-
-        SearchRequestBuilder builder = nativeElastiClient.getClient().prepareSearch(properties.get("elastic.index.city"))
+        SearchRequestBuilder builder = nativeElastiClient.getClient()
+                .prepareSearch(properties.get("elastic.index.city"))
                 .setQuery(boolQuery);
         if (countrySearchText.isEmpty()) {
-            builder.addSort("titleRu.raw", SortOrder.ASC);
+            builder.addSort("titleRu.raw",
+                    SortOrder.ASC);
         }
         SearchResponse res = builder.execute()
                 .actionGet();
 
-        return elasticExecutor.execute(res, CityDTO.class);
+        return elasticExecutor.execute(res,
+                CityDTO.class);
     }
 }

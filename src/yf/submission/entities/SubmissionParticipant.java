@@ -1,8 +1,7 @@
 package yf.submission.entities;
 
-import org.hibernate.annotations.Fetch;
-import org.hibernate.annotations.FetchMode;
 import yf.core.entities.AbstractDateEntity;
+import yf.meta.entities.City;
 import yf.meta.entities.Country;
 import yf.submission.dtos.PhotoshootingParticipantTypeEnum;
 
@@ -56,6 +55,14 @@ public class SubmissionParticipant extends AbstractDateEntity {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public int getNumber() {
+        return number;
+    }
+
+    public void setNumber(int number) {
+        this.number = number;
     }
 
     public String getFirstName() {
@@ -144,13 +151,5 @@ public class SubmissionParticipant extends AbstractDateEntity {
 
     public void setAgency(String agency) {
         this.agency = agency;
-    }
-
-    public int getNumber() {
-        return number;
-    }
-
-    public void setNumber(int number) {
-        this.number = number;
     }
 }

@@ -19,7 +19,7 @@ public class UserDto {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(final Long id) {
         this.id = id;
     }
 
@@ -27,7 +27,7 @@ public class UserDto {
         return email;
     }
 
-    public void setEmail(String email) {
+    public void setEmail(final String email) {
         this.email = email;
     }
 
@@ -35,7 +35,7 @@ public class UserDto {
         return type;
     }
 
-    public void setType(UserTypeEnum type) {
+    public void setType(final UserTypeEnum type) {
         this.type = type;
     }
 
@@ -43,7 +43,7 @@ public class UserDto {
         return status;
     }
 
-    public void setStatus(UserStatusEnum status) {
+    public void setStatus(final UserStatusEnum status) {
         this.status = status;
     }
 
@@ -51,7 +51,7 @@ public class UserDto {
         return createdOn;
     }
 
-    public void setCreatedOn(Date createdOn) {
+    public void setCreatedOn(final Date createdOn) {
         this.createdOn = createdOn;
     }
 
@@ -59,7 +59,7 @@ public class UserDto {
         return nickName;
     }
 
-    public void setNickName(String nickName) {
+    public void setNickName(final String nickName) {
         this.nickName = nickName;
     }
 
@@ -67,7 +67,7 @@ public class UserDto {
         return lastName;
     }
 
-    public void setLastName(String lastName) {
+    public void setLastName(final String lastName) {
         this.lastName = lastName;
     }
 
@@ -75,7 +75,7 @@ public class UserDto {
         return firstName;
     }
 
-    public void setFirstName(String firstName) {
+    public void setFirstName(final String firstName) {
         this.firstName = firstName;
     }
 
@@ -83,7 +83,7 @@ public class UserDto {
         return authorized;
     }
 
-    public void setAuthorized(Boolean authorized) {
+    public void setAuthorized(final Boolean authorized) {
         this.authorized = authorized;
     }
 
@@ -91,7 +91,7 @@ public class UserDto {
         return gender;
     }
 
-    public void setGender(String gender) {
+    public void setGender(final String gender) {
         this.gender = gender;
     }
 
@@ -99,7 +99,7 @@ public class UserDto {
         return profilePictureDTO;
     }
 
-    public void setProfilePictureDTO(ProfilePictureDTO profilePictureDTO) {
+    public void setProfilePictureDTO(final ProfilePictureDTO profilePictureDTO) {
         this.profilePictureDTO = profilePictureDTO;
     }
 }

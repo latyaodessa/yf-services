@@ -22,7 +22,6 @@ import javax.ws.rs.core.Response;
 @Stateless
 public class SubmissionRestImpl {
 
-
     @Inject
     private SubmissionService submissionService;
     @Inject
@@ -33,6 +32,7 @@ public class SubmissionRestImpl {
     @Produces({MediaType.APPLICATION_JSON})
     @Consumes({MediaType.APPLICATION_JSON})
     public Response initSubmission(@PathParam("userId") final Long userId, @PathParam("token") final String token, final AllParticipantsDTO allParticipantsDTO) {
+
         final Boolean isValid = userService.validateToken(userId,
                 token);
         if (!isValid) {
@@ -93,6 +93,5 @@ public class SubmissionRestImpl {
                 .build();
 
     }
-
 
 }

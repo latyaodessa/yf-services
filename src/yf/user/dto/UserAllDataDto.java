@@ -4,6 +4,10 @@ import yf.user.dto.external.FBUserDTO;
 import yf.user.dto.external.VKUserDTO;
 
 public class UserAllDataDto {
+    private UserDto user;
+    private VKUserDTO vkUser;
+    private FBUserDTO fbUser;
+
     public UserDto getUser() {
         return user;
     }
@@ -27,8 +31,4 @@ public class UserAllDataDto {
     public void setFbUser(final FBUserDTO fbUser) {
         this.fbUser = fbUser;
     }
-
-    private UserDto user;
-    private VKUserDTO vkUser;
-    private FBUserDTO fbUser;
 }

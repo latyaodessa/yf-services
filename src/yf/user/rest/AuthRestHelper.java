@@ -1,16 +1,17 @@
 package yf.user.rest;
 
+import java.util.HashMap;
+import java.util.Map;
+
+import javax.inject.Inject;
+import javax.ws.rs.core.Response;
+
 import yf.user.UserDao;
 import yf.user.dto.AuthResponseStatusesEnum;
 import yf.user.dto.LoginDTO;
 import yf.user.dto.UserAllDataDto;
 import yf.user.entities.User;
 import yf.user.services.JWTService;
-
-import javax.inject.Inject;
-import javax.ws.rs.core.Response;
-import java.util.HashMap;
-import java.util.Map;
 
 public class AuthRestHelper {
 
@@ -35,8 +36,8 @@ public class AuthRestHelper {
         return null;
     }
 
-
-    public Response isAuthValid(final LoginDTO loginDTO, final User user) {
+    public Response isAuthValid(final LoginDTO loginDTO,
+                                final User user) {
 
         AuthResponseStatusesEnum error = loginUserValidityCheck(user,
                 loginDTO);
@@ -62,7 +63,6 @@ public class AuthRestHelper {
 
         return null;
     }
-
 
     public Map<String, Object> userAuthResponseEntityMap(final UserAllDataDto dto) {
         Map<String, Object> resp = new HashMap<>();
@@ -92,7 +92,7 @@ public class AuthRestHelper {
     private AuthResponseStatusesEnum passwordValidityCheck(final LoginDTO loginDTO) {
         if (loginDTO.getPassword()
                 .length() < 7 || loginDTO.getPassword()
-                .matches("\\s+")) {
+                        .matches("\\s+")) {
             return AuthResponseStatusesEnum.PASSWORD_NOT_VALID;
         }
 
@@ -106,10 +106,11 @@ public class AuthRestHelper {
         if (user == null) {
             return AuthResponseStatusesEnum.NOT_EXIST;
         }
-//        if (!user.isAuthorize()) {
-//            return Response.status(401).entity(AuthResponseStatusesEnum.NOT_AUTHORIZED).build();
-//        }
-        if (!user.getPassword().equals(loginDTO.getPassword())) {
+        // if (!user.isAuthorize()) {
+        // return Response.status(401).entity(AuthResponseStatusesEnum.NOT_AUTHORIZED).build();
+        // }
+        if (!user.getPassword()
+                .equals(loginDTO.getPassword())) {
             return AuthResponseStatusesEnum.WRONG_PASSWORD;
         }
 
@@ -127,7 +128,7 @@ public class AuthRestHelper {
         if (dto.getUser()
                 .getAuthorized() == null
                 || !dto.getUser()
-                .getAuthorized()) {
+                        .getAuthorized()) {
             return AuthResponseStatusesEnum.NOT_AUTHORIZED;
         }
 

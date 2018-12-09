@@ -1,27 +1,25 @@
 package yf.post.parser.rest.scheduler;
 
-import yf.settings.SystemSettings;
-import yf.settings.SystemSettingsWorkflow;
+import java.util.Date;
+import java.util.logging.Logger;
 
 import javax.ejb.Schedule;
 import javax.ejb.Singleton;
 import javax.ejb.Timeout;
 import javax.inject.Inject;
-import java.util.Date;
-import java.util.logging.Logger;
+
+import yf.settings.SystemSettings;
+import yf.settings.SystemSettingsWorkflow;
 
 @Singleton
 public class RestScheduler implements Scheduler {
 
-    private static final Logger LOG = Logger.getLogger(RestScheduler.class.getName());
-
     public static final String VK_SCHEDULER_ENABLED_SETTING = "vk_scheduler_enabled";
-
+    private static final Logger LOG = Logger.getLogger(RestScheduler.class.getName());
     @Inject
     private SchedulerProcessor processor;
     @Inject
     private SystemSettingsWorkflow systemSettingsWorkflow;
-
 
     @Schedule(minute = "*/30", hour = "*")
     @Timeout
@@ -38,10 +36,10 @@ public class RestScheduler implements Scheduler {
         }
     }
 
-//    @Schedule(hour = "11")
-//    @Timeout
-//    public void weeklyTop() {
-//        processor.triggerWeeklyTop();
-//    }
+    // @Schedule(hour = "11")
+    // @Timeout
+    // public void weeklyTop() {
+    // processor.triggerWeeklyTop();
+    // }
 
 }

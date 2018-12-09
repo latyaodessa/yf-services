@@ -10,7 +10,8 @@ public class CityConverter {
         dto.setId(entity.getId());
         dto.setTitleRu(entity.getTitleRu());
         dto.setTitleEn(entity.getTitleEn());
-        dto.setCountryId(entity.getCountry().getId());
+        dto.setCountryId(entity.getCountry()
+                .getId());
         return dto;
     }
 }

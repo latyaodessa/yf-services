@@ -8,15 +8,15 @@ public class LoginDTO {
         return user;
     }
 
+    public void setUser(final String user) {
+        this.user = user;
+    }
+
     public String getPassword() {
         return password;
     }
 
     public void setPassword(final String password) {
         this.password = password;
-    }
-
-    public void setUser(final String user) {
-        this.user = user;
     }
 }
