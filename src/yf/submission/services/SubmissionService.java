@@ -8,8 +8,10 @@ import yf.submission.entities.SubmissionParticipant;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -27,6 +29,11 @@ public class SubmissionService {
         final Submission submission = submissionDAO.geSubmissionByUUid(uuid, userId);
         return submissionConverter.toDto(submission);
 
+    }
+
+    public List<SubmissionDTO> getUserSubmissions(final Long userId, final int offset, final int limit) {
+        final List<Submission> submissionsList = submissionDAO.getSubmissionsByUserId(userId, offset, limit);
+        return submissionsList.stream().map(submission -> submissionConverter.toDto(submission)).collect(Collectors.toList());
     }
 
     public SubmissionDTO initSubmission(final AllParticipantsDTO allParticipantsDTO, final Long userId) {

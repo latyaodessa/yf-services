@@ -7,6 +7,7 @@ import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 import javax.transaction.Transactional;
+import java.util.List;
 
 public class SubmissionDAO {
 
@@ -27,7 +28,6 @@ public class SubmissionDAO {
     }
 
 
-
     public Submission findSavedPublicationById(final Long id) {
         return em.find(Submission.class, id);
     }
@@ -39,6 +39,18 @@ public class SubmissionDAO {
                 .setParameter("userId", userId);
         try {
             return query.getSingleResult();
+        } catch (NoResultException e) {
+            return null;
+        }
+    }
+
+    public List<Submission> getSubmissionsByUserId(final Long userId, final int offset, final int limit) {
+        TypedQuery<Submission> query = em.createNamedQuery(Submission.QUERY_GET_SUBMISSIONS_BY_USERID, Submission.class)
+                .setParameter("userId", userId)
+                .setFirstResult(offset)
+                .setMaxResults(limit);
+        try {
+            return query.getResultList();
         } catch (NoResultException e) {
             return null;
         }

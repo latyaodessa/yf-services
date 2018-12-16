@@ -1,7 +1,6 @@
 package yf.submission.entities;
 
 import yf.core.entities.AbstractDateEntity;
-import yf.meta.entities.Country;
 import yf.submission.dtos.SubmissionStatusEnum;
 import yf.user.entities.User;
 
@@ -20,17 +19,19 @@ import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
-import java.util.List;
 import java.util.Set;
 
 @Entity
 @Table(name = "submission")
 @NamedQueries({
-        @NamedQuery(name = Submission.QUERY_GET_SUBMISSION_BY_UUID_USERID, query = "SELECT t FROM Submission t WHERE t.submitter.id = :userId AND uuid = :uuid")
+        @NamedQuery(name = Submission.QUERY_GET_SUBMISSION_BY_UUID_USERID, query = "SELECT t FROM Submission t WHERE t.submitter.id = :userId AND uuid = :uuid"),
+        @NamedQuery(name = Submission.QUERY_GET_SUBMISSIONS_BY_USERID, query = "SELECT t FROM Submission t WHERE t.submitter.id = :userId ORDER BY t.createdOn DESC")
 })
 public class Submission extends AbstractDateEntity {
 
     public static final String QUERY_GET_SUBMISSION_BY_UUID_USERID = "Submission.getSubmissionByUUidUserId";
+    public static final String QUERY_GET_SUBMISSIONS_BY_USERID = "Submission.getSubmissionsByUserId";
+
     @Id
     @NotNull
     @GeneratedValue
@@ -38,9 +39,8 @@ public class Submission extends AbstractDateEntity {
     private Long id;
     private String uuid;
     private String text;
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "country_id")
-    private Country country;
+    @JoinColumn(name = "country")
+    private String country;
     private String city;
     @Column(name = "event_date")
     private Long eventDate;
@@ -51,12 +51,6 @@ public class Submission extends AbstractDateEntity {
     private String comment;
     private String equipment;
 
-    @OneToMany(orphanRemoval = true,
-            cascade = {CascadeType.MERGE,
-                    CascadeType.PERSIST},
-            fetch = FetchType.LAZY)
-    @JoinColumn(name = "submission_fk")
-    private List<SubmissionPicture> submissionPictures;
     @OneToMany(orphanRemoval = true,
             cascade = {CascadeType.MERGE,
                     CascadeType.PERSIST},
@@ -92,11 +86,11 @@ public class Submission extends AbstractDateEntity {
         this.text = text;
     }
 
-    public Country getCountry() {
+    public String getCountry() {
         return country;
     }
 
-    public void setCountry(Country country) {
+    public void setCountry(String country) {
         this.country = country;
     }
 
@@ -138,14 +132,6 @@ public class Submission extends AbstractDateEntity {
 
     public void setEquipment(String equipment) {
         this.equipment = equipment;
-    }
-
-    public List<SubmissionPicture> getSubmissionPictures() {
-        return submissionPictures;
-    }
-
-    public void setSubmissionPictures(List<SubmissionPicture> submissionPictures) {
-        this.submissionPictures = submissionPictures;
     }
 
     public Set<SubmissionParticipant> getSubmissionParticipants() {

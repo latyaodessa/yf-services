@@ -243,40 +243,40 @@
             <!--</plugin>-->
 
 
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-checkstyle-plugin</artifactId>
-                <version>2.15</version>
-                <dependencies>
-                    <dependency>
-                        <groupId>com.puppycrawl.tools</groupId>
-                        <artifactId>checkstyle</artifactId>
-                        <version>6.5</version>
-                    </dependency>
-                </dependencies>
-                <configuration>
-                    <configLocation>${project.setup.dir}checkstyle${file.separator}cp-check-style.xml
-                    </configLocation>
-                    <linkXRef>false</linkXRef>
-                    <skip>false</skip>
-                    <outputFile>
-                        ${project.build.directory}${file.separator}report${file.separator}checkstyle-result.xml
-                    </outputFile>
-                    <failsOnError>true</failsOnError>
-                    <failOnViolation>true</failOnViolation>
-                    <consoleOutput>true</consoleOutput>
-                    <violationSeverity>info</violationSeverity>
-                    <excludes>**/*_.java</excludes>
-                </configuration>
-                <executions>
-                    <execution>
-                        <phase>validate</phase>
-                        <goals>
-                            <goal>check</goal>
-                            <!--<goal>cpd-check</goal>-->
-                        </goals>
-                    </execution>
-                </executions>
+            <!--<plugin>-->
+                <!--<groupId>org.apache.maven.plugins</groupId>-->
+                <!--<artifactId>maven-checkstyle-plugin</artifactId>-->
+                <!--<version>2.15</version>-->
+                <!--<dependencies>-->
+                    <!--<dependency>-->
+                        <!--<groupId>com.puppycrawl.tools</groupId>-->
+                        <!--<artifactId>checkstyle</artifactId>-->
+                        <!--<version>6.5</version>-->
+                    <!--</dependency>-->
+                <!--</dependencies>-->
+                <!--<configuration>-->
+                    <!--<configLocation>${project.setup.dir}checkstyle${file.separator}cp-check-style.xml-->
+                    <!--</configLocation>-->
+                    <!--<linkXRef>false</linkXRef>-->
+                    <!--<skip>false</skip>-->
+                    <!--<outputFile>-->
+                        <!--${project.build.directory}${file.separator}report${file.separator}checkstyle-result.xml-->
+                    <!--</outputFile>-->
+                    <!--<failsOnError>true</failsOnError>-->
+                    <!--<failOnViolation>true</failOnViolation>-->
+                    <!--<consoleOutput>true</consoleOutput>-->
+                    <!--<violationSeverity>info</violationSeverity>-->
+                    <!--<excludes>**/*_.java</excludes>-->
+                <!--</configuration>-->
+                <!--<executions>-->
+                    <!--<execution>-->
+                        <!--<phase>validate</phase>-->
+                        <!--<goals>-->
+                            <!--<goal>check</goal>-->
+                            <!--&lt;!&ndash;<goal>cpd-check</goal>&ndash;&gt;-->
+                        <!--</goals>-->
+                    <!--</execution>-->
+                <!--</executions>-->
                 <!--<executions>-->
                 <!--<execution>-->
                 <!--<phase>process-sources</phase>-->
@@ -288,7 +288,7 @@
                 <!--<configuration>-->
                 <!--<failsOnError>true</failsOnError>-->
                 <!--</configuration>-->
-            </plugin>
+            <!--</plugin>-->
 
             <plugin>
                 <artifactId>maven-compiler-plugin</artifactId>

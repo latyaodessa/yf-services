@@ -9,6 +9,7 @@ import yf.submission.dtos.SubmissionStatusEnum;
 import yf.submission.entities.Submission;
 import yf.submission.entities.SubmissionParticipant;
 import yf.user.UserConverter;
+import yf.user.UserDao;
 
 import javax.inject.Inject;
 import java.util.Date;
@@ -16,19 +17,26 @@ import java.util.Optional;
 
 
 public class SubmissionConverter {
-    @Inject
-    private MetaDataDao metaDataDao;
-    @Inject
-    private CountryConverter countryConverter;
+//    @Inject
+//    private MetaDataDao metaDataDao;
+//    @Inject
+//    private CountryConverter countryConverter;
     @Inject
     private UserConverter userConverter;
+    @Inject
+    private UserDao userDao;
+//    @Inject
+//    private MetaDataDao metaDataDao;
 
     public SubmissionParticipant participantDTOToEntity(final SubmissionParticipantDTO dto, final PhotoshootingParticipantTypeEnum typeEnum) {
         SubmissionParticipant entity = new SubmissionParticipant();
         entity.setCity(dto.getCity());
         entity.setNumber(dto.getNumber());
-        entity.setCountry(metaDataDao.getCountryById(dto.getCountry().getKey()));
+        entity.setCountry(dto.getCountry());
         entity.setAgency(dto.getAgency());
+
+        entity.setCity(dto.getCity());
+        entity.setCountry(dto.getCountry());
         entity.setFacebook(dto.getFacebook());
         entity.setInstagram(dto.getInstagram());
         entity.setMe(dto.getMe());
@@ -43,7 +51,7 @@ public class SubmissionConverter {
     public void handleSubmissionConvertion(final SubmissionDTO dto, final Submission entity) {
         entity.setCreatedOn(new Date().getTime());
         entity.setText(dto.getText());
-        entity.setCountry(metaDataDao.getCountryById(dto.getCountry().getKey()));
+        entity.setCountry(entity.getCountry());
         entity.setCity(dto.getCity());
         entity.setEquipment(dto.getEquipment());
         entity.setEventDate(dto.getEventDate());
@@ -55,7 +63,7 @@ public class SubmissionConverter {
         SubmissionParticipantDTO dto = new SubmissionParticipantDTO();
         dto.setCity(entity.getCity());
         dto.setNumber(entity.getNumber());
-        dto.setCountry(countryConverter.toFrontendDto(entity.getCountry()));
+        dto.setCountry(entity.getCountry());
         dto.setInstagram(entity.getInstagram());
         dto.setMe(entity.getMe());
         dto.setLastName(entity.getLastName());
@@ -63,22 +71,13 @@ public class SubmissionConverter {
         return dto;
     }
 
-//    public SubmissionPictureDTO submissionPictureEntityToDTO(final SubmissionPicture submissionPicture) {
-//        SubmissionPictureDTO dto = new SubmissionPictureDTO();
-//        dto.setCreatedOn(submissionPicture.getCreatedOn());
-//        dto.setId(submissionPicture.getId());
-//        dto.setOrder(submissionPicture.getOrder());
-//        dto.setUrl(submissionPicture.getUrl());
-//        return dto;
-//    }
-
     public SubmissionDTO toDto(final Submission enity) {
         SubmissionDTO dto = new SubmissionDTO();
         dto.setCreatedOn(enity.getCreatedOn());
         dto.setId(enity.getId());
         dto.setUuid(enity.getUuid());
         dto.setText(enity.getText());
-        dto.setCountry(Optional.ofNullable(enity.getCountry()).map(country -> countryConverter.toFrontendDto(country)).orElse(null));
+        dto.setCountry(enity.getCountry());
         dto.setCity(enity.getCity());
         dto.setEventDate(enity.getEventDate());
         dto.setStatus(enity.getStatus());

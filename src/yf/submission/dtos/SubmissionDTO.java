@@ -2,27 +2,22 @@ package yf.submission.dtos;
 
 import yf.user.dto.UserDto;
 
-import java.util.HashSet;
-import java.util.Set;
-
 public class SubmissionDTO {
 
     private Long id;
     private String uuid;
     private String text;
-    private CountryFrontendDto country;
+    private String country;
     private String city;
     private Long eventDate;
     private SubmissionStatusEnum status;
     private String comment;
-    private Set<SubmissionPictureDTO> submissionPictures;
     private AllParticipantsDTO allParticipants;
     private Long createdOn;
     private UserDto user;
     private String equipment;
 
     public SubmissionDTO() {
-        submissionPictures = new HashSet<>();
         allParticipants = new AllParticipantsDTO();
     }
 
@@ -50,11 +45,11 @@ public class SubmissionDTO {
         this.text = text;
     }
 
-    public CountryFrontendDto getCountry() {
+    public String getCountry() {
         return country;
     }
 
-    public void setCountry(CountryFrontendDto country) {
+    public void setCountry(String country) {
         this.country = country;
     }
 
@@ -88,15 +83,6 @@ public class SubmissionDTO {
 
     public void setComment(String comment) {
         this.comment = comment;
-    }
-
-
-    public Set<SubmissionPictureDTO> getSubmissionPictures() {
-        return submissionPictures;
-    }
-
-    public void setSubmissionPictures(Set<SubmissionPictureDTO> submissionPictures) {
-        this.submissionPictures = submissionPictures;
     }
 
     public AllParticipantsDTO getAllParticipants() {

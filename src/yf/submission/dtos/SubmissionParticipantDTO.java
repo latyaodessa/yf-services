@@ -6,7 +6,7 @@ public class SubmissionParticipantDTO {
     private int number;
     private String firstName;
     private String lastName;
-    private CountryFrontendDto country;
+    private String country;
     private String city;
     private Boolean me;
     private String instagram;
@@ -41,11 +41,11 @@ public class SubmissionParticipantDTO {
         this.lastName = lastName;
     }
 
-    public CountryFrontendDto getCountry() {
+    public String getCountry() {
         return country;
     }
 
-    public void setCountry(CountryFrontendDto country) {
+    public void setCountry(String country) {
         this.country = country;
     }
 

@@ -9,14 +9,14 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
-@Entity
-@Table(name = "_cities")
+//@Entity
+//@Table(name = "_cities")
 public class City {
 
-    @Id
-    @NotNull
-    @GeneratedValue
-    @Column(name = "city_id")
+//    @Id
+//    @NotNull
+//    @GeneratedValue
+//    @Column(name = "city_id")
     private Long id;
     @OneToOne
     @JoinColumn(name = "country_id")

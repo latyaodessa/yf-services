@@ -7,13 +7,13 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
-@Entity
-@Table(name = "_countries")
+//@Entity
+//@Table(name = "_countries")
 public class Country {
 
-    @Id
-    @NotNull
-    @GeneratedValue
+//    @Id
+//    @NotNull
+//    @GeneratedValue
     @Column(name = "country_id")
     private Long id;
     @Column(name = "title_ru")

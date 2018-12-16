@@ -94,4 +94,21 @@ public class SubmissionRestImpl {
 
     }
 
+    @GET
+    @Path("all/{userId}/{token}/{offset}/{limit}")
+    public Response getAllUserSubmissions(@PathParam("userId") final Long userId, @PathParam("token") final String token,
+                                          @PathParam("offset") final Integer offset, @PathParam("limit") final Integer limit) {
+        final Boolean isValid = userService.validateToken(userId,
+                token);
+        if (!isValid) {
+            Response.status(401)
+                    .entity(AuthResponseStatusesEnum.VERIFICATION_NOT_VALID)
+                    .build();
+        }
+        return Response.status(200)
+                .entity(submissionService.getUserSubmissions(userId, offset, limit))
+                .build();
+
+    }
+
 }

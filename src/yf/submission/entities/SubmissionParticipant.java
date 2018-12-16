@@ -1,19 +1,14 @@
 package yf.submission.entities;
 
 import yf.core.entities.AbstractDateEntity;
-import yf.meta.entities.City;
-import yf.meta.entities.Country;
 import yf.submission.dtos.PhotoshootingParticipantTypeEnum;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
@@ -31,12 +26,7 @@ public class SubmissionParticipant extends AbstractDateEntity {
     private String firstName;
     @Column(name = "last_name")
     private String lastName;
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "country_id")
-    private Country country;
-    //    @OneToOne(fetch = FetchType.LAZY)
-//    @JoinColumn(name = "city_id")
-//    private City city;
+    private String country;
     private String city;
     private Boolean me;
 
@@ -81,11 +71,11 @@ public class SubmissionParticipant extends AbstractDateEntity {
         this.lastName = lastName;
     }
 
-    public Country getCountry() {
+    public String getCountry() {
         return country;
     }
 
-    public void setCountry(Country country) {
+    public void setCountry(String country) {
         this.country = country;
     }
 
