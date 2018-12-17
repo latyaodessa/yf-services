@@ -1,5 +1,6 @@
 package yf.submission.services;
 
+import yf.submission.dtos.SubmissionStatusEnum;
 import yf.submission.entities.Submission;
 
 import javax.persistence.EntityManager;
@@ -49,6 +50,17 @@ public class SubmissionDAO {
                 .setParameter("userId", userId)
                 .setFirstResult(offset)
                 .setMaxResults(limit);
+        try {
+            return query.getResultList();
+        } catch (NoResultException e) {
+            return null;
+        }
+    }
+
+
+    public List<Submission> getSubmissionsWithStatus(final SubmissionStatusEnum status) {
+        TypedQuery<Submission> query = em.createNamedQuery(Submission.QUERY_GET_SUBMISSIONS_WITH_STATUS, Submission.class)
+                .setParameter("status", status);
         try {
             return query.getResultList();
         } catch (NoResultException e) {

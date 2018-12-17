@@ -111,4 +111,13 @@ public class SubmissionRestImpl {
 
     }
 
+    @GET
+    @Path("clean")
+    public Response cleanIncompletedSubmittions() {
+        return Response.status(200)
+                .entity(submissionService.cleanIncompletedSubmissions())
+                .build();
+
+    }
+
 }

@@ -1,14 +1,16 @@
 package yf.submission.services;
 
+import org.joda.time.DateTime;
 import yf.submission.dtos.AllParticipantsDTO;
 import yf.submission.dtos.PhotoshootingParticipantTypeEnum;
 import yf.submission.dtos.SubmissionDTO;
+import yf.submission.dtos.SubmissionStatusEnum;
 import yf.submission.entities.Submission;
 import yf.submission.entities.SubmissionParticipant;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;
-import java.util.Comparator;
+import java.sql.Timestamp;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
@@ -28,6 +30,31 @@ public class SubmissionService {
     public SubmissionDTO geSubmissionByUUid(final String uuid, final Long userId) {
         final Submission submission = submissionDAO.geSubmissionByUUid(uuid, userId);
         return submissionConverter.toDto(submission);
+
+    }
+
+    public List<Submission> cleanIncompletedSubmissions() {
+        final Date today = new Date();
+        final Date lastDays = new DateTime(today).minusDays(2)
+                .toDate();
+
+        final List<Submission> submissions = submissionDAO.getSubmissionsWithStatus(SubmissionStatusEnum.INCOMPLETED);
+        if (submissions == null) {
+            return null;
+        }
+
+        final List<Submission> expiredSubmittions = submissions.stream().filter(submission -> {
+            final Timestamp sbmtTime = new Timestamp(submission.getCreatedOn());
+            return sbmtTime.before(lastDays);
+        }).map(submission -> {
+            submission.setStatus(SubmissionStatusEnum.DECLINED);
+            submission.setComment("EXPIRED");
+            submissionDAO.updateSubmission(submission);
+            return submission;
+        }).collect(Collectors.toList());
+
+        return expiredSubmittions;
+
 
     }
 

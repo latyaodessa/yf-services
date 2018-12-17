@@ -25,12 +25,15 @@ import java.util.Set;
 @Table(name = "submission")
 @NamedQueries({
         @NamedQuery(name = Submission.QUERY_GET_SUBMISSION_BY_UUID_USERID, query = "SELECT t FROM Submission t WHERE t.submitter.id = :userId AND uuid = :uuid"),
-        @NamedQuery(name = Submission.QUERY_GET_SUBMISSIONS_BY_USERID, query = "SELECT t FROM Submission t WHERE t.submitter.id = :userId ORDER BY t.createdOn DESC")
+        @NamedQuery(name = Submission.QUERY_GET_SUBMISSIONS_BY_USERID, query = "SELECT t FROM Submission t WHERE t.submitter.id = :userId ORDER BY t.createdOn DESC"),
+        @NamedQuery(name = Submission.QUERY_GET_SUBMISSIONS_WITH_STATUS, query = "SELECT t FROM Submission t WHERE t.status = :status ORDER BY t.createdOn DESC")
+
 })
 public class Submission extends AbstractDateEntity {
 
     public static final String QUERY_GET_SUBMISSION_BY_UUID_USERID = "Submission.getSubmissionByUUidUserId";
     public static final String QUERY_GET_SUBMISSIONS_BY_USERID = "Submission.getSubmissionsByUserId";
+    public static final String QUERY_GET_SUBMISSIONS_WITH_STATUS = "Submission.getSubmissionsWithStatus";
 
     @Id
     @NotNull
