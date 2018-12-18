@@ -78,7 +78,7 @@
             <property name="value" value="http://194.1.239.223:9092/"></property>
         </custom-resource>
         <custom-resource factory-class="org.glassfish.resources.custom.factory.PrimitivesAndStringFactory" res-type="java.lang.String" jndi-name="yf.storage">
-            <property name="value" value="http://194.1.239.223:9093/"></property>
+            <property name="value" value="http://192.168.0.52:8081/"></property>
         </custom-resource>
     </resources>
     <servers>

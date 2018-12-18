@@ -1,7 +1,6 @@
 package yf.submission.services;
 
-import yf.meta.services.CountryConverter;
-import yf.meta.services.MetaDataDao;
+import yf.publication.entities.Publication;
 import yf.submission.dtos.PhotoshootingParticipantTypeEnum;
 import yf.submission.dtos.SubmissionDTO;
 import yf.submission.dtos.SubmissionParticipantDTO;
@@ -13,11 +12,10 @@ import yf.user.UserDao;
 
 import javax.inject.Inject;
 import java.util.Date;
-import java.util.Optional;
 
 
 public class SubmissionConverter {
-//    @Inject
+    //    @Inject
 //    private MetaDataDao metaDataDao;
 //    @Inject
 //    private CountryConverter countryConverter;
@@ -73,6 +71,85 @@ public class SubmissionConverter {
 
     public SubmissionDTO toDto(final Submission enity) {
         SubmissionDTO dto = new SubmissionDTO();
+        dto.setCreatedOn(enity.getCreatedOn());
+        dto.setId(enity.getId());
+        dto.setUuid(enity.getUuid());
+        dto.setText(enity.getText());
+        dto.setCountry(enity.getCountry());
+        dto.setCity(enity.getCity());
+        dto.setEventDate(enity.getEventDate());
+        dto.setStatus(enity.getStatus());
+        dto.setComment(enity.getComment());
+
+        dto.setUser(userConverter.toBasicUserDto(enity.getSubmitter()));
+
+        enity.getSubmissionParticipants().forEach(prt -> {
+            switch (prt.getType()) {
+                case MD:
+                    dto.getAllParticipants().getMds().add(participantEntityToDTO(prt));
+                    break;
+                case HAIR_STAILIST:
+                    dto.getAllParticipants().getHairStylists().add(participantEntityToDTO(prt));
+                    break;
+                case MUA:
+                    dto.getAllParticipants().getMuas().add(participantEntityToDTO(prt));
+                    break;
+                case PH:
+                    dto.getAllParticipants().getPhs().add(participantEntityToDTO(prt));
+                    break;
+                case SET_DESIGNER:
+                    dto.getAllParticipants().getSetDesigner().add(participantEntityToDTO(prt));
+                    break;
+                case WARDROBE_STYLIST:
+                    dto.getAllParticipants().getWardrobeStylists().add(participantEntityToDTO(prt));
+                    break;
+                default:
+                    break;
+            }
+        });
+
+//        if (enity.getSubmissionPictures() != null) {
+//            enity.getSubmissionPictures().forEach(this::submissionPictureEntityToDTO);
+//        }
+
+        return dto;
+    }
+
+    public void updateExistingSubmissionData(final Submission submission, final SubmissionDTO dto) {
+
+        submission.setCreatedOn(new Date().getTime());
+
+        if (dto.getStatus() != null) {
+            submission.setStatus(dto.getStatus());
+        }
+
+        if (dto.getComment() != null) {
+            submission.setComment(dto.getComment());
+        }
+        if (dto.getText() != null) {
+            submission.setText(dto.getText());
+        }
+
+        if (dto.getCountry() != null) {
+            submission.setCountry(dto.getCountry());
+        }
+
+        if (dto.getCity() != null) {
+            submission.setCity(dto.getCity());
+        }
+
+        if (dto.getEventDate() != null) {
+            submission.setEventDate(dto.getEventDate());
+        }
+
+        if (dto.getEquipment() != null) {
+            submission.setEquipment(dto.getEquipment());
+        }
+    }
+
+
+    public Publication submissionToPublication(final Submission enity) {
+        Publication dto = new Publication();
         dto.setCreatedOn(enity.getCreatedOn());
         dto.setId(enity.getId());
         dto.setUuid(enity.getUuid());

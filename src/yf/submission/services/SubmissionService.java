@@ -11,9 +11,12 @@ import yf.submission.entities.SubmissionParticipant;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
 import java.sql.Timestamp;
+import java.util.Arrays;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -26,6 +29,8 @@ public class SubmissionService {
     private SubmissionWorkflow submissionWorkflow;
     @Inject
     private SubmissionDAO submissionDAO;
+    @Inject
+    private StorageService storageService;
 
     public SubmissionDTO geSubmissionByUUid(final String uuid, final Long userId) {
         final Submission submission = submissionDAO.geSubmissionByUUid(uuid, userId);
@@ -33,17 +38,17 @@ public class SubmissionService {
 
     }
 
-    public List<Submission> cleanIncompletedSubmissions() {
+    public Map<String, Long> cleanIncompletedSubmissions() {
         final Date today = new Date();
         final Date lastDays = new DateTime(today).minusDays(2)
                 .toDate();
 
-        final List<Submission> submissions = submissionDAO.getSubmissionsWithStatus(SubmissionStatusEnum.INCOMPLETED);
+        final List<Submission> submissions = submissionDAO.getSubmissionsWithStatus(Arrays.asList(SubmissionStatusEnum.INCOMPLETED, SubmissionStatusEnum.SEND_TO_REWORK));
         if (submissions == null) {
             return null;
         }
 
-        final List<Submission> expiredSubmittions = submissions.stream().filter(submission -> {
+        Map<String, Long> submitionMap = submissions.stream().filter(submission -> {
             final Timestamp sbmtTime = new Timestamp(submission.getCreatedOn());
             return sbmtTime.before(lastDays);
         }).map(submission -> {
@@ -51,11 +56,54 @@ public class SubmissionService {
             submission.setComment("EXPIRED");
             submissionDAO.updateSubmission(submission);
             return submission;
-        }).collect(Collectors.toList());
-
-        return expiredSubmittions;
+        }).collect(Collectors.toMap(Submission::getUuid, sbm -> sbm.getSubmitter().getId()));
 
 
+        storageService.clean(submitionMap);
+
+        return submitionMap;
+    }
+
+    public Submission updateEntireSubmissionAndParticipants(final SubmissionDTO dto, final Boolean deleteUploads) {
+
+        final Submission submission = submissionDAO.getSubmissionById(dto.getId());
+
+        if (submission == null) {
+            throw new RuntimeException("Submission doesn't exist");
+        }
+        submissionConverter.updateExistingSubmissionData(submission, dto);
+
+        if (dto.getAllParticipants() != null) {
+            Set<SubmissionParticipant> participants = convertParticipants(dto.getAllParticipants());
+            submission.setSubmissionParticipants(participants);
+        }
+
+        submissionDAO.updateSubmission(submission);
+
+        if (deleteUploads) {
+            Map<String, Long> submitionMap = new HashMap<String, Long>() {{
+                put(submission.getUuid(), submission.getId());
+            }};
+            storageService.clean(submitionMap);
+
+        }
+        return submission;
+    }
+
+    public Submission publishSubmission(final Long submissionId) {
+
+        final Submission submission = submissionDAO.getSubmissionById(submissionId);
+
+        if (submission == null) {
+            throw new RuntimeException("Submission doesn't exist");
+        }
+        submission.setStatus(SubmissionStatusEnum.ACCEPTED);
+        submission.setCreatedOn(new Date().getTime());
+        submissionDAO.updateSubmission(submission);
+
+        submissionConverter.submissionToPublication(submission);
+
+        return submission;
     }
 
     public List<SubmissionDTO> getUserSubmissions(final Long userId, final int offset, final int limit) {
@@ -74,7 +122,7 @@ public class SubmissionService {
 
 
     public SubmissionDTO updateSubmission(final SubmissionDTO submissionDTO) {
-        final Submission submission = submissionDAO.findSavedPublicationById(submissionDTO.getId());
+        final Submission submission = submissionDAO.getSubmissionById(submissionDTO.getId());
 
         final Set<SubmissionParticipant> participants = convertParticipants(submissionDTO.getAllParticipants());
 
@@ -86,7 +134,7 @@ public class SubmissionService {
     }
 
     public SubmissionDTO submit(final SubmissionDTO submissionDTO) {
-        final Submission submission = submissionDAO.findSavedPublicationById(submissionDTO.getId());
+        final Submission submission = submissionDAO.getSubmissionById(submissionDTO.getId());
 
         final Set<SubmissionParticipant> participants = convertParticipants(submissionDTO.getAllParticipants());
 

@@ -29,7 +29,7 @@ public class SubmissionDAO {
     }
 
 
-    public Submission findSavedPublicationById(final Long id) {
+    public Submission getSubmissionById(final Long id) {
         return em.find(Submission.class, id);
     }
 
@@ -58,9 +58,9 @@ public class SubmissionDAO {
     }
 
 
-    public List<Submission> getSubmissionsWithStatus(final SubmissionStatusEnum status) {
+    public List<Submission> getSubmissionsWithStatus(final List<SubmissionStatusEnum> statuses) {
         TypedQuery<Submission> query = em.createNamedQuery(Submission.QUERY_GET_SUBMISSIONS_WITH_STATUS, Submission.class)
-                .setParameter("status", status);
+                .setParameter("status", statuses);
         try {
             return query.getResultList();
         } catch (NoResultException e) {

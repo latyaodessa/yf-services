@@ -14,7 +14,7 @@ public class SubmissionSchedulerCleaner implements Scheduler {
     @Inject
     private SubmissionService submissionService;
 
-    @Schedule(hour = "*/1", info = "Submission cleaner Scheduler. Every 1 hour", persistent = false)
+    @Schedule(hour = "*/1", minute = "*", second = "*", info = "Submission cleaner Scheduler. Every 1 hour", persistent = false)
     public void process() {
         LOGGER.info("Submission cleaner Scheduler");
         submissionService.cleanIncompletedSubmissions();

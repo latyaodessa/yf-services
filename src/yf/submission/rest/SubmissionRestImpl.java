@@ -11,6 +11,7 @@ import javax.inject.Inject;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
@@ -116,6 +117,25 @@ public class SubmissionRestImpl {
     public Response cleanIncompletedSubmittions() {
         return Response.status(200)
                 .entity(submissionService.cleanIncompletedSubmissions())
+                .build();
+
+    }
+
+    @PUT
+    @Path("update/data/{deleteUploads}")
+    public Response changeSubmissionStatus(@PathParam("deleteUploads") final Boolean deleteUploads, final SubmissionDTO dto) {
+        return Response.status(200)
+                .entity(submissionService.updateEntireSubmissionAndParticipants(dto, deleteUploads))
+                .build();
+
+    }
+
+
+    @PUT
+    @Path("publish")
+    public Response publishSubmission(final Long submissionId) {
+        return Response.status(200)
+                .entity(submissionService.publishSubmission(submissionId))
                 .build();
 
     }
