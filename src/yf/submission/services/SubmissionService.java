@@ -100,8 +100,8 @@ public class SubmissionService {
         submission.setStatus(SubmissionStatusEnum.ACCEPTED);
         submission.setCreatedOn(new Date().getTime());
         submissionDAO.updateSubmission(submission);
-
-        submissionConverter.submissionToPublication(submission);
+//TODO
+//        submissionConverter.submissionToPublication(submission);
 
         return submission;
     }

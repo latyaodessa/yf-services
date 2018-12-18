@@ -147,51 +147,51 @@ public class SubmissionConverter {
         }
     }
 
-
-    public Publication submissionToPublication(final Submission enity) {
-        Publication dto = new Publication();
-        dto.setCreatedOn(enity.getCreatedOn());
-        dto.setId(enity.getId());
-        dto.setUuid(enity.getUuid());
-        dto.setText(enity.getText());
-        dto.setCountry(enity.getCountry());
-        dto.setCity(enity.getCity());
-        dto.setEventDate(enity.getEventDate());
-        dto.setStatus(enity.getStatus());
-        dto.setComment(enity.getComment());
-
-        dto.setUser(userConverter.toBasicUserDto(enity.getSubmitter()));
-
-        enity.getSubmissionParticipants().forEach(prt -> {
-            switch (prt.getType()) {
-                case MD:
-                    dto.getAllParticipants().getMds().add(participantEntityToDTO(prt));
-                    break;
-                case HAIR_STAILIST:
-                    dto.getAllParticipants().getHairStylists().add(participantEntityToDTO(prt));
-                    break;
-                case MUA:
-                    dto.getAllParticipants().getMuas().add(participantEntityToDTO(prt));
-                    break;
-                case PH:
-                    dto.getAllParticipants().getPhs().add(participantEntityToDTO(prt));
-                    break;
-                case SET_DESIGNER:
-                    dto.getAllParticipants().getSetDesigner().add(participantEntityToDTO(prt));
-                    break;
-                case WARDROBE_STYLIST:
-                    dto.getAllParticipants().getWardrobeStylists().add(participantEntityToDTO(prt));
-                    break;
-                default:
-                    break;
-            }
-        });
-
-//        if (enity.getSubmissionPictures() != null) {
-//            enity.getSubmissionPictures().forEach(this::submissionPictureEntityToDTO);
-//        }
-
-        return dto;
-    }
+//TODO
+//    public Publication submissionToPublication(final Submission enity) {
+//        Publication dto = new Publication();
+//        dto.setCreatedOn(enity.getCreatedOn());
+//        dto.setId(enity.getId());
+//        dto.setUuid(enity.getUuid());
+//        dto.setText(enity.getText());
+//        dto.setCountry(enity.getCountry());
+//        dto.setCity(enity.getCity());
+//        dto.setEventDate(enity.getEventDate());
+//        dto.setStatus(enity.getStatus());
+//        dto.setComment(enity.getComment());
+//
+//        dto.setUser(userConverter.toBasicUserDto(enity.getSubmitter()));
+//
+//        enity.getSubmissionParticipants().forEach(prt -> {
+//            switch (prt.getType()) {
+//                case MD:
+//                    dto.getAllParticipants().getMds().add(participantEntityToDTO(prt));
+//                    break;
+//                case HAIR_STAILIST:
+//                    dto.getAllParticipants().getHairStylists().add(participantEntityToDTO(prt));
+//                    break;
+//                case MUA:
+//                    dto.getAllParticipants().getMuas().add(participantEntityToDTO(prt));
+//                    break;
+//                case PH:
+//                    dto.getAllParticipants().getPhs().add(participantEntityToDTO(prt));
+//                    break;
+//                case SET_DESIGNER:
+//                    dto.getAllParticipants().getSetDesigner().add(participantEntityToDTO(prt));
+//                    break;
+//                case WARDROBE_STYLIST:
+//                    dto.getAllParticipants().getWardrobeStylists().add(participantEntityToDTO(prt));
+//                    break;
+//                default:
+//                    break;
+//            }
+//        });
+//
+////        if (enity.getSubmissionPictures() != null) {
+////            enity.getSubmissionPictures().forEach(this::submissionPictureEntityToDTO);
+////        }
+//
+//        return dto;
+//    }
 
 }
