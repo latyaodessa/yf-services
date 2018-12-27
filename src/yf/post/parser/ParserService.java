@@ -1,13 +1,5 @@
 package yf.post.parser;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.logging.Logger;
-import java.util.stream.Collectors;
-
-import javax.ejb.Stateless;
-import javax.inject.Inject;
-
 import yf.core.PropertiesResolover;
 import yf.elastic.reindex.ElasticBulkFetcher;
 import yf.post.entities.Post;
@@ -16,6 +8,13 @@ import yf.post.parser.rest.client.ParserRestClient;
 import yf.post.parser.workflow.PostParserWorkflow;
 import yf.publication.bulkworkflow.PublicationBulkWorkflow;
 import yf.publication.entities.Publication;
+
+import javax.ejb.Stateless;
+import javax.inject.Inject;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.logging.Logger;
+import java.util.stream.Collectors;
 
 @Stateless
 public class ParserService {

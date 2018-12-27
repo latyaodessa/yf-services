@@ -1,9 +1,8 @@
 package yf.core.entities;
 
-import java.util.Date;
-
 import javax.persistence.Column;
 import javax.persistence.MappedSuperclass;
+import java.util.Date;
 
 @MappedSuperclass
 public class AbstractVersionEntity {

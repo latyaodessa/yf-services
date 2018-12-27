@@ -1,6 +1,10 @@
 package yf.user.rest;
 
-import java.util.Map;
+import yf.user.UserWorkflow;
+import yf.user.dto.LoginDTO;
+import yf.user.dto.UserAllDataDto;
+import yf.user.entities.User;
+import yf.user.services.UserService;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;
@@ -11,12 +15,7 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-
-import yf.user.UserWorkflow;
-import yf.user.dto.LoginDTO;
-import yf.user.dto.UserAllDataDto;
-import yf.user.entities.User;
-import yf.user.services.UserService;
+import java.util.Map;
 
 @Path("auth")
 @Produces(MediaType.APPLICATION_JSON)

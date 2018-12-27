@@ -1,18 +1,16 @@
 package yf.core.elastic;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.inject.Inject;
-
 import org.elasticsearch.action.get.GetResponse;
 import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.search.SearchHit;
-
 import yf.post.PostConverter;
 import yf.post.dto.PostElasticDTO;
 import yf.post.dto.SharedBasicPostDTO;
 import yf.publication.dtos.PublicationElasticDTO;
+
+import javax.inject.Inject;
+import java.util.ArrayList;
+import java.util.List;
 
 public class ElasticSearchExecutor {
 

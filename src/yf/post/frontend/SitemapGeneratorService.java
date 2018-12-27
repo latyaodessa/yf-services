@@ -1,10 +1,9 @@
 package yf.post.frontend;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.List;
-import java.util.logging.Logger;
-import java.util.stream.Collectors;
+import com.sun.jersey.api.client.Client;
+import com.sun.jersey.api.client.ClientResponse;
+import yf.core.JNDIPropertyHelper;
+import yf.publication.entities.Publication;
 
 import javax.ejb.Stateless;
 import javax.ejb.TransactionAttribute;
@@ -13,12 +12,11 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 import javax.ws.rs.core.MediaType;
-
-import com.sun.jersey.api.client.Client;
-import com.sun.jersey.api.client.ClientResponse;
-
-import yf.core.JNDIPropertyHelper;
-import yf.publication.entities.Publication;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.List;
+import java.util.logging.Logger;
+import java.util.stream.Collectors;
 
 @Stateless
 public class SitemapGeneratorService {

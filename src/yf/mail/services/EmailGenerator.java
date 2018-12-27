@@ -1,7 +1,5 @@
 package yf.mail.services;
 
-import javax.inject.Inject;
-
 import yf.core.JNDIPropertyHelper;
 import yf.mail.converters.TemplateToEmailSendConverter;
 import yf.mail.dtos.EmailToSendDTO;
@@ -10,6 +8,8 @@ import yf.mail.dtos.MailTemplateNamesEnum;
 import yf.mail.entities.EmailTemplate;
 import yf.user.entities.User;
 import yf.user.entities.Verifications;
+
+import javax.inject.Inject;
 
 public class EmailGenerator {
 

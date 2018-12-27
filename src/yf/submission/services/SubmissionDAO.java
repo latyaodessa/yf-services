@@ -57,7 +57,6 @@ public class SubmissionDAO {
         }
     }
 
-
     public List<Submission> getSubmissionsWithStatus(final List<SubmissionStatusEnum> statuses) {
         TypedQuery<Submission> query = em.createNamedQuery(Submission.QUERY_GET_SUBMISSIONS_WITH_STATUS, Submission.class)
                 .setParameter("status", statuses);

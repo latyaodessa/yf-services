@@ -1,17 +1,10 @@
 package yf.elastic.reindex.bulkworkflow;
 
-import java.util.List;
-
-import javax.annotation.PostConstruct;
-import javax.inject.Inject;
-
+import com.fasterxml.jackson.core.JsonProcessingException;
 import org.elasticsearch.action.bulk.BulkRequestBuilder;
 import org.elasticsearch.action.bulk.BulkResponse;
 import org.elasticsearch.action.index.IndexRequestBuilder;
 import org.elasticsearch.action.support.WriteRequest.RefreshPolicy;
-
-import com.fasterxml.jackson.core.JsonProcessingException;
-
 import yf.core.PropertiesResolover;
 import yf.dashboard.postphoto.PostPhotoDashboardConverter;
 import yf.dashboard.postphoto.dto.PostDashboardElasticDTO;
@@ -19,6 +12,10 @@ import yf.dashboard.postphoto.entities.UserSavedPosts;
 import yf.elastic.core.ElasticWorkflow;
 import yf.elastic.core.NativeElasticSingleton;
 import yf.elastic.reindex.BulkOptions;
+
+import javax.annotation.PostConstruct;
+import javax.inject.Inject;
+import java.util.List;
 
 public class PostDashboardBulkWorkflow extends AbstractBulkReindexWorkflow<UserSavedPosts, PostDashboardElasticDTO> {
 

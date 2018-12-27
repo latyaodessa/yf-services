@@ -1,13 +1,13 @@
 package yf.user;
 
+import yf.user.entities.FBUser;
+import yf.user.entities.User;
+import yf.user.entities.VKUser;
+
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
-
-import yf.user.entities.FBUser;
-import yf.user.entities.User;
-import yf.user.entities.VKUser;
 
 public class UserDao {
 

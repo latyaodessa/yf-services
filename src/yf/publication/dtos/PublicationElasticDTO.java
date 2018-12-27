@@ -1,14 +1,15 @@
 package yf.publication.dtos;
 
-import java.util.List;
-
 import yf.post.dto.PostElasticDTO;
+
+import javax.persistence.Column;
+import java.util.List;
 
 public class PublicationElasticDTO {
 
     private Long id;
     private Long date;
-    private Long photoshootDate;
+    private Long eventDate;
     private PublicationTypeEnum type;
     private String link;
     private String mdSimple;
@@ -17,33 +18,14 @@ public class PublicationElasticDTO {
     private String thumbnail;
     private Integer likes;
     private PostElasticDTO vkPost;
+    private String city;
+    private String country;
+    private String hashtags;
+    private String equipment;
     private List<PublicationPicturesDTO> publicationPictures;
     private List<PublicationUserDTO> phUsers;
     private List<PublicationUserDTO> mdUsers;
-
-    public List<PublicationPicturesDTO> getPublicationPictures() {
-        return publicationPictures;
-    }
-
-    public void setPublicationPictures(List<PublicationPicturesDTO> publicationPictures) {
-        this.publicationPictures = publicationPictures;
-    }
-
-    public List<PublicationUserDTO> getPhUsers() {
-        return phUsers;
-    }
-
-    public void setPhUsers(List<PublicationUserDTO> phUsers) {
-        this.phUsers = phUsers;
-    }
-
-    public List<PublicationUserDTO> getMdUsers() {
-        return mdUsers;
-    }
-
-    public void setMdUsers(List<PublicationUserDTO> mdUsers) {
-        this.mdUsers = mdUsers;
-    }
+    private List<PublicationParticipantDTO> publicationParticipants;
 
     public Long getId() {
         return id;
@@ -51,6 +33,38 @@ public class PublicationElasticDTO {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public Long getDate() {
+        return date;
+    }
+
+    public void setDate(Long date) {
+        this.date = date;
+    }
+
+    public Long getEventDate() {
+        return eventDate;
+    }
+
+    public void setEventDate(Long eventDate) {
+        this.eventDate = eventDate;
+    }
+
+    public PublicationTypeEnum getType() {
+        return type;
+    }
+
+    public void setType(PublicationTypeEnum type) {
+        this.type = type;
+    }
+
+    public String getLink() {
+        return link;
+    }
+
+    public void setLink(String link) {
+        this.link = link;
     }
 
     public String getMdSimple() {
@@ -85,6 +99,14 @@ public class PublicationElasticDTO {
         this.thumbnail = thumbnail;
     }
 
+    public Integer getLikes() {
+        return likes;
+    }
+
+    public void setLikes(Integer likes) {
+        this.likes = likes;
+    }
+
     public PostElasticDTO getVkPost() {
         return vkPost;
     }
@@ -93,43 +115,67 @@ public class PublicationElasticDTO {
         this.vkPost = vkPost;
     }
 
-    public Long getDate() {
-        return date;
+    public String getCity() {
+        return city;
     }
 
-    public void setDate(Long date) {
-        this.date = date;
+    public void setCity(String city) {
+        this.city = city;
     }
 
-    public PublicationTypeEnum getType() {
-        return type;
+    public String getCountry() {
+        return country;
     }
 
-    public void setType(PublicationTypeEnum type) {
-        this.type = type;
+    public void setCountry(String country) {
+        this.country = country;
     }
 
-    public Long getPhotoshootDate() {
-        return photoshootDate;
+    public String getHashtags() {
+        return hashtags;
     }
 
-    public void setPhotoshootDate(Long photoshootDate) {
-        this.photoshootDate = photoshootDate;
+    public void setHashtags(String hashtags) {
+        this.hashtags = hashtags;
     }
 
-    public String getLink() {
-        return link;
+    public String getEquipment() {
+        return equipment;
     }
 
-    public void setLink(String link) {
-        this.link = link;
+    public void setEquipment(String equipment) {
+        this.equipment = equipment;
     }
 
-    public Integer getLikes() {
-        return likes;
+    public List<PublicationPicturesDTO> getPublicationPictures() {
+        return publicationPictures;
     }
 
-    public void setLikes(Integer likes) {
-        this.likes = likes;
+    public void setPublicationPictures(List<PublicationPicturesDTO> publicationPictures) {
+        this.publicationPictures = publicationPictures;
+    }
+
+    public List<PublicationUserDTO> getPhUsers() {
+        return phUsers;
+    }
+
+    public void setPhUsers(List<PublicationUserDTO> phUsers) {
+        this.phUsers = phUsers;
+    }
+
+    public List<PublicationUserDTO> getMdUsers() {
+        return mdUsers;
+    }
+
+    public void setMdUsers(List<PublicationUserDTO> mdUsers) {
+        this.mdUsers = mdUsers;
+    }
+
+    public List<PublicationParticipantDTO> getPublicationParticipants() {
+        return publicationParticipants;
+    }
+
+    public void setPublicationParticipants(List<PublicationParticipantDTO> publicationParticipants) {
+        this.publicationParticipants = publicationParticipants;
     }
 }

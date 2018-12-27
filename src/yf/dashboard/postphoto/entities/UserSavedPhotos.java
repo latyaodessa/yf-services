@@ -1,6 +1,6 @@
 package yf.dashboard.postphoto.entities;
 
-import java.util.Date;
+import org.hibernate.annotations.Type;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -11,8 +11,7 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
-
-import org.hibernate.annotations.Type;
+import java.util.Date;
 
 @Entity
 @Table(name = "user_saved_photos")

@@ -1,17 +1,16 @@
 package yf.user.rest;
 
-import java.util.HashMap;
-import java.util.Map;
-
-import javax.inject.Inject;
-import javax.ws.rs.core.Response;
-
 import yf.user.UserDao;
 import yf.user.dto.AuthResponseStatusesEnum;
 import yf.user.dto.LoginDTO;
 import yf.user.dto.UserAllDataDto;
 import yf.user.entities.User;
 import yf.user.services.JWTService;
+
+import javax.inject.Inject;
+import javax.ws.rs.core.Response;
+import java.util.HashMap;
+import java.util.Map;
 
 public class AuthRestHelper {
 

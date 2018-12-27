@@ -1,13 +1,12 @@
 package yf.submission.services;
 
-import java.util.Date;
-import java.util.UUID;
-
-import javax.inject.Inject;
-
 import yf.submission.dtos.SubmissionStatusEnum;
 import yf.submission.entities.Submission;
 import yf.user.UserDao;
+
+import javax.inject.Inject;
+import java.util.Date;
+import java.util.UUID;
 
 public class SubmissionWorkflow {
 

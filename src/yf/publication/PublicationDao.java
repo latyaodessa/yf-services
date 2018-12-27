@@ -1,14 +1,13 @@
 package yf.publication;
 
-import java.util.List;
+import yf.publication.entities.Publication;
+import yf.publication.entities.PublicationUser;
 
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
-
-import yf.publication.entities.Publication;
-import yf.publication.entities.PublicationUser;
+import java.util.List;
 
 public class PublicationDao {
 

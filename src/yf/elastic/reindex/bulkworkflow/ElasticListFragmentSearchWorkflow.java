@@ -1,13 +1,13 @@
 package yf.elastic.reindex.bulkworkflow;
 
+import org.apache.commons.lang3.StringUtils;
+
 import java.lang.reflect.Field;
 import java.lang.reflect.ParameterizedType;
 import java.util.Collection;
 import java.util.Locale;
 import java.util.Optional;
 import java.util.Set;
-
-import org.apache.commons.lang3.StringUtils;
 
 public abstract class ElasticListFragmentSearchWorkflow<T> {
 

@@ -1,11 +1,6 @@
 package yf.meta.entities;
 
 import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.Table;
-import javax.validation.constraints.NotNull;
 
 //@Entity
 //@Table(name = "_countries")

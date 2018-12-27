@@ -1,10 +1,5 @@
 package yf.post;
 
-import java.util.List;
-
-import javax.ejb.Stateless;
-import javax.inject.Inject;
-
 import org.apache.commons.lang3.StringUtils;
 import org.elasticsearch.action.get.GetResponse;
 import org.elasticsearch.action.get.MultiGetItemResponse;
@@ -13,7 +8,6 @@ import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.index.query.BoolQueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.search.sort.SortOrder;
-
 import yf.core.PropertiesResolover;
 import yf.core.elastic.ElasticSearchExecutor;
 import yf.core.elastic.ElasticToObjectConvertor;
@@ -21,6 +15,10 @@ import yf.elastic.core.NativeElasticSingleton;
 import yf.post.dto.PostDetailsDTO;
 import yf.post.dto.PostElasticDTO;
 import yf.post.dto.SharedBasicPostDTO;
+
+import javax.ejb.Stateless;
+import javax.inject.Inject;
+import java.util.List;
 
 @Stateless
 public class PostService {

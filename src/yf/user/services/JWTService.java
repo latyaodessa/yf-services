@@ -1,17 +1,16 @@
 package yf.user.services;
 
-import java.util.Optional;
-import java.util.logging.Logger;
-
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTCreationException;
 import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.auth0.jwt.interfaces.DecodedJWT;
-
 import yf.user.dto.ProfilePictureDTO;
 import yf.user.dto.UserDto;
+
+import java.util.Optional;
+import java.util.logging.Logger;
 
 public class JWTService {
 

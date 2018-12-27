@@ -1,16 +1,15 @@
 package yf.user.services;
 
-import java.util.Date;
-import java.util.UUID;
-
-import javax.inject.Inject;
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-
 import yf.user.VerificationDao;
 import yf.user.dto.VerificationTypesEnum;
 import yf.user.entities.User;
 import yf.user.entities.Verifications;
+
+import javax.inject.Inject;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import java.util.Date;
+import java.util.UUID;
 
 public class VerificationService {
 

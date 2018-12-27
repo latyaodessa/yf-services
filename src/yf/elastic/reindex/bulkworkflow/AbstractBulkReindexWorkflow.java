@@ -1,5 +1,17 @@
 package yf.elastic.reindex.bulkworkflow;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import org.apache.commons.io.IOUtils;
+import org.codehaus.jackson.map.ObjectMapper;
+import org.elasticsearch.action.bulk.BulkRequestBuilder;
+import org.elasticsearch.action.index.IndexRequestBuilder;
+import org.elasticsearch.common.settings.Settings;
+import org.elasticsearch.common.xcontent.XContentType;
+import yf.elastic.core.NativeElasticSingleton;
+import yf.elastic.reindex.BulkOptions;
+
+import javax.annotation.PostConstruct;
+import javax.inject.Inject;
 import java.io.IOException;
 import java.nio.charset.Charset;
 import java.util.HashMap;
@@ -8,21 +20,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.logging.Logger;
-
-import javax.annotation.PostConstruct;
-import javax.inject.Inject;
-
-import org.apache.commons.io.IOUtils;
-import org.codehaus.jackson.map.ObjectMapper;
-import org.elasticsearch.action.bulk.BulkRequestBuilder;
-import org.elasticsearch.action.index.IndexRequestBuilder;
-import org.elasticsearch.common.settings.Settings;
-import org.elasticsearch.common.xcontent.XContentType;
-
-import com.fasterxml.jackson.core.JsonProcessingException;
-
-import yf.elastic.core.NativeElasticSingleton;
-import yf.elastic.reindex.BulkOptions;
 
 public abstract class AbstractBulkReindexWorkflow<T, V> {
 

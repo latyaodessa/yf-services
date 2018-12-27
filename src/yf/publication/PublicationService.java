@@ -1,29 +1,36 @@
 package yf.publication;
 
-import static org.elasticsearch.index.query.QueryBuilders.idsQuery;
-
-import java.util.List;
-
-import javax.inject.Inject;
-
 import org.apache.commons.lang3.StringUtils;
 import org.elasticsearch.action.get.GetResponse;
 import org.elasticsearch.action.search.SearchRequestBuilder;
 import org.elasticsearch.action.search.SearchResponse;
+import org.elasticsearch.action.update.UpdateResponse;
+import org.elasticsearch.common.xcontent.XContentType;
 import org.elasticsearch.index.query.BoolQueryBuilder;
 import org.elasticsearch.index.query.QueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.search.sort.SortOrder;
-
 import yf.core.PropertiesResolover;
 import yf.core.elastic.ElasticSearchExecutor;
 import yf.core.elastic.ElasticToObjectConvertor;
 import yf.elastic.core.NativeElasticSingleton;
+import yf.elastic.reindex.bulkworkflow.ObjectToSourceUtil;
 import yf.post.dto.SharedBasicPostDTO;
 import yf.post.entities.Post;
 import yf.publication.dtos.PublicationElasticDTO;
+import yf.publication.dtos.PublicationPicturesDTO;
 import yf.publication.dtos.PublicationTypeEnum;
 import yf.publication.entities.Publication;
+import yf.publication.entities.PublicationPictures;
+
+import javax.inject.Inject;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import javax.ws.rs.PathParam;
+import java.util.List;
+import java.util.stream.Collectors;
+
+import static org.elasticsearch.index.query.QueryBuilders.idsQuery;
 
 public class PublicationService {
 
@@ -37,6 +44,10 @@ public class PublicationService {
     private PropertiesResolover properties;
     @Inject
     private ElasticSearchExecutor elasticSearchExecutor;
+    @Inject
+    private PublicationConverter publicationConverter;
+    @PersistenceContext
+    private EntityManager em;
 
     public Publication createPublicationFromVkPost(final Post vkPost) {
         Publication publication = publicationWorkflow.createPublicationFromVkPost(vkPost);
@@ -267,6 +278,32 @@ public class PublicationService {
         }
 
         return boolQuery;
+    }
+
+    public PublicationElasticDTO updatePublicationPictures(final Long publicationId,
+                                                 final List<PublicationPicturesDTO> publicationPicturesDTOS) {
+
+        Publication publication = publicationWorkflow.getPublicationById(publicationId);
+
+        if (publication == null) {
+            throw new RuntimeException("Publication was not found id =" + publicationId);
+        }
+
+        final List<PublicationPictures> publicationPictures = publicationPicturesDTOS.stream().map(dto -> publicationConverter.convertPublicationPicturesDTOToEntity(publication, dto)).collect(Collectors.toList());
+        publication.getPublicationPictures().clear();
+        publication.getPublicationPictures().addAll(publicationPictures);
+
+        em.merge(publication);
+
+        PublicationElasticDTO dto = publicationConverter.publicationToElasticDTO(publication);
+        dto.setPublicationPictures(publicationPicturesDTOS);
+        dto.setThumbnail(publicationPictures.get(0).getFriendlyLink());
+
+        nativeElastiClient.getClient()
+                .prepareUpdate(properties.get("elastic.index.publication"), properties.get("elastic.type.photo"), String.valueOf(publicationId))
+                .setDoc(ObjectToSourceUtil.covert(dto), XContentType.JSON).get();
+
+        return dto;
     }
 
 }

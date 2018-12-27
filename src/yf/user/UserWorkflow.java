@@ -1,13 +1,5 @@
 package yf.user;
 
-import java.util.Date;
-import java.util.Optional;
-
-import javax.ejb.Stateless;
-import javax.inject.Inject;
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-
 import yf.mail.services.EmailService;
 import yf.user.dto.LoginDTO;
 import yf.user.dto.ProfilePictureDTO;
@@ -23,6 +15,13 @@ import yf.user.entities.ProfilePicture;
 import yf.user.entities.User;
 import yf.user.entities.UserVerifications;
 import yf.user.entities.VKUser;
+
+import javax.ejb.Stateless;
+import javax.inject.Inject;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import java.util.Date;
+import java.util.Optional;
 
 @Stateless
 public class UserWorkflow {

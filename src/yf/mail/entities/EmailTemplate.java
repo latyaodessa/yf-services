@@ -1,5 +1,8 @@
 package yf.mail.entities;
 
+import yf.mail.dtos.LanguagesEnum;
+import yf.mail.dtos.MailTemplateNamesEnum;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -10,9 +13,6 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
-
-import yf.mail.dtos.LanguagesEnum;
-import yf.mail.dtos.MailTemplateNamesEnum;
 
 @Entity
 @Table(name = "email_template")

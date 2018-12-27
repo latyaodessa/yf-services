@@ -1,11 +1,10 @@
 package yf.elastic.core;
 
-import static javax.naming.InitialContext.doLookup;
-
+import javax.naming.NamingException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import javax.naming.NamingException;
+import static javax.naming.InitialContext.doLookup;
 
 public final class PropertyLookupHelper {
     private static final Logger LOG = Logger.getLogger(PropertyLookupHelper.class.getName());

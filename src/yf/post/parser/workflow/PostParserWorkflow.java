@@ -1,23 +1,8 @@
 package yf.post.parser.workflow;
 
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Locale;
-import java.util.Set;
-import java.util.logging.Logger;
-import java.util.stream.Collectors;
-
-import javax.ejb.Stateless;
-import javax.inject.Inject;
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-
+import com.fasterxml.jackson.core.JsonProcessingException;
 import org.elasticsearch.action.bulk.BulkRequestBuilder;
 import org.elasticsearch.action.bulk.BulkResponse;
-
-import com.fasterxml.jackson.core.JsonProcessingException;
-
 import yf.core.PropertiesResolover;
 import yf.elastic.core.ElasticWorkflow;
 import yf.elastic.core.NativeElasticSingleton;
@@ -31,8 +16,22 @@ import yf.publication.PublicationDao;
 import yf.publication.entities.MdProfile;
 import yf.publication.entities.PhProfile;
 import yf.publication.entities.Publication;
+import yf.submission.dtos.PhotoshootingParticipantTypeEnum;
+import yf.submission.entities.SubmissionParticipant;
 import yf.user.UserProfileService;
 import yf.user.rest.VkRestClient;
+
+import javax.ejb.Stateless;
+import javax.inject.Inject;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Locale;
+import java.util.Set;
+import java.util.logging.Logger;
+import java.util.stream.Collectors;
 
 @Stateless
 public class PostParserWorkflow {
@@ -199,7 +198,8 @@ public class PostParserWorkflow {
                     .getLastName();
             parseNameByTag(firstName,
                     lastName,
-                    link);
+                    link,
+                    MD_TAG);
         });
 
         phProfiles.forEach(phProfile -> {
@@ -209,7 +209,8 @@ public class PostParserWorkflow {
                     .getLastName();
             parseNameByTag(firstName,
                     lastName,
-                    link);
+                    link,
+                    PH_TAG);
         });
 
         // try simple text
@@ -238,12 +239,57 @@ public class PostParserWorkflow {
 
     }
 
+
+    public String generateLinkFromSubmissionParticipants(final Long publicationId,
+                                                          final Set<SubmissionParticipant> submissionParticipants) {
+
+        Set<String> link = new HashSet<>();
+
+        submissionParticipants.forEach(participant -> {
+            if(participant.getType().equals(PhotoshootingParticipantTypeEnum.MD)) {
+                parseNameByTag(participant.getFirstName(),
+                        participant.getLastName(),
+                        link,
+                        MD_TAG);
+            }
+            if(participant.getType().equals(PhotoshootingParticipantTypeEnum.PH)) {
+                parseNameByTag(participant.getFirstName(),
+                        participant.getLastName(),
+                        link,
+                        PH_TAG);
+            }
+
+            // TODO Other participants
+        });
+
+
+        if (link.isEmpty()) {
+            return String.valueOf(publicationId);
+        }
+
+        final String generatedLink = regexTextCleaner.transliterate(String.join("-",
+                link)
+                .toLowerCase(Locale.ROOT));
+
+        Publication publication = publicationDao.getPublicationByLink(generatedLink);
+
+        if (publication == null) {
+            return generatedLink;
+        } else {
+            return String.join("-",
+                    generatedLink,
+                    String.valueOf(publicationId));
+        }
+
+    }
+
     private void parseNameByTag(final String firstName,
                                 final String lastName,
-                                final Set<String> link) {
+                                final Set<String> link,
+                                final String tag) {
         if (firstName != null && lastName != null) {
             link.add(String.join("-",
-                    MD_TAG,
+                    tag,
                     firstName.replaceAll("[^A-Za-z0-9]",
                             ""),
                     lastName.replaceAll("[^A-Za-z0-9]",

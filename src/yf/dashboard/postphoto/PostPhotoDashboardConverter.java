@@ -1,7 +1,5 @@
 package yf.dashboard.postphoto;
 
-import java.util.Date;
-
 import yf.dashboard.postphoto.dto.PhotoDashboardElasticDTO;
 import yf.dashboard.postphoto.dto.PostDashboardElasticDTO;
 import yf.dashboard.postphoto.dto.SavePhotoDTO;
@@ -9,6 +7,8 @@ import yf.dashboard.postphoto.entities.UserSavedPhotos;
 import yf.dashboard.postphoto.entities.UserSavedPosts;
 import yf.post.dto.SharedBasicPostDTO;
 import yf.publication.entities.Publication;
+
+import java.util.Date;
 
 public class PostPhotoDashboardConverter {
 

@@ -1,10 +1,5 @@
 package yf.elastic.reindex;
 
-import java.util.List;
-import java.util.logging.Logger;
-
-import javax.inject.Inject;
-
 import yf.dashboard.postphoto.entities.UserSavedPhotos;
 import yf.dashboard.postphoto.entities.UserSavedPosts;
 import yf.elastic.reindex.bulkworkflow.PhotoDashboardBulkWorkflow;
@@ -17,6 +12,10 @@ import yf.meta.entities.Country;
 import yf.post.entities.Post;
 import yf.publication.bulkworkflow.PublicationBulkWorkflow;
 import yf.publication.entities.Publication;
+
+import javax.inject.Inject;
+import java.util.List;
+import java.util.logging.Logger;
 
 public class ReindexWorkflow {
 

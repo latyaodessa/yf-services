@@ -1,8 +1,8 @@
 package yf.core.elastic;
 
-import java.io.IOException;
-
 import org.codehaus.jackson.map.ObjectMapper;
+
+import java.io.IOException;
 
 public class GenericElasticToObjectConvertor {
 

@@ -1,20 +1,9 @@
 package yf.dashboard.postphoto;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-
-import javax.inject.Inject;
-import javax.persistence.EntityManager;
-import javax.persistence.NoResultException;
-import javax.persistence.PersistenceContext;
-import javax.persistence.TypedQuery;
-
 import org.elasticsearch.action.index.IndexResponse;
 import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.rest.RestStatus;
 import org.elasticsearch.search.SearchHit;
-
 import yf.core.ElasticException;
 import yf.core.PropertiesResolover;
 import yf.core.elastic.ElasticToObjectConvertor;
@@ -28,6 +17,15 @@ import yf.elastic.core.NativeElasticSingleton;
 import yf.publication.PublicationDao;
 import yf.publication.bulkworkflow.PublicationBulkWorkflow;
 import yf.publication.entities.Publication;
+
+import javax.inject.Inject;
+import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
+import javax.persistence.PersistenceContext;
+import javax.persistence.TypedQuery;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 public class PostPhotoDashboardWorkflow {
 

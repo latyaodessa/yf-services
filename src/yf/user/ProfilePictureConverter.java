@@ -1,9 +1,9 @@
 package yf.user;
 
-import java.util.Date;
-
 import yf.user.dto.ProfilePictureDTO;
 import yf.user.entities.ProfilePicture;
+
+import java.util.Date;
 
 public class ProfilePictureConverter {
 

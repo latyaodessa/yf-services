@@ -7,6 +7,7 @@ import yf.user.dto.LoginDTO;
 import yf.user.dto.ProfilePictureDTO;
 import yf.user.dto.UserAllDataDto;
 import yf.user.dto.UserDto;
+import yf.user.dto.UserStatusEnum;
 import yf.user.dto.external.FBUserDTO;
 import yf.user.dto.external.VKUserDTO;
 import yf.user.entities.FBUser;
@@ -135,6 +136,10 @@ public class UserService {
         return jwtService.isValidToken(token,
                 userId);
 
+    }
+
+    public boolean isAdmin(final Long userId) {
+        return getBasicUserById(userId).getStatus().equals(UserStatusEnum.ADMINISTRATOR);
     }
 
     public Response validateUiidVerification(final String verification) {

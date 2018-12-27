@@ -1,12 +1,11 @@
 package yf.core.elastic;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.inject.Inject;
-
 import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.search.SearchHit;
+
+import javax.inject.Inject;
+import java.util.ArrayList;
+import java.util.List;
 
 public class GenericElasticHitsToObjectExecutor {
 

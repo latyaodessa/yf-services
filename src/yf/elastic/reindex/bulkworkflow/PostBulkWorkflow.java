@@ -1,14 +1,6 @@
 package yf.elastic.reindex.bulkworkflow;
 
-import java.io.IOException;
-import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.Optional;
-
-import javax.annotation.PostConstruct;
-import javax.inject.Inject;
-
+import com.fasterxml.jackson.core.JsonProcessingException;
 import org.codehaus.jackson.JsonGenerationException;
 import org.codehaus.jackson.map.JsonMappingException;
 import org.codehaus.jackson.map.ObjectMapper;
@@ -18,9 +10,6 @@ import org.elasticsearch.action.delete.DeleteRequestBuilder;
 import org.elasticsearch.action.index.IndexRequestBuilder;
 import org.elasticsearch.action.support.WriteRequest.RefreshPolicy;
 import org.elasticsearch.action.update.UpdateRequestBuilder;
-
-import com.fasterxml.jackson.core.JsonProcessingException;
-
 import yf.core.PropertiesResolover;
 import yf.elastic.core.ElasticWorkflow;
 import yf.elastic.core.NativeElasticSingleton;
@@ -28,6 +17,14 @@ import yf.elastic.reindex.BulkOptions;
 import yf.post.dto.PostElasticDTO;
 import yf.post.entities.Post;
 import yf.post.parser.workflow.ParserPostConverter;
+
+import javax.annotation.PostConstruct;
+import javax.inject.Inject;
+import java.io.IOException;
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Optional;
 
 public class PostBulkWorkflow extends AbstractBulkReindexWorkflow<Post, PostElasticDTO> {
     @Inject

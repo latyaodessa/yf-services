@@ -1,5 +1,7 @@
 package yf.user.entities;
 
+import yf.core.entities.AbstractVersionEntity;
+
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -11,8 +13,6 @@ import javax.persistence.NamedQuery;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
-
-import yf.core.entities.AbstractVersionEntity;
 
 @Entity
 @Table(name = "user_vk")

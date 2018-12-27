@@ -1,16 +1,14 @@
 package yf.post.parser.workflow;
 
+import com.ibm.icu.text.Transliterator;
+import org.apache.commons.lang3.StringUtils;
+import yf.post.dto.PostElasticDTO;
+import yf.post.entities.Post;
+
 import java.util.HashSet;
 import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
-import org.apache.commons.lang3.StringUtils;
-
-import com.ibm.icu.text.Transliterator;
-
-import yf.post.dto.PostElasticDTO;
-import yf.post.entities.Post;
 
 public class PostRegexTextCleaner {
 

@@ -1,8 +1,7 @@
 package yf.publication.entities;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import yf.core.entities.AbstractVersionEntity;
+import yf.user.entities.User;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -17,9 +16,9 @@ import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
-
-import yf.core.entities.AbstractVersionEntity;
-import yf.user.entities.User;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 @Entity
 @Table(name = "md_profile")

@@ -1,8 +1,8 @@
 package yf.user.dto.external;
 
-import java.util.Date;
-
 import yf.user.dto.UserDto;
+
+import java.util.Date;
 
 public class FBUserDTO {
     private Long id;

@@ -1,5 +1,9 @@
 package yf.dashboard.postphoto.entities;
 
+import yf.core.entities.AbstractDateEntity;
+import yf.post.entities.Post;
+import yf.publication.entities.Publication;
+
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -11,10 +15,6 @@ import javax.persistence.NamedQuery;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
-
-import yf.core.entities.AbstractDateEntity;
-import yf.post.entities.Post;
-import yf.publication.entities.Publication;
 
 @Entity
 @Table(name = "user_saved_posts")

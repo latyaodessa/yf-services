@@ -1,5 +1,7 @@
 package yf.publication.entities;
 
+import yf.core.entities.AbstractDateEntity;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -8,7 +10,7 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name = "publication_pictures")
-public class PublicationPictures {
+public class PublicationPictures extends AbstractDateEntity {
 
     @Id
     @GeneratedValue

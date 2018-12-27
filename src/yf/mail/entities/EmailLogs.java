@@ -1,8 +1,7 @@
 package yf.mail.entities;
 
-import java.io.IOException;
-import java.util.Date;
-import java.util.logging.Logger;
+import org.codehaus.jackson.map.ObjectMapper;
+import yf.core.entities.AbstractVersionEntity;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -10,10 +9,9 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
-
-import org.codehaus.jackson.map.ObjectMapper;
-
-import yf.core.entities.AbstractVersionEntity;
+import java.io.IOException;
+import java.util.Date;
+import java.util.logging.Logger;
 
 @Entity
 @Table(name = "email_logs")

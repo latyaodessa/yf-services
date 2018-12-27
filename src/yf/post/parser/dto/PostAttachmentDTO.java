@@ -1,8 +1,7 @@
 package yf.post.parser.dto;
 
-import org.codehaus.jackson.annotate.JsonProperty;
-
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import org.codehaus.jackson.annotate.JsonProperty;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class PostAttachmentDTO {

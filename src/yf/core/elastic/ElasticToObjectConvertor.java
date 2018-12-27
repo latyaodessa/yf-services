@@ -1,12 +1,12 @@
 package yf.core.elastic;
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-
 import org.codehaus.jackson.map.ObjectMapper;
 import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.search.SearchHit;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 public final class ElasticToObjectConvertor {
 

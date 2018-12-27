@@ -1,14 +1,6 @@
 package yf.publication.bulkworkflow;
 
-import static org.elasticsearch.common.xcontent.XContentFactory.jsonBuilder;
-
-import java.io.IOException;
-import java.util.List;
-import java.util.logging.Level;
-
-import javax.annotation.PostConstruct;
-import javax.inject.Inject;
-
+import com.fasterxml.jackson.core.JsonProcessingException;
 import org.elasticsearch.action.bulk.BulkRequestBuilder;
 import org.elasticsearch.action.bulk.BulkResponse;
 import org.elasticsearch.action.index.IndexRequestBuilder;
@@ -16,9 +8,6 @@ import org.elasticsearch.action.support.WriteRequest;
 import org.elasticsearch.common.settings.Settings;
 import org.elasticsearch.common.xcontent.XContentBuilder;
 import org.elasticsearch.common.xcontent.XContentType;
-
-import com.fasterxml.jackson.core.JsonProcessingException;
-
 import yf.core.PropertiesResolover;
 import yf.elastic.core.ElasticWorkflow;
 import yf.elastic.core.NativeElasticSingleton;
@@ -27,6 +16,14 @@ import yf.elastic.reindex.bulkworkflow.AbstractBulkReindexWorkflow;
 import yf.publication.PublicationConverter;
 import yf.publication.dtos.PublicationElasticDTO;
 import yf.publication.entities.Publication;
+
+import javax.annotation.PostConstruct;
+import javax.inject.Inject;
+import java.io.IOException;
+import java.util.List;
+import java.util.logging.Level;
+
+import static org.elasticsearch.common.xcontent.XContentFactory.jsonBuilder;
 
 public class PublicationBulkWorkflow extends AbstractBulkReindexWorkflow<Publication, PublicationElasticDTO> {
 

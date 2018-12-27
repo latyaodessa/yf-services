@@ -1,10 +1,9 @@
 package yf.post.parser.rest.scheduler;
 
-import java.util.logging.Logger;
+import yf.post.parser.ParserService;
 
 import javax.inject.Inject;
-
-import yf.post.parser.ParserService;
+import java.util.logging.Logger;
 
 public class SchedulerProcessor {
 

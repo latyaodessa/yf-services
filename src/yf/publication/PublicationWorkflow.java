@@ -1,14 +1,13 @@
 package yf.publication;
 
-import java.util.List;
+import yf.post.entities.Post;
+import yf.publication.entities.Publication;
+import yf.publication.entities.PublicationUser;
 
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-
-import yf.post.entities.Post;
-import yf.publication.entities.Publication;
-import yf.publication.entities.PublicationUser;
+import java.util.List;
 
 public class PublicationWorkflow {
 
@@ -29,6 +28,12 @@ public class PublicationWorkflow {
 
     public List<PublicationUser> getPublishedByUserId(final Long userId) {
         return publicationDao.getPublishedSetsByUserId(userId);
+
+    }
+
+    public Publication getPublicationById(final Long publicationId) {
+        return publicationDao.getPublicationById(publicationId);
+
 
     }
 }

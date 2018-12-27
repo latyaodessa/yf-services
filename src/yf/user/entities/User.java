@@ -1,5 +1,10 @@
 package yf.user.entities;
 
+import org.hibernate.annotations.ColumnTransformer;
+import yf.core.entities.AbstractVersionEntity;
+import yf.user.dto.UserStatusEnum;
+import yf.user.dto.UserTypeEnum;
+
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -14,12 +19,6 @@ import javax.persistence.NamedQuery;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
-
-import org.hibernate.annotations.ColumnTransformer;
-
-import yf.core.entities.AbstractVersionEntity;
-import yf.user.dto.UserStatusEnum;
-import yf.user.dto.UserTypeEnum;
 
 @Entity
 @Table(name = "user_yf")

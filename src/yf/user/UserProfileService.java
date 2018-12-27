@@ -1,7 +1,5 @@
 package yf.user;
 
-import javax.inject.Inject;
-
 import yf.publication.entities.MdProfile;
 import yf.publication.entities.PhProfile;
 import yf.publication.entities.Publication;
@@ -9,6 +7,8 @@ import yf.publication.entities.PublicationUser;
 import yf.user.dto.external.VKUserDTO;
 import yf.user.entities.User;
 import yf.user.entities.VKUser;
+
+import javax.inject.Inject;
 
 public class UserProfileService {
 

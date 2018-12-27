@@ -1,8 +1,8 @@
 package yf.publication.entities;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import yf.core.entities.AbstractDateEntity;
+import yf.post.entities.Post;
+import yf.submission.entities.SubmissionParticipant;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -17,9 +17,10 @@ import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
-
-import yf.core.entities.AbstractDateEntity;
-import yf.post.entities.Post;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name = "publication")
@@ -38,20 +39,19 @@ public class Publication extends AbstractDateEntity {
     @Column(name = "id")
     private Long id;
     private String link;
-    @Column(name = "photoshoot_date")
-    private Date photoshootDate;
-    private String location;
+    @Column(name = "event_date")
+    private Long eventDate;
+    private String city;
     private String country;
-    private String title;
-    private String about;
+    private String text;
     private String hashtags;
     @Column(name = "additional_phs")
     private String additionalPhs;
     @Column(name = "additional_mds")
     private String additionalMds;
-    @Column(name = "ph_techincal")
-    private String phTechnical;
+    private String equipment;
     private Integer likes;
+    private Boolean exclusive;
 
     @OneToMany(fetch = FetchType.LAZY,
                cascade = {CascadeType.MERGE,
@@ -69,9 +69,16 @@ public class Publication extends AbstractDateEntity {
     @JoinColumn(name = "vk_post_id", referencedColumnName = "id")
     private Post vkPost;
 
+    @OneToMany(orphanRemoval = true,
+            cascade = {CascadeType.ALL},
+            fetch = FetchType.LAZY)
+    @JoinColumn(name = "publication_fk")
+    private List<PublicationParticipant> publicationParticipants;
+
     public Publication() {
         publicationPictures = new ArrayList<>();
         publicationUsers = new ArrayList<>();
+        publicationParticipants = new ArrayList<>();
         setCreatedOn(new Date().getTime());
     }
 
@@ -79,7 +86,7 @@ public class Publication extends AbstractDateEntity {
         return id;
     }
 
-    public void setId(final Long id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -87,55 +94,47 @@ public class Publication extends AbstractDateEntity {
         return link;
     }
 
-    public void setLink(final String link) {
+    public void setLink(String link) {
         this.link = link;
     }
 
-    public Date getPhotoshootDate() {
-        return photoshootDate;
+    public Long getEventDate() {
+        return eventDate;
     }
 
-    public void setPhotoshootDate(final Date photoshootDate) {
-        this.photoshootDate = photoshootDate;
+    public void setEventDate(Long eventDate) {
+        this.eventDate = eventDate;
     }
 
-    public String getLocation() {
-        return location;
+    public String getCity() {
+        return city;
     }
 
-    public void setLocation(final String location) {
-        this.location = location;
+    public void setCity(String city) {
+        this.city = city;
     }
 
     public String getCountry() {
         return country;
     }
 
-    public void setCountry(final String country) {
+    public void setCountry(String country) {
         this.country = country;
     }
 
-    public String getTitle() {
-        return title;
+    public String getText() {
+        return text;
     }
 
-    public void setTitle(final String title) {
-        this.title = title;
-    }
-
-    public String getAbout() {
-        return about;
-    }
-
-    public void setAbout(final String about) {
-        this.about = about;
+    public void setText(String text) {
+        this.text = text;
     }
 
     public String getHashtags() {
         return hashtags;
     }
 
-    public void setHashtags(final String hashtags) {
+    public void setHashtags(String hashtags) {
         this.hashtags = hashtags;
     }
 
@@ -151,48 +150,63 @@ public class Publication extends AbstractDateEntity {
         return additionalMds;
     }
 
-    public void setAdditionalMds(final String additionalMds) {
+    public void setAdditionalMds(String additionalMds) {
         this.additionalMds = additionalMds;
     }
 
-    public String getPhTechnical() {
-        return phTechnical;
+    public String getEquipment() {
+        return equipment;
     }
 
-    public void setPhTechnical(final String phTechnical) {
-        this.phTechnical = phTechnical;
-    }
-
-    public List<PublicationPictures> getPublicationPictures() {
-        return publicationPictures;
-    }
-
-    public void setPublicationPictures(final List<PublicationPictures> publicationPictures) {
-        this.publicationPictures = publicationPictures;
-    }
-
-    public Post getVkPost() {
-        return vkPost;
-    }
-
-    public void setVkPost(final Post vkPost) {
-        this.vkPost = vkPost;
-    }
-
-    public List<PublicationUser> getPublicationUsers() {
-        return publicationUsers;
-    }
-
-    public void setPublicationUsers(final List<PublicationUser> publicationUsers) {
-        this.publicationUsers = publicationUsers;
+    public void setEquipment(String equipment) {
+        this.equipment = equipment;
     }
 
     public Integer getLikes() {
         return likes;
     }
 
-    public void setLikes(final Integer likes) {
+    public void setLikes(Integer likes) {
         this.likes = likes;
     }
 
+    public List<PublicationPictures> getPublicationPictures() {
+        return publicationPictures;
+    }
+
+    public void setPublicationPictures(List<PublicationPictures> publicationPictures) {
+        this.publicationPictures = publicationPictures;
+    }
+
+    public List<PublicationUser> getPublicationUsers() {
+        return publicationUsers;
+    }
+
+    public void setPublicationUsers(List<PublicationUser> publicationUsers) {
+        this.publicationUsers = publicationUsers;
+    }
+
+    public Post getVkPost() {
+        return vkPost;
+    }
+
+    public void setVkPost(Post vkPost) {
+        this.vkPost = vkPost;
+    }
+
+    public List<PublicationParticipant> getPublicationParticipants() {
+        return publicationParticipants;
+    }
+
+    public void setPublicationParticipants(List<PublicationParticipant> publicationParticipants) {
+        this.publicationParticipants = publicationParticipants;
+    }
+
+    public Boolean getExclusive() {
+        return exclusive;
+    }
+
+    public void setExclusive(Boolean exclusive) {
+        this.exclusive = exclusive;
+    }
 }

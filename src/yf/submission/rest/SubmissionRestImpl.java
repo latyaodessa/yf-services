@@ -2,6 +2,7 @@ package yf.submission.rest;
 
 import yf.submission.dtos.AllParticipantsDTO;
 import yf.submission.dtos.SubmissionDTO;
+import yf.submission.dtos.SubmissionStatusEnum;
 import yf.submission.services.SubmissionService;
 import yf.user.dto.AuthResponseStatusesEnum;
 import yf.user.services.UserService;
@@ -9,6 +10,7 @@ import yf.user.services.UserService;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
 import javax.ws.rs.Consumes;
+import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
@@ -79,21 +81,6 @@ public class SubmissionRestImpl {
 
     }
 
-    @GET
-    @Path("{uuid}/{userId}/{token}")
-    public Response getSubmissionByUuid(@PathParam("uuid") final String uuid, @PathParam("userId") final Long userId, @PathParam("token") final String token) {
-        final Boolean isValid = userService.validateToken(userId,
-                token);
-        if (!isValid) {
-            Response.status(401)
-                    .entity(AuthResponseStatusesEnum.VERIFICATION_NOT_VALID)
-                    .build();
-        }
-        return Response.status(200)
-                .entity(submissionService.geSubmissionByUUid(uuid, userId))
-                .build();
-
-    }
 
     @GET
     @Path("all/{userId}/{token}/{offset}/{limit}")
@@ -113,6 +100,24 @@ public class SubmissionRestImpl {
     }
 
     @GET
+    @Path("status/{statusEnum}/{userId}/{token}")
+    public Response getSubmissionsByStatus(@PathParam("statusEnum") final SubmissionStatusEnum statusEnum,
+                                           @PathParam("userId") final Long userId,
+                                           @PathParam("token") final String token) {
+        final Boolean isValid = userService.validateToken(userId,
+                token);
+        if (!isValid && userService.isAdmin(userId)) {
+            Response.status(401)
+                    .entity(AuthResponseStatusesEnum.VERIFICATION_NOT_VALID)
+                    .build();
+        }
+        return Response.status(200)
+                .entity(submissionService.getSubmissionsByStatus(statusEnum))
+                .build();
+
+    }
+
+    @GET
     @Path("clean")
     public Response cleanIncompletedSubmittions() {
         return Response.status(200)
@@ -122,20 +127,80 @@ public class SubmissionRestImpl {
     }
 
     @PUT
-    @Path("update/data/{deleteUploads}")
-    public Response changeSubmissionStatus(@PathParam("deleteUploads") final Boolean deleteUploads, final SubmissionDTO dto) {
+    @Path("update/data/{adminId}/{adminToken}")
+    public Response changeSubmissionStatus(@PathParam("adminId") final Long adminId,
+                                           @PathParam("adminToken") final String adminToken,
+                                           final SubmissionDTO dto) {
+        final Boolean isValid = userService.validateToken(adminId,
+                adminToken);
+        if (!isValid && userService.isAdmin(adminId)) {
+            Response.status(401)
+                    .entity(AuthResponseStatusesEnum.VERIFICATION_NOT_VALID)
+                    .build();
+        }
         return Response.status(200)
-                .entity(submissionService.updateEntireSubmissionAndParticipants(dto, deleteUploads))
+                .entity(submissionService.updateEntireSubmissionAndParticipants(dto))
+                .build();
+
+    }
+
+    @DELETE
+    @Path("delete/uploads/{submissionUUID}/{userId}")
+    public void deleteUploads(@PathParam("submissionUUID") final String submissionUUID, @PathParam("userId") final Long userId) {
+        submissionService.deleteUploads(submissionUUID, userId);
+    }
+
+
+    @POST
+    @Path("publish/{submissionId}/{adminId}/{adminToken}")
+    public Response publishSubmission(@PathParam("adminId") final Long adminId,
+                                      @PathParam("adminToken") final String adminToken,
+                                      @PathParam("submissionId") final Long submissionId) {
+        final Boolean isValid = userService.validateToken(adminId,
+                adminToken);
+        if (!isValid && userService.isAdmin(adminId)) {
+            Response.status(401)
+                    .entity(AuthResponseStatusesEnum.VERIFICATION_NOT_VALID)
+                    .build();
+        }
+        return Response.status(200)
+                .entity(submissionService.publishSubmission(submissionId))
                 .build();
 
     }
 
 
-    @PUT
-    @Path("publish")
-    public Response publishSubmission(final Long submissionId) {
+    @GET
+    @Path("get/{uuid}/{userId}/{adminId}/{adminToken}")
+    public Response getSubmissionByUuidAsAdmin(@PathParam("uuid") final String uuid,
+                                               @PathParam("userId") final Long userId,
+                                               @PathParam("adminId") final Long adminId,
+                                               @PathParam("adminToken") final String adminToken) {
+        final Boolean isValid = userService.validateToken(adminId,
+                adminToken);
+        if (!isValid && userService.isAdmin(adminId)) {
+            Response.status(401)
+                    .entity(AuthResponseStatusesEnum.VERIFICATION_NOT_VALID)
+                    .build();
+        }
         return Response.status(200)
-                .entity(submissionService.publishSubmission(submissionId))
+                .entity(submissionService.geSubmissionByUUid(uuid, userId))
+                .build();
+
+    }
+
+    @GET
+    @Path("{uuid}/{userId}/{token}")
+    public Response getSubmissionByUuid(@PathParam("uuid") final String uuid, @PathParam("userId") final Long userId, @PathParam("token") final String token) {
+        final Boolean isValid = userService.validateToken(userId,
+                token);
+        if (!isValid) {
+            Response.status(401)
+                    .entity(AuthResponseStatusesEnum.VERIFICATION_NOT_VALID)
+                    .build();
+        }
+        return Response.status(200)
+                .entity(submissionService.geSubmissionByUUid(uuid, userId))
                 .build();
 
     }

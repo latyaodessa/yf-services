@@ -1,15 +1,14 @@
 package yf.mail.services;
 
-import java.util.logging.Logger;
+import yf.mail.dtos.LanguagesEnum;
+import yf.mail.dtos.MailTemplateNamesEnum;
+import yf.mail.entities.EmailTemplate;
 
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
-
-import yf.mail.dtos.LanguagesEnum;
-import yf.mail.dtos.MailTemplateNamesEnum;
-import yf.mail.entities.EmailTemplate;
+import java.util.logging.Logger;
 
 public class EmailDAO {
 

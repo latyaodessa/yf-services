@@ -1,5 +1,8 @@
 package yf.publication.entities;
 
+import yf.submission.dtos.PhotoshootingParticipantTypeEnum;
+import yf.user.entities.User;
+
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -13,9 +16,6 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
-import yf.publication.ProfileUserTypeEnum;
-import yf.user.entities.User;
-
 @Entity
 @Table(name = "publication_user")
 @NamedQueries({@NamedQuery(name = PublicationUser.QUERY_GET_PUBLICATIONS_BY_USER, query = "SELECT t FROM PublicationUser t WHERE user.id = :user_id") })
@@ -27,7 +27,7 @@ public class PublicationUser {
     @GeneratedValue
     private Long id;
     @Enumerated(EnumType.STRING)
-    private ProfileUserTypeEnum type;
+    private PhotoshootingParticipantTypeEnum type;
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     @NotNull
@@ -45,11 +45,11 @@ public class PublicationUser {
         this.id = id;
     }
 
-    public ProfileUserTypeEnum getType() {
+    public PhotoshootingParticipantTypeEnum getType() {
         return type;
     }
 
-    public void setType(ProfileUserTypeEnum type) {
+    public void setType(PhotoshootingParticipantTypeEnum type) {
         this.type = type;
     }
 

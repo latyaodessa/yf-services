@@ -1,22 +1,29 @@
 package yf.publication;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-
-import javax.inject.Inject;
-
 import yf.core.PropertiesResolover;
 import yf.post.dto.PostElasticDTO;
 import yf.post.entities.Post;
 import yf.post.parser.workflow.ParserPostConverter;
 import yf.publication.dtos.PublicationElasticDTO;
+import yf.publication.dtos.PublicationParticipantDTO;
+import yf.publication.dtos.PublicationPicturesDTO;
 import yf.publication.dtos.PublicationTypeEnum;
 import yf.publication.dtos.PublicationUserDTO;
 import yf.publication.entities.Publication;
+import yf.publication.entities.PublicationParticipant;
+import yf.publication.entities.PublicationPictures;
 import yf.publication.entities.PublicationUser;
+import yf.submission.dtos.PhotoshootingParticipantTypeEnum;
+
+import javax.inject.Inject;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 public class PublicationConverter {
 
@@ -24,6 +31,9 @@ public class PublicationConverter {
     private PropertiesResolover properties;
     @Inject
     private ParserPostConverter postConverter;
+
+    @PersistenceContext
+    private EntityManager em;
 
     public Publication vkPostToPublication(final Post post) {
         Publication publication = new Publication();
@@ -38,18 +48,57 @@ public class PublicationConverter {
         dto.setId(publication.getId());
         dto.setDate(publication.getCreatedOn());
         dto.setLink(publication.getLink());
-        dto.setPhotoshootDate(Optional.ofNullable(publication.getPhotoshootDate())
-                .map(java.util.Date::getTime)
+        dto.setEventDate(Optional.ofNullable(publication.getEventDate())
                 .orElse(null));
         dto.setLikes(publication.getLikes());
-
+        dto.setCity(publication.getCity());
+        dto.setCountry(publication.getCountry());
+        dto.setHashtags(publication.getHashtags());
+        dto.setEquipment(publication.getEquipment());
         handlePublicationUsers(dto,
                 publication.getPublicationUsers());
-        // TODO NORMAL, NOT VK
 
-        handleConvertionFromVKPost(dto,
-                publication);
+        if (publication.getVkPost() != null) {
+            handleConvertionFromVKPost(dto,
+                    publication);
+        }
 
+        if (publication.getPublicationParticipants() != null) {
+            final List<PublicationParticipantDTO> collect = publication.getPublicationParticipants().stream().map(this::publicationParticipantsToDTO).collect(Collectors.toList());
+            dto.setPublicationParticipants(collect);
+
+        }
+
+        return dto;
+    }
+
+    public PublicationPictures convertPublicationPicturesDTOToEntity(final Publication publication, final PublicationPicturesDTO dto) {
+        PublicationPictures publicationPictures = new PublicationPictures();
+        publicationPictures.setFileId(dto.getFileId());
+        publicationPictures.setFileName(dto.getFileName());
+        publicationPictures.setFriendlyLink(dto.getFriendlyLink());
+        publicationPictures.setNativeLink(dto.getNativeLink());
+        publicationPictures.setPublicationId(publication.getId());
+        em.persist(publicationPictures);
+        return publicationPictures;
+
+    }
+
+    private PublicationParticipantDTO publicationParticipantsToDTO(final PublicationParticipant publicationParticipant) {
+
+        PublicationParticipantDTO dto = new PublicationParticipantDTO();
+        dto.setId(publicationParticipant.getId());
+        dto.setNumber(publicationParticipant.getNumber());
+        dto.setFirstName(publicationParticipant.getFirstName());
+        dto.setLastName(publicationParticipant.getLastName());
+        dto.setCountry(publicationParticipant.getCountry());
+        dto.setCity(publicationParticipant.getCity());
+        dto.setType(publicationParticipant.getType());
+        dto.setInstagram(publicationParticipant.getInstagram());
+        dto.setVk(publicationParticipant.getVk());
+        dto.setFacebook(publicationParticipant.getFacebook());
+        dto.setWebsite(publicationParticipant.getWebsite());
+        dto.setAgency(publicationParticipant.getAgency());
         return dto;
     }
 
@@ -101,9 +150,9 @@ public class PublicationConverter {
 
         publicationUsers.forEach(publicationUser -> {
 
-            if (ProfileUserTypeEnum.PH.equals(publicationUser.getType())) {
+            if (PhotoshootingParticipantTypeEnum.PH.equals(publicationUser.getType())) {
                 phUsers.add(publicationUserToDTO(publicationUser));
-            } else if (ProfileUserTypeEnum.MD.equals(publicationUser.getType())) {
+            } else if (PhotoshootingParticipantTypeEnum.MD.equals(publicationUser.getType())) {
                 mdUsers.add(publicationUserToDTO(publicationUser));
             }
         });
@@ -123,4 +172,5 @@ public class PublicationConverter {
                 .getId());
         return dto;
     }
+
 }

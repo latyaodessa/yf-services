@@ -1,15 +1,14 @@
 package yf.user;
 
-import java.util.Date;
-
-import javax.inject.Inject;
-
 import yf.user.dto.UserDto;
 import yf.user.dto.external.FBUserDTO;
 import yf.user.dto.external.VKUserDTO;
 import yf.user.entities.FBUser;
 import yf.user.entities.User;
 import yf.user.entities.VKUser;
+
+import javax.inject.Inject;
+import java.util.Date;
 
 public class UserConverter {
 

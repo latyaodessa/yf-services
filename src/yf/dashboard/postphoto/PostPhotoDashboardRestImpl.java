@@ -1,6 +1,10 @@
 package yf.dashboard.postphoto;
 
-import java.util.List;
+import yf.dashboard.postphoto.dto.PhotoDashboardElasticDTO;
+import yf.dashboard.postphoto.dto.PostDashboardElasticDTO;
+import yf.dashboard.postphoto.dto.UserVerificationDto;
+import yf.user.dto.AuthResponseStatusesEnum;
+import yf.user.services.UserService;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;
@@ -11,12 +15,7 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-
-import yf.dashboard.postphoto.dto.PhotoDashboardElasticDTO;
-import yf.dashboard.postphoto.dto.PostDashboardElasticDTO;
-import yf.dashboard.postphoto.dto.UserVerificationDto;
-import yf.user.dto.AuthResponseStatusesEnum;
-import yf.user.services.UserService;
+import java.util.List;
 
 @Path("dashboard")
 @Produces(MediaType.APPLICATION_JSON)

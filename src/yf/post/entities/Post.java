@@ -1,6 +1,6 @@
 package yf.post.entities;
 
-import java.util.List;
+import yf.core.entities.AbstractVersionEntity;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -12,8 +12,7 @@ import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
-
-import yf.core.entities.AbstractVersionEntity;
+import java.util.List;
 
 @Entity
 @Table(name = "vk_post")

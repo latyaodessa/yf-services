@@ -1,17 +1,16 @@
 package yf.user;
 
-import java.util.Date;
-
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-
-import yf.publication.ProfileUserTypeEnum;
 import yf.publication.entities.MdProfile;
 import yf.publication.entities.PhProfile;
 import yf.publication.entities.Publication;
 import yf.publication.entities.PublicationUser;
+import yf.submission.dtos.PhotoshootingParticipantTypeEnum;
 import yf.user.entities.User;
 import yf.user.entities.VKUser;
+
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import java.util.Date;
 
 public class UserProfileWorkflow {
 
@@ -46,7 +45,7 @@ public class UserProfileWorkflow {
         publicationUser.setPublication(em.merge(publication));
         User user = phProfile.getUser();
         publicationUser.setUser(em.merge(user));
-        publicationUser.setType(ProfileUserTypeEnum.PH);
+        publicationUser.setType(PhotoshootingParticipantTypeEnum.PH);
         em.persist(publicationUser);
 
         // em.flush();
@@ -65,7 +64,7 @@ public class UserProfileWorkflow {
         publicationUser.setPublication(em.merge(publication));
         User user = mdProfile.getUser();
         publicationUser.setUser(em.merge(user));
-        publicationUser.setType(ProfileUserTypeEnum.MD);
+        publicationUser.setType(PhotoshootingParticipantTypeEnum.MD);
         em.persist(publicationUser);
         // em.flush();
         //

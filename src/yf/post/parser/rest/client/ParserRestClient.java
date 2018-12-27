@@ -1,12 +1,11 @@
 package yf.post.parser.rest.client;
 
-import java.util.List;
-
 import com.sun.jersey.api.client.Client;
 import com.sun.jersey.api.client.GenericType;
-
 import yf.core.JNDIPropertyHelper;
 import yf.post.parser.dto.PostDTO;
+
+import java.util.List;
 
 public class ParserRestClient {
 

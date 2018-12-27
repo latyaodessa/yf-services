@@ -1,16 +1,10 @@
 package yf.dashboard.postphoto;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
-import javax.inject.Inject;
-
 import org.elasticsearch.action.delete.DeleteResponse;
 import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.rest.RestStatus;
 import org.elasticsearch.search.sort.SortOrder;
-
 import yf.core.PropertiesResolover;
 import yf.dashboard.postphoto.dto.PhotoDashboardElasticDTO;
 import yf.dashboard.postphoto.dto.PostDashboardElasticDTO;
@@ -18,6 +12,10 @@ import yf.dashboard.postphoto.dto.SavePhotoDTO;
 import yf.elastic.core.NativeElasticSingleton;
 import yf.post.dto.SharedBasicPostDTO;
 import yf.publication.PublicationService;
+
+import javax.inject.Inject;
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class PostPhotoDashboardService {
 

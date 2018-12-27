@@ -1,6 +1,12 @@
 package yf.submission.services;
 
+import org.elasticsearch.action.index.IndexResponse;
 import org.joda.time.DateTime;
+import yf.elastic.core.NativeElasticSingleton;
+import yf.publication.PublicationConverter;
+import yf.publication.bulkworkflow.PublicationBulkWorkflow;
+import yf.publication.dtos.PublicationElasticDTO;
+import yf.publication.entities.Publication;
 import yf.submission.dtos.AllParticipantsDTO;
 import yf.submission.dtos.PhotoshootingParticipantTypeEnum;
 import yf.submission.dtos.SubmissionDTO;
@@ -12,6 +18,7 @@ import javax.ejb.Stateless;
 import javax.inject.Inject;
 import java.sql.Timestamp;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -31,6 +38,10 @@ public class SubmissionService {
     private SubmissionDAO submissionDAO;
     @Inject
     private StorageService storageService;
+    @Inject
+    private PublicationBulkWorkflow publicationBulkWorkflow;
+    @Inject
+    private PublicationConverter publicationConverter;
 
     public SubmissionDTO geSubmissionByUUid(final String uuid, final Long userId) {
         final Submission submission = submissionDAO.geSubmissionByUUid(uuid, userId);
@@ -64,7 +75,7 @@ public class SubmissionService {
         return submitionMap;
     }
 
-    public Submission updateEntireSubmissionAndParticipants(final SubmissionDTO dto, final Boolean deleteUploads) {
+        public SubmissionDTO updateEntireSubmissionAndParticipants(final SubmissionDTO dto) {
 
         final Submission submission = submissionDAO.getSubmissionById(dto.getId());
 
@@ -74,23 +85,31 @@ public class SubmissionService {
         submissionConverter.updateExistingSubmissionData(submission, dto);
 
         if (dto.getAllParticipants() != null) {
+
+            submission.getSubmissionParticipants().clear();
+
             Set<SubmissionParticipant> participants = convertParticipants(dto.getAllParticipants());
-            submission.setSubmissionParticipants(participants);
+            submission.getSubmissionParticipants().addAll(participants);
         }
 
         submissionDAO.updateSubmission(submission);
 
-        if (deleteUploads) {
-            Map<String, Long> submitionMap = new HashMap<String, Long>() {{
-                put(submission.getUuid(), submission.getId());
-            }};
-            storageService.clean(submitionMap);
-
+        if (dto.getStatus().equals(SubmissionStatusEnum.BLOCKED) || dto.getStatus().equals(SubmissionStatusEnum.DECLINED)) {
+            deleteUploads(dto.getUuid(), dto.getUser().getId());
         }
-        return submission;
+
+        return submissionConverter.toDto(submission);
     }
 
-    public Submission publishSubmission(final Long submissionId) {
+    public void deleteUploads(final String uUID, final Long userId) {
+        Map<String, Long> submitionMap = new HashMap<String, Long>() {{
+            put(uUID, userId);
+        }};
+        storageService.clean(submitionMap);
+
+    }
+
+    public PublicationElasticDTO publishSubmission(final Long submissionId) {
 
         final Submission submission = submissionDAO.getSubmissionById(submissionId);
 
@@ -100,14 +119,21 @@ public class SubmissionService {
         submission.setStatus(SubmissionStatusEnum.ACCEPTED);
         submission.setCreatedOn(new Date().getTime());
         submissionDAO.updateSubmission(submission);
-//TODO
-//        submissionConverter.submissionToPublication(submission);
 
-        return submission;
+        Publication publication =  submissionConverter.submissionToPublication(submission);
+
+        publicationBulkWorkflow.execute(Collections.singletonList(publication));
+        return publicationConverter.publicationToElasticDTO(publication);
+
     }
 
     public List<SubmissionDTO> getUserSubmissions(final Long userId, final int offset, final int limit) {
         final List<Submission> submissionsList = submissionDAO.getSubmissionsByUserId(userId, offset, limit);
+        return submissionsList.stream().map(submission -> submissionConverter.toDto(submission)).collect(Collectors.toList());
+    }
+
+    public List<SubmissionDTO> getSubmissionsByStatus(final SubmissionStatusEnum statusEnum) {
+        final List<Submission> submissionsList = submissionDAO.getSubmissionsWithStatus(Collections.singletonList(statusEnum));
         return submissionsList.stream().map(submission -> submissionConverter.toDto(submission)).collect(Collectors.toList());
     }
 

@@ -1,5 +1,8 @@
 package yf.user.entities;
 
+import yf.core.entities.AbstractVersionEntity;
+import yf.user.dto.VerificationTypesEnum;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -10,9 +13,6 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
-
-import yf.core.entities.AbstractVersionEntity;
-import yf.user.dto.VerificationTypesEnum;
 
 @Entity
 @Table(name = "verifications")

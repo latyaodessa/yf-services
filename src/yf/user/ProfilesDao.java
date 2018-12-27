@@ -1,12 +1,12 @@
 package yf.user;
 
+import yf.publication.entities.MdProfile;
+import yf.publication.entities.PhProfile;
+
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
-
-import yf.publication.entities.MdProfile;
-import yf.publication.entities.PhProfile;
 
 public class ProfilesDao {
 

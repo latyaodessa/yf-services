@@ -1,18 +1,5 @@
 package yf.user.rest;
 
-import java.util.Map;
-
-import javax.ejb.Stateless;
-import javax.inject.Inject;
-import javax.ws.rs.GET;
-import javax.ws.rs.POST;
-import javax.ws.rs.PUT;
-import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
-import javax.ws.rs.Produces;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
-
 import yf.user.UserDao;
 import yf.user.UserWorkflow;
 import yf.user.dto.AuthResponseStatusesEnum;
@@ -25,6 +12,18 @@ import yf.user.entities.FBUser;
 import yf.user.entities.User;
 import yf.user.entities.VKUser;
 import yf.user.services.UserService;
+
+import javax.ejb.Stateless;
+import javax.inject.Inject;
+import javax.ws.rs.GET;
+import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
+import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
+import javax.ws.rs.Produces;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
+import java.util.Map;
 
 @Path("user")
 @Produces(MediaType.APPLICATION_JSON)

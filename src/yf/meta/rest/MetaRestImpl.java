@@ -1,6 +1,8 @@
 package yf.meta.rest;
 
-import java.util.List;
+import yf.meta.dtos.CityDTO;
+import yf.meta.dtos.CountryDTO;
+import yf.meta.services.MetaService;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;
@@ -9,10 +11,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
-
-import yf.meta.dtos.CityDTO;
-import yf.meta.dtos.CountryDTO;
-import yf.meta.services.MetaService;
+import java.util.List;
 
 @Path("meta")
 @Produces(MediaType.APPLICATION_JSON)

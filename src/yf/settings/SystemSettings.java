@@ -1,5 +1,7 @@
 package yf.settings;
 
+import yf.core.entities.AbstractDateEntity;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -8,8 +10,6 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
-
-import yf.core.entities.AbstractDateEntity;
 
 @Entity
 @Table(name = "system_settings")

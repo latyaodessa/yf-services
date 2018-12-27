@@ -1,12 +1,12 @@
 package yf.user.entities;
 
+import yf.core.entities.AbstractVersionEntity;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
-
-import yf.core.entities.AbstractVersionEntity;
 
 @Entity
 @Table(name = "profile_picture")

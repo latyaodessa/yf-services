@@ -1,12 +1,11 @@
 package yf.mail.converters;
 
-import java.util.Map;
-
 import org.apache.commons.lang3.text.StrSubstitutor;
-
 import yf.mail.dtos.EmailToSendDTO;
 import yf.mail.entities.EmailTemplate;
 import yf.user.entities.User;
+
+import java.util.Map;
 
 public class TemplateToEmailSendConverter {
 

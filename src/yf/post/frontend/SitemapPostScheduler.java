@@ -1,15 +1,13 @@
 package yf.post.frontend;
 
-import java.util.Date;
-import java.util.logging.Logger;
+import org.joda.time.DateTime;
+import yf.post.parser.rest.scheduler.Scheduler;
 
 import javax.ejb.EJB;
 import javax.ejb.Schedule;
 import javax.ejb.Singleton;
-
-import org.joda.time.DateTime;
-
-import yf.post.parser.rest.scheduler.Scheduler;
+import java.util.Date;
+import java.util.logging.Logger;
 
 @Singleton
 public class SitemapPostScheduler implements Scheduler {

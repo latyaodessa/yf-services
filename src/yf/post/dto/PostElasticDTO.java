@@ -1,8 +1,8 @@
 package yf.post.dto;
 
-import java.util.List;
-
 import yf.post.entities.Post;
+
+import java.util.List;
 
 public class PostElasticDTO extends Post {
 

@@ -18,15 +18,14 @@ public class BulkElasticReindexRestImpl {
     @GET
     @Path("all")
     public boolean allReindex() {
-        return reindexWorkflow.reindexPosts() && reindexWorkflow.reindexDashboardPosts() && reindexWorkflow.reindexDashboardPhotos()
-                && reindexWorkflow.reindexPublications() && reindexWorkflow.reindexCountries() && reindexWorkflow.reindexCities();
+        return  reindexWorkflow.reindexPublications() && reindexWorkflow.reindexDashboardPosts();
     }
 
-    @GET
-    @Path("vk/posts")
-    public boolean postsBulkReindex() {
-        return reindexWorkflow.reindexPosts();
-    }
+//    @GET
+//    @Path("vk/posts")
+//    public boolean postsBulkReindex() {
+//        return reindexWorkflow.reindexPosts();
+//    }
 
     @GET
     @Path("publications")
@@ -40,15 +39,15 @@ public class BulkElasticReindexRestImpl {
         return reindexWorkflow.reindexDashboardPosts() && reindexWorkflow.reindexDashboardPhotos();
     }
 
-    @GET
-    @Path("countries")
-    public boolean countriesBulkReindex() {
-        return reindexWorkflow.reindexCountries();
-    }
-
-    @GET
-    @Path("cities")
-    public boolean citiesBulkReindex() {
-        return reindexWorkflow.reindexCities();
-    }
-}
+//    @GET
+//    @Path("countries")
+//    public boolean countriesBulkReindex() {
+//        return reindexWorkflow.reindexCountries();
+//    }
+//
+//    @GET
+//    @Path("cities")
+//    public boolean citiesBulkReindex() {
+//        return reindexWorkflow.reindexCities();
+//    }
+//}

@@ -1,21 +1,19 @@
 package yf.post.parser.workflow;
 
+import org.apache.commons.lang3.StringUtils;
+import yf.post.dto.PostElasticDTO;
+import yf.post.entities.Post;
+import yf.post.entities.PostPhoto;
+import yf.post.parser.dto.PostAttachmentDTO;
+import yf.post.parser.dto.PostDTO;
+
+import javax.inject.Inject;
 import java.time.Instant;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-
-import javax.inject.Inject;
-
-import org.apache.commons.lang3.StringUtils;
-
-import yf.post.dto.PostElasticDTO;
-import yf.post.entities.Post;
-import yf.post.entities.PostPhoto;
-import yf.post.parser.dto.PostAttachmentDTO;
-import yf.post.parser.dto.PostDTO;
 
 public class ParserPostConverter {
     private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");

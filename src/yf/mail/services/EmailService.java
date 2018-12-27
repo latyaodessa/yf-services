@@ -1,16 +1,7 @@
 package yf.mail.services;
 
-import java.util.logging.Logger;
-
-import javax.inject.Inject;
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
-
 import com.sun.jersey.api.client.Client;
 import com.sun.jersey.api.client.ClientResponse;
-
 import yf.core.JNDIPropertyHelper;
 import yf.mail.dtos.EmailToSendDTO;
 import yf.mail.entities.EmailLogs;
@@ -18,6 +9,13 @@ import yf.user.dto.VerificationTypesEnum;
 import yf.user.entities.User;
 import yf.user.entities.Verifications;
 import yf.user.services.VerificationService;
+
+import javax.inject.Inject;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
+import java.util.logging.Logger;
 
 public class EmailService {
 

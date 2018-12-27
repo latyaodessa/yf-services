@@ -1,11 +1,11 @@
 package yf.post.parser.workflow;
 
+import yf.post.entities.PostPhoto;
+import yf.post.parser.dto.PostPhotoDTO;
+
 import java.time.Instant;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
-
-import yf.post.entities.PostPhoto;
-import yf.post.parser.dto.PostPhotoDTO;
 
 public class PostPhotoConverter {
     final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");

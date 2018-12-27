@@ -1,21 +1,24 @@
 package yf.publication.rest;
 
-import java.util.List;
+import yf.post.dto.SharedBasicPostDTO;
+import yf.publication.PublicationService;
+import yf.publication.dtos.PublicationElasticDTO;
+import yf.publication.dtos.PublicationPicturesDTO;
+import yf.publication.dtos.PublicationTypeEnum;
+import yf.publication.entities.PublicationPictures;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
-
-import yf.post.dto.SharedBasicPostDTO;
-import yf.publication.PublicationService;
-import yf.publication.dtos.PublicationElasticDTO;
-import yf.publication.dtos.PublicationTypeEnum;
+import javax.ws.rs.core.Response;
+import java.util.List;
 
 @Path("publication")
 @Produces(MediaType.APPLICATION_JSON)
@@ -73,6 +76,17 @@ public class PublicationRestImpl {
         return publicationService.getUserPublications(user_id,
                 from,
                 size);
+    }
+
+
+    @PUT
+    @Path("update/pictures/{publicationId}")
+    public Response updatePublicationPictures(@PathParam("publicationId") final Long publicationId,
+                                              final List<PublicationPicturesDTO> publicationPicturesDTOS) {
+        return Response.status(200)
+                .entity(publicationService.updatePublicationPictures(publicationId, publicationPicturesDTOS))
+                .build();
+
     }
 
 }

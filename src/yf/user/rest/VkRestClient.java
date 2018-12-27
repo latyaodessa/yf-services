@@ -1,17 +1,14 @@
 package yf.user.rest;
 
-import java.util.logging.Logger;
+import com.sun.jersey.api.client.Client;
+import org.codehaus.jettison.json.JSONException;
+import org.codehaus.jettison.json.JSONObject;
+import yf.core.JSONService;
+import yf.user.dto.external.VKUserDTO;
 
 import javax.inject.Inject;
 import javax.ws.rs.core.MediaType;
-
-import org.codehaus.jettison.json.JSONException;
-import org.codehaus.jettison.json.JSONObject;
-
-import com.sun.jersey.api.client.Client;
-
-import yf.core.JSONService;
-import yf.user.dto.external.VKUserDTO;
+import java.util.logging.Logger;
 
 public class VkRestClient {
 

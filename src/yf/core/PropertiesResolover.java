@@ -1,12 +1,11 @@
 package yf.core;
 
+import javax.annotation.PostConstruct;
 import java.util.Enumeration;
 import java.util.Locale;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-
-import javax.annotation.PostConstruct;
 
 public class PropertiesResolover {
     private static final Logger LOG = Logger.getLogger(PropertiesResolover.class.getName());

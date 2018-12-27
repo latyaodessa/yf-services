@@ -1,15 +1,14 @@
 package yf.post.parser.rest.scheduler;
 
-import java.util.Date;
-import java.util.logging.Logger;
+import yf.settings.SystemSettings;
+import yf.settings.SystemSettingsWorkflow;
 
 import javax.ejb.Schedule;
 import javax.ejb.Singleton;
 import javax.ejb.Timeout;
 import javax.inject.Inject;
-
-import yf.settings.SystemSettings;
-import yf.settings.SystemSettingsWorkflow;
+import java.util.Date;
+import java.util.logging.Logger;
 
 @Singleton
 public class RestScheduler implements Scheduler {
