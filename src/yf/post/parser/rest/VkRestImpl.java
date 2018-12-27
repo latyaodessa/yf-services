@@ -2,6 +2,7 @@ package yf.post.parser.rest;
 
 import yf.post.parser.ParserService;
 import yf.post.parser.dto.PostDTO;
+import yf.post.parser.rest.scheduler.Scheduler;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;
@@ -25,6 +26,14 @@ public class VkRestImpl {
     @Produces(MediaType.APPLICATION_OCTET_STREAM)
     public String aliveMethod() {
         return "Yes baby, i'm alive";
+    }
+
+    @GET
+    @Path("env/scheduler")
+    @Produces(MediaType.APPLICATION_OCTET_STREAM)
+    public String envScheduler() {
+        final String envSchedulerTaskEnvVeriable = System.getenv(Scheduler.ENV_SCHEDULER_TASK);
+        return envSchedulerTaskEnvVeriable;
     }
 
     @GET

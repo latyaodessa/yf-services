@@ -18,7 +18,7 @@ public class BulkElasticReindexRestImpl {
     @GET
     @Path("all")
     public boolean allReindex() {
-        return  reindexWorkflow.reindexPublications() && reindexWorkflow.reindexDashboardPosts();
+        return reindexWorkflow.reindexPublications() && reindexWorkflow.reindexDashboardPosts();
     }
 
 //    @GET
@@ -38,6 +38,8 @@ public class BulkElasticReindexRestImpl {
     public boolean dashboardBulkReindex() {
         return reindexWorkflow.reindexDashboardPosts() && reindexWorkflow.reindexDashboardPhotos();
     }
+
+}
 
 //    @GET
 //    @Path("countries")

@@ -8,7 +8,7 @@ import javax.inject.Inject;
 import java.util.logging.Logger;
 
 @Singleton
-public class SubmissionSchedulerCleaner implements Scheduler {
+public class SubmissionSchedulerCleaner extends Scheduler {
     public static final Logger LOGGER = Logger.getLogger(SubmissionSchedulerCleaner.class.getName());
 
     @Inject
@@ -16,10 +16,13 @@ public class SubmissionSchedulerCleaner implements Scheduler {
 
     @Schedule(hour = "*/1", info = "Submission cleaner Scheduler. Every 1 hour", persistent = false)
     public void process() {
-        LOGGER.info("Submission cleaner Scheduler");
-        submissionService.cleanIncompletedSubmissions();
-        LOGGER.info("Submission cleaner DONE");
-
+        if (isEnvVariableEnabled()) {
+            LOGGER.info("Submission cleaner Scheduler");
+            submissionService.cleanIncompletedSubmissions();
+            LOGGER.info("Submission cleaner DONE");
+        } else {
+            LOGGER.info("Submission cleaner DISABLED");
+        }
 
     }
 }

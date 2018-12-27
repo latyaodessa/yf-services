@@ -11,7 +11,7 @@ import java.util.Date;
 import java.util.logging.Logger;
 
 @Singleton
-public class RestScheduler implements Scheduler {
+public class RestScheduler extends Scheduler {
 
     public static final String VK_SCHEDULER_ENABLED_SETTING = "vk_scheduler_enabled";
     private static final Logger LOG = Logger.getLogger(RestScheduler.class.getName());
@@ -26,7 +26,7 @@ public class RestScheduler implements Scheduler {
 
         final SystemSettings setting = systemSettingsWorkflow.getSystemSettingByKey(VK_SCHEDULER_ENABLED_SETTING);
 
-        if (setting == null || Boolean.parseBoolean(setting.getValue())) {
+        if (isEnvVariableEnabled() && (setting == null || Boolean.parseBoolean(setting.getValue()))) {
             LOG.info("Scheduler VK started : " + new Date());
             processor.triggerVkScraper();
             LOG.info("Scheduler VK finished : " + new Date());

@@ -10,7 +10,7 @@ import java.util.Date;
 import java.util.logging.Logger;
 
 @Singleton
-public class SitemapPostScheduler implements Scheduler {
+public class SitemapPostScheduler extends Scheduler {
     public static final Logger LOGGER = Logger.getLogger(SitemapPostScheduler.class.getName());
 
     @EJB
@@ -18,12 +18,16 @@ public class SitemapPostScheduler implements Scheduler {
 
     @Schedule(hour = "1", persistent = false)
     public void process() {
-        LOGGER.info("Sitemap Scheduler");
-        final Date date = new Date();
-        final Date yersterday = new DateTime(date).minusDays(1)
-                .toDate();
-        service.execute(yersterday,
-                date);
-        LOGGER.info("Sitemap Scheduler DONE");
+        if(isEnvVariableEnabled()) {
+            LOGGER.info("Sitemap Scheduler");
+            final Date date = new Date();
+            final Date yersterday = new DateTime(date).minusDays(1)
+                    .toDate();
+            service.execute(yersterday,
+                    date);
+            LOGGER.info("Sitemap Scheduler DONE");
+        } else {
+            LOGGER.info("Sitemap Scheduler DISABLED");
+        }
     }
 }
