@@ -3,6 +3,7 @@ package yf.submission.services;
 import yf.post.parser.workflow.PostParserWorkflow;
 import yf.publication.PublicationConverter;
 import yf.publication.dtos.PublicationParticipantDTO;
+import yf.publication.dtos.PublicationTypeEnum;
 import yf.publication.entities.Publication;
 import yf.publication.entities.PublicationParticipant;
 import yf.publication.entities.PublicationUser;
@@ -165,7 +166,10 @@ public class SubmissionConverter {
 
     public Publication submissionToPublication(final Submission submission) {
         Publication publication = new Publication();
+        em.persist(publication);
         publication.setCreatedOn(new Date().getTime());
+
+        publication.setSubmission(submission);
 
         final String link = postParserWorkflow.generateLinkFromSubmissionParticipants(publication.getId(), submission.getSubmissionParticipants());
         publication.setLink(link);
@@ -177,9 +181,9 @@ public class SubmissionConverter {
         publication.setHashtags(null); // TODO from submission
         publication.setEquipment(submission.getEquipment());
         publication.setLikes(0);
-        publication.setExclusive(true); //TODO non exclusive
+        publication.setType(PublicationTypeEnum.EXCLUSIVE); //TODO non exclusive
 
-        em.persist(publication);
+        em.merge(publication);
         em.flush();
 
         publication.getPublicationUsers().add(getPublicationUserFromSubmission(publication, submission));

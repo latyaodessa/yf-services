@@ -6,7 +6,7 @@
         <setting name="validation-enabled" value="true" />
         <setting name="provider-name" value="" />
         <datasource-mapping>
-          <factory-entry name="yf_db" />
+          <factory-entry name="yf_db" value="a1e80fc0-f49c-4cdd-9024-f0abd10a3c32" />
         </datasource-mapping>
         <deploymentDescriptor name="persistence.xml" url="file://$MODULE_DIR$/WebContent/WEB-INF/classes/META-INF/persistence.xml" />
       </configuration>

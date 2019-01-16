@@ -1,9 +1,8 @@
 package yf.submission.services;
 
-import org.elasticsearch.action.index.IndexResponse;
 import org.joda.time.DateTime;
-import yf.elastic.core.NativeElasticSingleton;
 import yf.publication.PublicationConverter;
+import yf.publication.PublicationDao;
 import yf.publication.bulkworkflow.PublicationBulkWorkflow;
 import yf.publication.dtos.PublicationElasticDTO;
 import yf.publication.entities.Publication;
@@ -42,6 +41,8 @@ public class SubmissionService {
     private PublicationBulkWorkflow publicationBulkWorkflow;
     @Inject
     private PublicationConverter publicationConverter;
+    @Inject
+    private PublicationDao publicationDao;
 
     public SubmissionDTO geSubmissionByUUid(final String uuid, final Long userId) {
         final Submission submission = submissionDAO.geSubmissionByUUid(uuid, userId);
@@ -116,6 +117,13 @@ public class SubmissionService {
         if (submission == null) {
             throw new RuntimeException("Submission doesn't exist");
         }
+
+        final Publication publicationBySubmissionId = publicationDao.getPublicationBySubmissionId(submissionId);
+
+        if(publicationBySubmissionId != null) {
+            return publicationConverter.publicationToElasticDTO(publicationBySubmissionId);
+        }
+
         submission.setStatus(SubmissionStatusEnum.ACCEPTED);
         submission.setCreatedOn(new Date().getTime());
         submissionDAO.updateSubmission(submission);

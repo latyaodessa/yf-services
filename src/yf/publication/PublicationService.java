@@ -289,6 +289,8 @@ public class PublicationService {
             throw new RuntimeException("Publication was not found id =" + publicationId);
         }
 
+        publication.getPublicationPictures().forEach(publicationPictures -> em.remove(publicationPictures));
+
         final List<PublicationPictures> publicationPictures = publicationPicturesDTOS.stream().map(dto -> publicationConverter.convertPublicationPicturesDTOToEntity(publication, dto)).collect(Collectors.toList());
         publication.getPublicationPictures().clear();
         publication.getPublicationPictures().addAll(publicationPictures);

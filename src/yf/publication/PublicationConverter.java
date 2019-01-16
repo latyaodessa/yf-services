@@ -21,6 +21,7 @@ import javax.persistence.PersistenceContext;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -50,6 +51,7 @@ public class PublicationConverter {
         dto.setLink(publication.getLink());
         dto.setEventDate(Optional.ofNullable(publication.getEventDate())
                 .orElse(null));
+        dto.setType(publication.getType());
         dto.setLikes(publication.getLikes());
         dto.setCity(publication.getCity());
         dto.setCountry(publication.getCountry());
@@ -77,8 +79,9 @@ public class PublicationConverter {
         publicationPictures.setFileId(dto.getFileId());
         publicationPictures.setFileName(dto.getFileName());
         publicationPictures.setFriendlyLink(dto.getFriendlyLink());
-        publicationPictures.setNativeLink(dto.getNativeLink());
+        publicationPictures.setSha1(dto.getContentSha1());
         publicationPictures.setPublicationId(publication.getId());
+        publicationPictures.setCreatedOn(new Date().getTime());
         em.persist(publicationPictures);
         return publicationPictures;
 

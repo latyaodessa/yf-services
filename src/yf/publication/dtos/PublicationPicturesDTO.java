@@ -2,25 +2,16 @@ package yf.publication.dtos;
 
 public class PublicationPicturesDTO {
 
-    private Long id;
     private String fileId;
     private String fileName;
     private String friendlyLink;
-    private String nativeLink;
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(final Long id) {
-        this.id = id;
-    }
+    private String contentSha1;
 
     public String getFileId() {
         return fileId;
     }
 
-    public void setFileId(final String fileId) {
+    public void setFileId(String fileId) {
         this.fileId = fileId;
     }
 
@@ -28,7 +19,7 @@ public class PublicationPicturesDTO {
         return fileName;
     }
 
-    public void setFileName(final String fileName) {
+    public void setFileName(String fileName) {
         this.fileName = fileName;
     }
 
@@ -36,16 +27,15 @@ public class PublicationPicturesDTO {
         return friendlyLink;
     }
 
-    public void setFriendlyLink(final String friendlyLink) {
+    public void setFriendlyLink(String friendlyLink) {
         this.friendlyLink = friendlyLink;
     }
 
-    public String getNativeLink() {
-        return nativeLink;
+    public String getContentSha1() {
+        return contentSha1;
     }
 
-    public void setNativeLink(final String nativeLink) {
-        this.nativeLink = nativeLink;
+    public void setContentSha1(String contentSha1) {
+        this.contentSha1 = contentSha1;
     }
-
 }

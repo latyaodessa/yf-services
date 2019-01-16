@@ -60,9 +60,14 @@ ALTER TABLE publication DROP COLUMN title;
 ALTER TABLE publication ADD COLUMN text TEXT;
 ALTER TABLE publication RENAME ph_techincal TO equipment;
 ALTER TABLE publication DROP COLUMN about;
-ALTER TABLE publication ADD COLUMN exclusive BOOLEAN;
+ALTER TABLE publication ADD COLUMN type VARCHAR(255);
 
 ALTER TABLE publication_pictures add COLUMN created_on BIGINT NOT NULL;
+ALTER TABLE publication_pictures DROP COLUMN native_link;
+ALTER TABLE sha1 add COLUMN created_on VARCHAR(500) NOT NULL;
 
-
+ALTER TABLE publication
+  ADD COLUMN submission_id BIGINT;
+ALTER TABLE publication
+  ADD CONSTRAINT submission_fk FOREIGN KEY (submission_id) REFERENCES submission (id) ON DELETE CASCADE;
 

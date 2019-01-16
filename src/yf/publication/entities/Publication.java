@@ -2,11 +2,14 @@ package yf.publication.entities;
 
 import yf.core.entities.AbstractDateEntity;
 import yf.post.entities.Post;
-import yf.submission.entities.SubmissionParticipant;
+import yf.publication.dtos.PublicationTypeEnum;
+import yf.submission.entities.Submission;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -20,18 +23,19 @@ import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Set;
 
 @Entity
 @Table(name = "publication")
 @NamedQueries({@NamedQuery(name = Publication.QUERY_GET_PUBLICATION_BY_VK_POST, query = "SELECT t FROM Publication t WHERE t.vkPost.id = :vk_post_id "),
-               @NamedQuery(name = Publication.QUERY_GET_PUBLICATION_BY_LINK, query = "SELECT t FROM Publication t WHERE t.link = :link "),
-               @NamedQuery(name = Publication.QUERY_SETS_NATIVE_POSTS_RANGE, query = "SELECT t FROM Publication t WHERE t.createdOn between :from and :end") })
+        @NamedQuery(name = Publication.QUERY_GET_PUBLICATION_BY_LINK, query = "SELECT t FROM Publication t WHERE t.link = :link "),
+        @NamedQuery(name = Publication.QUERY_SETS_NATIVE_POSTS_RANGE, query = "SELECT t FROM Publication t WHERE t.createdOn between :from and :end"),
+        @NamedQuery(name = Publication.QUERY_GET_PUBLICATION_BY_SUBMISSION, query = "SELECT t FROM Publication t WHERE t.submission.id = :submissionId ")})
 public class Publication extends AbstractDateEntity {
 
     public static final String QUERY_GET_PUBLICATION_BY_VK_POST = "Publication.getPublicationsByVkPost";
     public static final String QUERY_GET_PUBLICATION_BY_LINK = "Publication.getPublicationsByLink";
     public static final String QUERY_SETS_NATIVE_POSTS_RANGE = "Publication.getPostByRange";
+    public static final String QUERY_GET_PUBLICATION_BY_SUBMISSION = "Publication.getPublicationBySubmission";
 
     @Id
     @NotNull
@@ -51,21 +55,22 @@ public class Publication extends AbstractDateEntity {
     private String additionalMds;
     private String equipment;
     private Integer likes;
-    private Boolean exclusive;
+    @Enumerated(EnumType.STRING)
+    private PublicationTypeEnum type;
 
     @OneToMany(fetch = FetchType.LAZY,
-               cascade = {CascadeType.MERGE,
-                          CascadeType.PERSIST })
+            cascade = {CascadeType.MERGE,
+                    CascadeType.PERSIST})
     @JoinColumn(name = "publication_id", referencedColumnName = "id")
     private List<PublicationPictures> publicationPictures;
 
     @OneToMany(fetch = FetchType.LAZY,
-               cascade = {CascadeType.MERGE,
-                          CascadeType.PERSIST })
+            cascade = {CascadeType.MERGE,
+                    CascadeType.PERSIST})
     @JoinColumn(name = "publication_id", referencedColumnName = "id")
     private List<PublicationUser> publicationUsers;
 
-    @OneToOne(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST })
+    @OneToOne(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST})
     @JoinColumn(name = "vk_post_id", referencedColumnName = "id")
     private Post vkPost;
 
@@ -74,6 +79,12 @@ public class Publication extends AbstractDateEntity {
             fetch = FetchType.LAZY)
     @JoinColumn(name = "publication_fk")
     private List<PublicationParticipant> publicationParticipants;
+
+    @OneToOne(orphanRemoval = true,
+            cascade = {CascadeType.ALL},
+            fetch = FetchType.LAZY)
+    @JoinColumn(name = "submission_id")
+    private Submission submission;
 
     public Publication() {
         publicationPictures = new ArrayList<>();
@@ -202,11 +213,20 @@ public class Publication extends AbstractDateEntity {
         this.publicationParticipants = publicationParticipants;
     }
 
-    public Boolean getExclusive() {
-        return exclusive;
+
+    public Submission getSubmission() {
+        return submission;
     }
 
-    public void setExclusive(Boolean exclusive) {
-        this.exclusive = exclusive;
+    public void setSubmission(Submission submission) {
+        this.submission = submission;
+    }
+
+    public PublicationTypeEnum getType() {
+        return type;
+    }
+
+    public void setType(PublicationTypeEnum type) {
+        this.type = type;
     }
 }

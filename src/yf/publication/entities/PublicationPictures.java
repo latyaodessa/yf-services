@@ -21,10 +21,10 @@ public class PublicationPictures extends AbstractDateEntity {
     private String fileName;
     @Column(name = "friendly_link")
     private String friendlyLink;
-    @Column(name = "native_link")
-    private String nativeLink;
     @Column(name = "publication_id")
     private Long publicationId;
+    @Column(name = "sha1")
+    private String sha1;
 
     public Long getId() {
         return id;
@@ -58,19 +58,19 @@ public class PublicationPictures extends AbstractDateEntity {
         this.friendlyLink = friendlyLink;
     }
 
-    public String getNativeLink() {
-        return nativeLink;
-    }
-
-    public void setNativeLink(final String nativeLink) {
-        this.nativeLink = nativeLink;
-    }
-
     public Long getPublicationId() {
         return publicationId;
     }
 
     public void setPublicationId(final Long publicationId) {
         this.publicationId = publicationId;
+    }
+
+    public String getSha1() {
+        return sha1;
+    }
+
+    public void setSha1(String sha1) {
+        this.sha1 = sha1;
     }
 }

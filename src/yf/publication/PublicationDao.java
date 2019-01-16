@@ -31,6 +31,18 @@ public class PublicationDao {
         }
     }
 
+    public Publication getPublicationBySubmissionId(final Long submissionId) {
+        TypedQuery<Publication> query = em.createNamedQuery(Publication.QUERY_GET_PUBLICATION_BY_SUBMISSION,
+                Publication.class)
+                .setParameter("submissionId",
+                        submissionId);
+        try {
+            return query.getSingleResult();
+        } catch (NoResultException e) {
+            return null;
+        }
+    }
+
     public List<PublicationUser> getPublishedSetsByUserId(final Long userId) {
         TypedQuery<PublicationUser> query = em.createNamedQuery(PublicationUser.QUERY_GET_PUBLICATIONS_BY_USER,
                 PublicationUser.class)
