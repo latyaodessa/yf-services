@@ -281,7 +281,8 @@ public class PublicationService {
     }
 
     public PublicationElasticDTO updatePublicationPictures(final Long publicationId,
-                                                 final List<PublicationPicturesDTO> publicationPicturesDTOS) {
+                                                           final String thumbnailId,
+                                                           final List<PublicationPicturesDTO> publicationPicturesDTOS) {
 
         Publication publication = publicationWorkflow.getPublicationById(publicationId);
 
@@ -299,7 +300,16 @@ public class PublicationService {
 
         PublicationElasticDTO dto = publicationConverter.publicationToElasticDTO(publication);
         dto.setPublicationPictures(publicationPicturesDTOS);
-        dto.setThumbnail(publicationPictures.get(0).getFriendlyLink());
+        if (thumbnailId != null) {
+            final String friendlyThumbnail = publicationPictures.stream()
+                    .filter(pP -> pP.getFileId().equals(thumbnailId))
+                    .map(PublicationPictures::getFriendlyLink)
+                    .findFirst()
+                    .orElse(publicationPictures.get(0).getFriendlyLink());
+            dto.setThumbnail(friendlyThumbnail);
+        } else {
+            dto.setThumbnail(publicationPictures.get(0).getFriendlyLink());
+        }
 
         nativeElastiClient.getClient()
                 .prepareUpdate(properties.get("elastic.index.publication"), properties.get("elastic.type.photo"), String.valueOf(publicationId))

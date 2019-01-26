@@ -33,7 +33,6 @@ public class UserSavedPosts extends AbstractDateEntity {
     private Long id;
     @OneToOne(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST })
     @JoinColumn(name = "post_id", referencedColumnName = "id", nullable = false)
-    @NotNull
     private Post post;
     @OneToOne(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST })
     @JoinColumn(name = "publication_id", referencedColumnName = "id", nullable = false)

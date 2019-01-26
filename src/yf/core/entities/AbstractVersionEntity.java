@@ -7,7 +7,7 @@ import java.util.Date;
 @MappedSuperclass
 public class AbstractVersionEntity {
 
-    @Column(name = "created_on")
+    @Column(name = "created_on", columnDefinition = "DATE")
     private Date createdOn;
 
     public Date getCreatedOn() {

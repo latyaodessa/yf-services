@@ -290,9 +290,9 @@ public class PostParserWorkflow {
         if (firstName != null && lastName != null) {
             link.add(String.join("-",
                     tag,
-                    firstName.replaceAll("[^A-Za-z0-9]",
+                    regexTextCleaner.transliterate(firstName).replaceAll("[^A-Za-z0-9]",
                             ""),
-                    lastName.replaceAll("[^A-Za-z0-9]",
+                    regexTextCleaner.transliterate(lastName).replaceAll("[^A-Za-z0-9]",
                             "")));
         }
     }

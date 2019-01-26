@@ -15,6 +15,8 @@ public class PublicationElasticDTO {
     private String mdSimple;
     private String phSimple;
     private String text;
+    private String about;
+    private String title;
     private String thumbnail;
     private Integer likes;
     private PostElasticDTO vkPost;
@@ -177,5 +179,21 @@ public class PublicationElasticDTO {
 
     public void setPublicationParticipants(List<PublicationParticipantDTO> publicationParticipants) {
         this.publicationParticipants = publicationParticipants;
+    }
+
+    public String getAbout() {
+        return about;
+    }
+
+    public void setAbout(String about) {
+        this.about = about;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
     }
 }

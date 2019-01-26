@@ -6,7 +6,8 @@ public class SubmissionDTO {
 
     private Long id;
     private String uuid;
-    private String text;
+    private String about;
+    private String title;
     private String country;
     private String city;
     private Long eventDate;
@@ -35,14 +36,6 @@ public class SubmissionDTO {
 
     public void setUuid(String uuid) {
         this.uuid = uuid;
-    }
-
-    public String getText() {
-        return text;
-    }
-
-    public void setText(String text) {
-        this.text = text;
     }
 
     public String getCountry() {
@@ -115,5 +108,21 @@ public class SubmissionDTO {
 
     public void setEquipment(String equipment) {
         this.equipment = equipment;
+    }
+
+    public String getAbout() {
+        return about;
+    }
+
+    public void setAbout(String about) {
+        this.about = about;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
     }
 }

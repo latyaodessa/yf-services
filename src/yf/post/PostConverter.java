@@ -31,6 +31,8 @@ public class PostConverter {
         sharedBasicPostDTO.setText(dto.getText());
         sharedBasicPostDTO.setThumbnail(dto.getThumbnail());
         sharedBasicPostDTO.setLink(dto.getLink());
+        sharedBasicPostDTO.setTitle(dto.getTitle());
+        sharedBasicPostDTO.setAbout(dto.getAbout());
 
         if (dto.getVkPost() != null) {
             Integer likes = dto.getLikes() + dto.getVkPost()

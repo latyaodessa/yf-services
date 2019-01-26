@@ -47,7 +47,8 @@ public class Publication extends AbstractDateEntity {
     private Long eventDate;
     private String city;
     private String country;
-    private String text;
+    private String about;
+    private String title;
     private String hashtags;
     @Column(name = "additional_phs")
     private String additionalPhs;
@@ -131,14 +132,6 @@ public class Publication extends AbstractDateEntity {
 
     public void setCountry(String country) {
         this.country = country;
-    }
-
-    public String getText() {
-        return text;
-    }
-
-    public void setText(String text) {
-        this.text = text;
     }
 
     public String getHashtags() {
@@ -228,5 +221,21 @@ public class Publication extends AbstractDateEntity {
 
     public void setType(PublicationTypeEnum type) {
         this.type = type;
+    }
+
+    public String getAbout() {
+        return about;
+    }
+
+    public void setAbout(String about) {
+        this.about = about;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
     }
 }

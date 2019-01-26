@@ -44,6 +44,7 @@ public class SubmissionService {
     @Inject
     private PublicationDao publicationDao;
 
+
     public SubmissionDTO geSubmissionByUUid(final String uuid, final Long userId) {
         final Submission submission = submissionDAO.geSubmissionByUUid(uuid, userId);
         return submissionConverter.toDto(submission);
@@ -126,6 +127,7 @@ public class SubmissionService {
 
         submission.setStatus(SubmissionStatusEnum.ACCEPTED);
         submission.setCreatedOn(new Date().getTime());
+        submission.setComment(null);
         submissionDAO.updateSubmission(submission);
 
         Publication publication =  submissionConverter.submissionToPublication(submission);

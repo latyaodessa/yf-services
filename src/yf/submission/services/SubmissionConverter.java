@@ -1,8 +1,6 @@
 package yf.submission.services;
 
 import yf.post.parser.workflow.PostParserWorkflow;
-import yf.publication.PublicationConverter;
-import yf.publication.dtos.PublicationParticipantDTO;
 import yf.publication.dtos.PublicationTypeEnum;
 import yf.publication.entities.Publication;
 import yf.publication.entities.PublicationParticipant;
@@ -14,46 +12,40 @@ import yf.submission.dtos.SubmissionStatusEnum;
 import yf.submission.entities.Submission;
 import yf.submission.entities.SubmissionParticipant;
 import yf.user.UserConverter;
-import yf.user.UserDao;
 
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 
 public class SubmissionConverter {
-    //    @Inject
-//    private MetaDataDao metaDataDao;
-//    @Inject
-//    private CountryConverter countryConverter;
+
     @Inject
     private UserConverter userConverter;
-    @Inject
-    private UserDao userDao;
     @PersistenceContext
     private EntityManager em;
     @Inject
     private PostParserWorkflow postParserWorkflow;
 
-//    @Inject
-//    private MetaDataDao metaDataDao;
 
     public SubmissionParticipant participantDTOToEntity(final SubmissionParticipantDTO dto, final PhotoshootingParticipantTypeEnum typeEnum) {
         SubmissionParticipant entity = new SubmissionParticipant();
         entity.setCity(dto.getCity());
         entity.setNumber(dto.getNumber());
         entity.setCountry(dto.getCountry());
+
+        entity.setWebsite(dto.getWebsite());
+        entity.setVk(dto.getVk());
         entity.setAgency(dto.getAgency());
+        entity.setFacebook(dto.getFacebook());
+        entity.setInstagram(dto.getInstagram());
 
         entity.setCity(dto.getCity());
         entity.setCountry(dto.getCountry());
-        entity.setFacebook(dto.getFacebook());
-        entity.setInstagram(dto.getInstagram());
+
         entity.setMe(dto.getMe());
         entity.setType(typeEnum);
         entity.setCreatedOn(new Date().getTime());
@@ -65,7 +57,8 @@ public class SubmissionConverter {
 
     public void handleSubmissionConvertion(final SubmissionDTO dto, final Submission entity) {
         entity.setCreatedOn(new Date().getTime());
-        entity.setText(dto.getText());
+        entity.setAbout(dto.getAbout());
+        entity.setTitle(dto.getTitle());
         entity.setCountry(dto.getCountry());
         entity.setCity(dto.getCity());
         entity.setEquipment(dto.getEquipment());
@@ -79,7 +72,13 @@ public class SubmissionConverter {
         dto.setCity(entity.getCity());
         dto.setNumber(entity.getNumber());
         dto.setCountry(entity.getCountry());
+
         dto.setInstagram(entity.getInstagram());
+        dto.setFacebook(entity.getFacebook());
+        dto.setVk(entity.getVk());
+        dto.setWebsite(entity.getWebsite());
+        dto.setAgency(entity.getAgency());
+
         dto.setMe(entity.getMe());
         dto.setLastName(entity.getLastName());
         dto.setFirstName(entity.getFirstName());
@@ -91,7 +90,9 @@ public class SubmissionConverter {
         dto.setCreatedOn(enity.getCreatedOn());
         dto.setId(enity.getId());
         dto.setUuid(enity.getUuid());
-        dto.setText(enity.getText());
+        dto.setAbout(enity.getAbout());
+        dto.setTitle(enity.getTitle());
+        dto.setEquipment(enity.getEquipment());
         dto.setCountry(enity.getCountry());
         dto.setCity(enity.getCity());
         dto.setEventDate(enity.getEventDate());
@@ -143,8 +144,12 @@ public class SubmissionConverter {
         if (dto.getComment() != null) {
             submission.setComment(dto.getComment());
         }
-        if (dto.getText() != null) {
-            submission.setText(dto.getText());
+        if (dto.getAbout() != null) {
+            submission.setAbout(dto.getAbout());
+        }
+
+        if (dto.getTitle() != null) {
+            submission.setTitle(dto.getTitle());
         }
 
         if (dto.getCountry() != null) {
@@ -177,7 +182,8 @@ public class SubmissionConverter {
         publication.setEventDate(submission.getEventDate());
         publication.setCity(submission.getCity());
         publication.setCountry(submission.getCountry());
-        publication.setText(submission.getText());
+        publication.setAbout(submission.getAbout());
+        publication.setTitle(submission.getTitle());
         publication.setHashtags(null); // TODO from submission
         publication.setEquipment(submission.getEquipment());
         publication.setLikes(0);

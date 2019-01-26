@@ -80,11 +80,12 @@ public class PublicationRestImpl {
 
 
     @PUT
-    @Path("update/pictures/{publicationId}")
+    @Path("update/pictures/{publicationId}/{thumbnailId}")
     public Response updatePublicationPictures(@PathParam("publicationId") final Long publicationId,
+                                              @PathParam("thumbnailId") final String thumbnailId,
                                               final List<PublicationPicturesDTO> publicationPicturesDTOS) {
         return Response.status(200)
-                .entity(publicationService.updatePublicationPictures(publicationId, publicationPicturesDTOS))
+                .entity(publicationService.updatePublicationPictures(publicationId, thumbnailId, publicationPicturesDTOS))
                 .build();
 
     }

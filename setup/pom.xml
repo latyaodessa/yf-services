@@ -25,9 +25,9 @@
                                 <configuration>
                                         <changeLogFile>src/main/liquibase/changeset.xml</changeLogFile>
                                         <driver>org.postgresql.Driver</driver>
-                                        <url>jdbc:postgresql://localhost:53249/yf_db</url>
-                                        <username>postgres</username>
-                                        <password></password>
+                                        <url>jdbc:postgresql://194.1.239.223:53249/yf_db</url>
+                                        <username>yf_system</username>
+                                        <password>a2faSFq87</password>
                                         <changelogSchemaName>liquibase</changelogSchemaName>
                                         <promptOnNonLocalDatabase>false</promptOnNonLocalDatabase>
                                 </configuration>

@@ -2,6 +2,7 @@ package yf.dashboard.postphoto;
 
 import org.elasticsearch.action.index.IndexResponse;
 import org.elasticsearch.action.search.SearchResponse;
+import org.elasticsearch.common.xcontent.XContentType;
 import org.elasticsearch.rest.RestStatus;
 import org.elasticsearch.search.SearchHit;
 import yf.core.ElasticException;
@@ -14,8 +15,10 @@ import yf.dashboard.postphoto.entities.UserSavedPhotos;
 import yf.dashboard.postphoto.entities.UserSavedPosts;
 import yf.elastic.core.ElasticWorkflow;
 import yf.elastic.core.NativeElasticSingleton;
+import yf.elastic.reindex.bulkworkflow.ObjectToSourceUtil;
 import yf.publication.PublicationDao;
-import yf.publication.bulkworkflow.PublicationBulkWorkflow;
+import yf.publication.PublicationService;
+import yf.publication.dtos.PublicationElasticDTO;
 import yf.publication.entities.Publication;
 
 import javax.inject.Inject;
@@ -24,7 +27,6 @@ import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 public class PostPhotoDashboardWorkflow {
@@ -44,7 +46,10 @@ public class PostPhotoDashboardWorkflow {
     @Inject
     private PublicationDao publicationDao;
     @Inject
-    private PublicationBulkWorkflow publicationBulkWorkflow;
+    private PublicationService publicationService;
+    @Inject
+    private NativeElasticSingleton nativeElastiClient;
+
 
     public PostDashboardElasticDTO saveNewPublicationForUser(final Long publicationId,
                                                              final Long userId) {
@@ -86,7 +91,7 @@ public class PostPhotoDashboardWorkflow {
 
         if (!increase) {
             likes = likes != 0 ? likes - 1
-                               : 0;
+                    : 0;
         }
 
         if (increase) {
@@ -96,7 +101,13 @@ public class PostPhotoDashboardWorkflow {
         publication.setLikes(likes);
         em.merge(publication);
 
-        publicationBulkWorkflow.execute(Collections.singletonList(publication));
+        final PublicationElasticDTO publicationById = publicationService.getPublicationById(String.valueOf(publication.getId()));
+        publicationById.setLikes(likes);
+
+        nativeElastiClient.getClient()
+                .prepareUpdate(properties.get("elastic.index.publication"), properties.get("elastic.type.photo"), String.valueOf(publicationById.getId()))
+                .setDoc(ObjectToSourceUtil.covert(publicationById), XContentType.JSON).get();
+
 
     }
 

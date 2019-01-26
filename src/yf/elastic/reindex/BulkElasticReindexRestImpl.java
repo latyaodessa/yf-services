@@ -3,9 +3,11 @@ package yf.elastic.reindex;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
 import javax.ws.rs.GET;
+import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
+import java.util.List;
 
 @Path("reindex")
 @Produces(MediaType.APPLICATION_JSON)
@@ -31,6 +33,13 @@ public class BulkElasticReindexRestImpl {
     @Path("publications")
     public boolean publicationsBulkReindex() {
         return reindexWorkflow.reindexPublications();
+    }
+
+
+    @POST
+    @Path("publications/ids")
+    public boolean publicationsBulkReindex(final List<Long> publicationIds) {
+        return reindexWorkflow.reindexPublicationsIds(publicationIds);
     }
 
     @GET

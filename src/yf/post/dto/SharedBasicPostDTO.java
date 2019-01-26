@@ -8,6 +8,8 @@ public class SharedBasicPostDTO {
     private String thumbnail;
     private String link;
     private Integer likes;
+    private String title;
+    private String about;
 
     public Long getId() {
         return id;
@@ -63,5 +65,21 @@ public class SharedBasicPostDTO {
 
     public void setLikes(Integer likes) {
         this.likes = likes;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public String getAbout() {
+        return about;
+    }
+
+    public void setAbout(String about) {
+        this.about = about;
     }
 }

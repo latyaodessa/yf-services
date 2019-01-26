@@ -10,12 +10,15 @@ import yf.meta.bulkworkflow.CountryBulkWorkflow;
 import yf.meta.entities.City;
 import yf.meta.entities.Country;
 import yf.post.entities.Post;
+import yf.publication.PublicationDao;
 import yf.publication.bulkworkflow.PublicationBulkWorkflow;
 import yf.publication.entities.Publication;
 
 import javax.inject.Inject;
 import java.util.List;
+import java.util.Objects;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
 
 public class ReindexWorkflow {
 
@@ -34,6 +37,8 @@ public class ReindexWorkflow {
     private CityBulkWorkflow cityBulkWorkflow;
     @Inject
     private CountryBulkWorkflow countryBulkWorkflow;
+    @Inject
+    private PublicationDao publicationDao;
 
     public boolean reindexPosts() {
 
@@ -78,6 +83,19 @@ public class ReindexWorkflow {
             LOG.info(String.format("Bulk Updating: Already updated %s publications",
                     offset));
         } while (entities.isEmpty() || entities.size() >= ElasticBulkFetcher.getDefaultBulkSize());
+        return true;
+    }
+
+    public boolean reindexPublicationsIds(final List<Long> ids) {
+
+        List<Publication> entities = ids.stream().map(publicationId -> publicationDao.getPublicationById(publicationId))
+                .filter(Objects::nonNull).collect(Collectors.toList());
+
+        publicationBulkWorkflow.execute(entities);
+
+        LOG.info(String.format("Bulk Updating: Already updated %s publications",
+                entities.size()));
+
         return true;
     }
 

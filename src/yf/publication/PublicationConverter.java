@@ -59,10 +59,20 @@ public class PublicationConverter {
         dto.setEquipment(publication.getEquipment());
         handlePublicationUsers(dto,
                 publication.getPublicationUsers());
+        dto.setAbout(publication.getAbout());
+        dto.setTitle(publication.getTitle());
+
+        final List<PublicationPicturesDTO> publicationPicturesDTOS = publication.getPublicationPictures().stream().map(this::convertPublicationPictureEntityToDto).collect(Collectors.toList());
+        dto.setPublicationPictures(publicationPicturesDTOS);
 
         if (publication.getVkPost() != null) {
             handleConvertionFromVKPost(dto,
                     publication);
+        } else {
+            handleSimpleNames(dto, publication.getPublicationParticipants());
+            if (publication.getPublicationPictures() != null && !publication.getPublicationPictures().isEmpty()) {
+                dto.setThumbnail(publication.getPublicationPictures().get(0).getFriendlyLink());
+            }
         }
 
         if (publication.getPublicationParticipants() != null) {
@@ -72,6 +82,29 @@ public class PublicationConverter {
         }
 
         return dto;
+    }
+
+    private void handleSimpleNames(final PublicationElasticDTO dto, final List<PublicationParticipant> publicationParticipants) {
+
+        final List<String> mds = new ArrayList<>();
+        final List<String> phs = new ArrayList<>();
+
+        publicationParticipants.forEach(participant -> {
+            final String name = String.join(" ", participant.getFirstName(), participant.getLastName());
+            switch (participant.getType()) {
+                case MD:
+                    mds.add(name);
+                    break;
+                case PH:
+                    phs.add(name);
+                default:
+                    break;
+            }
+        });
+
+        dto.setMdSimple(String.join(", ", mds));
+        dto.setPhSimple(String.join(", ", phs));
+
     }
 
     public PublicationPictures convertPublicationPicturesDTOToEntity(final Publication publication, final PublicationPicturesDTO dto) {
@@ -84,6 +117,16 @@ public class PublicationConverter {
         publicationPictures.setCreatedOn(new Date().getTime());
         em.persist(publicationPictures);
         return publicationPictures;
+
+    }
+
+    public PublicationPicturesDTO convertPublicationPictureEntityToDto(final PublicationPictures entity) {
+        PublicationPicturesDTO publicationPicturesDto = new PublicationPicturesDTO();
+        publicationPicturesDto.setFileId(entity.getFileId());
+        publicationPicturesDto.setFileName(entity.getFileName());
+        publicationPicturesDto.setFriendlyLink(entity.getFriendlyLink());
+        publicationPicturesDto.setContentSha1(entity.getSha1());
+        return publicationPicturesDto;
 
     }
 

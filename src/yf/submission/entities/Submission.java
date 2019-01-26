@@ -41,7 +41,8 @@ public class Submission extends AbstractDateEntity {
     @Column(name = "id")
     private Long id;
     private String uuid;
-    private String text;
+    private String about;
+    private String title;
     @JoinColumn(name = "country")
     private String country;
     private String city;
@@ -79,14 +80,6 @@ public class Submission extends AbstractDateEntity {
 
     public void setUuid(String uuid) {
         this.uuid = uuid;
-    }
-
-    public String getText() {
-        return text;
-    }
-
-    public void setText(String text) {
-        this.text = text;
     }
 
     public String getCountry() {
@@ -151,6 +144,22 @@ public class Submission extends AbstractDateEntity {
 
     public void setSubmitter(User submitter) {
         this.submitter = submitter;
+    }
+
+    public String getAbout() {
+        return about;
+    }
+
+    public void setAbout(String about) {
+        this.about = about;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
     }
 }
 
